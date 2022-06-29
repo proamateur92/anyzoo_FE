@@ -1,0 +1,112 @@
+{
+  "user": [
+    {
+      "id": "0",
+      "useremail": "test1@test.com",
+      "username": "테스트이름1",
+      "profile": ""
+    },
+    {
+      "id": "2",
+      "useremail": "test2@test.com",
+      "username": "테스트이름2",
+      "profile": ""
+    },
+    {
+      "id": "3",
+      "useremail": "test3@test.com",
+      "username": "테스트이름3",
+      "profile": ""
+    }
+  ],
+  "post": [
+    {
+      "id": "0",
+      "username": "테스트1",
+      "content": "내용테스트1",
+      "img": "이미지테스트1"
+    },
+    {
+      "id": "1",
+      "username": "테스트2",
+      "content": "내용테스트2",
+      "img": "이미지테스트2"
+    },
+    {
+      "id": "2",
+      "username": "테스트3",
+      "content": "내용테스트3",
+      "img": "이미지테스트3"
+    },
+    {
+      "id": "3",
+      "username": "테스트4",
+      "content": "내용테스트4",
+      "img": "이미지테스트4"
+    }
+  ],
+  "comment": [
+    {
+      "id": "0",
+      "postId": "0",
+      "username": "테스트99",
+      "content": "댓글테스트1"
+    },
+    {
+      "id": "1",
+      "postId": "0",
+      "username": "테스트98",
+      "content": "댓글테스트2"
+    },
+    {
+      "id": "2",
+      "postId": "1",
+      "username": "테스트97",
+      "content": "댓글테스트3"
+    },
+    {
+      "id": "3",
+      "postId": "2",
+      "username": "테스트96",
+      "content": "댓글테스트4"
+    },
+    {
+      "id": "4",
+      "postId": "2",
+      "username": "테스트95",
+      "content": "댓글테스트5"
+    }
+  ],
+  "heart": [
+    {
+      "id": "0",
+      "postId": "0",
+      "username": "테스트99",
+      "heart": "댓글테스트1"
+    },
+    {
+      "id": "1",
+      "postId": "0",
+      "username": "테스트98",
+      "heart": "댓글테스트2"
+    },
+    {
+      "id": "2",
+      "postId": "1",
+      "username": "테스트97",
+      "heart": "댓글테스트3"
+    },
+    {
+      "id": "3",
+      "postId": "2",
+      "username": "테스트96",
+      "heart": "댓글테스트4"
+    },
+    {
+      "id": "4",
+      "postId": "2",
+      "username": "테스트95",
+      "heart": "댓글테스트5"
+    }
+  ]
+}

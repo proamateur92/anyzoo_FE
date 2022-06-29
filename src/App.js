@@ -1,25 +1,88 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// react
+import React, { useEffect, useCallback } from 'react';
+
+// route
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup } from './pages/Index';
+
+// style
+import GlobalStyles from './styles/GlobalStyles';
+import { defaultTheme } from './styles/theme';
+import { ThemeProvider } from 'styled-components';
+
+// axios
+import axios from 'axios';
+
+// redux
+import { useDispatch, useSelector } from 'react-redux';
+import { loadUserDB } from './redux/modules/userSlice';
+import { loadPostDB } from './redux/modules/postSlice';
+import { loadCommentDB } from './redux/modules/commentSlice';
+import { loadHeartDB } from './redux/modules/heartSlice';
 
 function App() {
+  // redux 테스트 코드 시작
+  const dispatch = useDispatch();
+  const userList = useSelector(state => state.user?.list);
+  const postList = useSelector(state => state.post?.list);
+  const heartList = useSelector(state => state.heart?.list);
+  const commentList = useSelector(state => state.comment?.list);
+  console.log(userList);
+  console.log(postList);
+  console.log(heartList);
+  console.log(commentList);
+
+  const getLogin = useCallback(async () => {
+    const response = await axios.get('http://localhost:5000/user');
+    dispatch(loadUserDB(response.data));
+  }, [dispatch]);
+
+  const getPost = useCallback(async () => {
+    const response = await axios.get('http://localhost:5000/post');
+    dispatch(loadPostDB(response.data));
+  }, [dispatch]);
+
+  const getHeart = useCallback(async () => {
+    const response = await axios.get('http://localhost:5000/heart');
+    dispatch(loadHeartDB(response.data));
+  }, [dispatch]);
+
+  const getComment = useCallback(async () => {
+    const response = await axios.get('http://localhost:5000/comment');
+    dispatch(loadCommentDB(response.data));
+  }, [dispatch]);
+
+  useEffect(() => {
+    getLogin();
+    getPost();
+    getHeart();
+    getComment();
+  }, [getLogin, getPost, getHeart, getComment]);
+  // redux 테스트 코드 끝
+
+  const theme = defaultTheme;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/mypage' element={<Mypage />} />
+          <Route path='/myedit' element={<UserEdit />} />
+          <Route path='/findinfo' element={<FindPwd />} />
+          <Route path='/post' element={<Post />} />
+          <Route path='/post/write' element={<PostWrite />} />
+          <Route path='/post/update/:id' element={<PostUpdate />} />
+          <Route path='/post/detail/:id' element={<PostDetail />} />
+          <Route path='/notice' element={<Notice />} />
+          <Route path='/notice/detail/:id' element={<NoticeDetail />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
