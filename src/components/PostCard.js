@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useNavigate } from 'react-router-dom';
+
 // 컴포넌트
 import EditBubble from "../elements/EditBubble";
 
@@ -9,26 +11,28 @@ import { IoMdMore } from "react-icons/io";
 import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
 
 const PostCard = (props) => {
-  const PostData = props.data
+  const navigate = useNavigate();
+  const postData = props.data
+  console.log(postData)
 
 
   return (
     <CardWrap>
       <CardHeader>
         <UserInfo>
-          <div id="profileImg" />
-          <span id="nickName">닉네임</span>
+          <div id="profileImg" img={ postData.user[0].img }/>
+          <span id="nickName"> { postData.user[0].nickname } </span>
         </UserInfo>
         <IoMdMore/>
         <EditBubble/>
       </CardHeader>
 
-      <ImgPreview />
-      <TextPreview> 텍스트 영역</TextPreview>
+      <ImgPreview img={ postData.imgURL[0]?.imgUrl }/>
+      <TextPreview> { postData.content } </TextPreview>
 
       <Reactions>
-        <span><IoHeartOutline/> 777 </span>
-        <span><IoChatbubbleOutline/> 777 </span>
+        <span><IoHeartOutline/> { postData.likeCnt } </span>
+        <span><IoChatbubbleOutline/> { postData.viewCnt } </span>
       </Reactions>
     </CardWrap>
   );
@@ -69,7 +73,7 @@ const UserInfo = styled.span`
 const ImgPreview = styled.div`
   width: 100%;
   height: 310px;
-  background: url( 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png');
+  background: url(${(props) => props.img ? props.img : 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png'});
   background-size: cover;
   background-position: center;
   margin: auto;

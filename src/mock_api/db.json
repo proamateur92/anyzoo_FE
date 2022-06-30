@@ -21,28 +21,88 @@
   ],
   "post": [
     {
-      "id": "0",
-      "username": "테스트1",
-      "content": "내용테스트1",
-      "img": "이미지테스트1"
+      "postId": "1",
+      "postCategory": [
+        {
+          "postCategoryId": "1",
+          "name": "귀여움"
+        }
+      ],
+      "boardMain": [{
+        "boardMainId": "1",
+        "user" : [{
+          "nickname": "1번요",
+          "img": ""
+        }],
+        "content": "첫번째 포스트입니다.",
+        "imgURL": { "imgUrl": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png" },
+        "likeCnt": "111",
+        "viewCnt": "111",
+        "createdAt": "2022-07-01"
+      }]
     },
     {
-      "id": "1",
-      "username": "테스트2",
-      "content": "내용테스트2",
-      "img": "이미지테스트2"
+      "postId": "2",
+      "postCategory": [
+        {
+          "postCategoryId": "1",
+          "name": "귀여움"
+        }
+      ],
+      "boardMain": [{
+        "boardMainId": "2",
+        "user" : [{
+          "nickname": "2번요",
+          "img": ""
+        }],
+        "content": "두번째 포스트입니다.",
+        "imgURL": { "imgUrl": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png" },
+        "likeCnt": "222",
+        "viewCnt": "222",
+        "createdAt": "2022-07-02"
+      }]
     },
     {
-      "id": "2",
-      "username": "테스트3",
-      "content": "내용테스트3",
-      "img": "이미지테스트3"
+      "postId": "3",
+      "postCategory": [
+        {
+          "postCategoryId": "2",
+          "name": "예쁨"
+        }
+      ],
+      "boardMain": [{
+        "boardMainId": "3",
+        "user" : [{
+          "nickname": "3번요",
+          "img": ""
+        }],
+        "content": "세번째 포스트입니다.",
+        "imgURL": { "imgUrl": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png" },
+        "likeCnt": "333",
+        "viewCnt": "333",
+        "createdAt": "2022-07-03"
+      }]
     },
     {
-      "id": "3",
-      "username": "테스트4",
-      "content": "내용테스트4",
-      "img": "이미지테스트4"
+      "postId": "4",
+      "postCategory": [
+        {
+          "postCategoryId": "3",
+          "name": "웃김"
+        }
+      ],
+      "boardMain": [{
+        "boardMainId": "4",
+        "user" : [{
+          "nickname": "4번요",
+          "img": ""
+        }],
+        "content": "네번째 포스트입니다.",
+        "imgURL": { "imgUrl": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png" },
+        "likeCnt": "444",
+        "viewCnt": "444",
+        "createdAt": "2022-07-04"
+      }]
     }
   ],
   "comment": [
