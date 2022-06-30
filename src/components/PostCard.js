@@ -1,7 +1,6 @@
 import React from "react";
 
 // 컴포넌트
-import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
 
 // CSS 관련 임포트
@@ -23,7 +22,7 @@ const PostCard = (props) => {
         <IoMdMore/>
         <EditBubble/>
       </CardHeader>
-      
+
       <ImgPreview />
       <TextPreview> 텍스트 영역</TextPreview>
 
