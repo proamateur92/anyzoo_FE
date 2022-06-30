@@ -4,19 +4,75 @@ import Wrap from '../elements/Wrap';
 // style
 import styled from 'styled-components';
 
+// react
+import { useRef } from 'react';
+
+// router
+import { useNavigate } from 'react-router-dom';
+
+// axios
+import instance from '../shared/axios';
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const eamilValue = useRef('');
+  const pwdValue = useRef('');
+
+  const login = async userInfo => {
+    try {
+      const response = await instance.post('/user/login', userInfo);
+      alert(response.data);
+      // 토큰값 저장하는 함수 필요
+      // 토큰값으로 유저정보 받아오기 api필요
+      navigate('/');
+    } catch (error) {
+      alert(error);
+      navigate('/login');
+    }
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const email = eamilValue.current;
+    const password = pwdValue.current;
+
+    if (email.value.trim().length === 0) {
+      email.focus();
+      return;
+    }
+
+    if (password.value.trim().length === 0) {
+      password.focus();
+      return;
+    }
+
+    // axios 통신
+    const userInfo = { username: email.value, password: password.value };
+    login(userInfo);
+
+    email.value = '';
+    password.value = '';
+  };
+
   return (
     <Wrap>
       <Container>
         <Logo>로고</Logo>
-        <LoginForm>
-          <input className='username' type='text' placeholder='이메일' />
-          <input className='password' type='password' placeholder='비밀번호' />
+        <LoginForm onSubmit={handleSubmit}>
+          <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
+          <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
           <Buttons>
-            <button className='login-btn'>로그인</button>
-            <button className='signup-btn'>회원가입</button>
+            <button onClick={() => handleSubmit} className='login-btn'>
+              로그인
+            </button>
+            <button onClick={() => navigate('/signup')} className='signup-btn'>
+              회원가입
+            </button>
           </Buttons>
-          <div className='findPwd'>비밀번호 찾기</div>
+          <div className='findPwd' onClick={() => navigate('/findinfo')}>
+            비밀번호 찾기
+          </div>
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
@@ -69,6 +125,7 @@ const Logo = styled.div`
   height: 36px;
   margin-bottom: 73px;
 `;
+
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;
