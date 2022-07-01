@@ -59,6 +59,21 @@ const Step = ({ step, onCountChange }) => {
     );
   }
 
+  if (step === 3) {
+    content = (
+      <>
+        <span className='desc'>
+          <p>마지막으로</p>
+          <p>
+            <span className='strong'>프로필이미지</span>를
+          </p>
+          <p>설정해주세요.</p>
+        </span>
+        <input type='file' />
+      </>
+    );
+  }
+
   const elButton = step < 4 ? <button onClick={() => onCountChange()}>다음 단계</button> : <button>가입하기</button>;
   return (
     <Container>
@@ -85,6 +100,10 @@ const Container = styled.div`
     margin-bottom: 27px;
     font-size: 14px;
   }
+  p {
+    display: block;
+    margin-bottom: 5px;
+  }
   input {
     box-sizing: border-box;
     height: 55px;
@@ -109,12 +128,13 @@ const Container = styled.div`
 
 const InputBox = styled.div`
   position: relative;
+  border-bottom: 3px solid #ccc;
   input {
     box-sizing: border-box;
     height: 55px;
     padding: 0 10px;
     font-size: 20px;
-    border-bottom: 3px solid #ccc;
+    border: none;
   }
   input:last-of-type {
     margin-bottom: 0;
