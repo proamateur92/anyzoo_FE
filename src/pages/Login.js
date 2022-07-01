@@ -63,12 +63,8 @@ const Login = () => {
           <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
           <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
           <Buttons>
-            <button onClick={() => handleSubmit} className='login-btn'>
-              로그인
-            </button>
-            <button onClick={() => navigate('/signup')} className='signup-btn'>
-              회원가입
-            </button>
+            <button onClick={() => handleSubmit}>로그인</button>
+            <button onClick={() => navigate('/signup')}>회원가입</button>
           </Buttons>
           <div className='findPwd' onClick={() => navigate('/findinfo')}>
             비밀번호 찾기
@@ -105,6 +101,9 @@ const LoginForm = styled.form`
     outline: none;
     font-size: inherit;
   }
+  button {
+    cursor: pointer;
+  }
   input:first-of-type,
   button:first-of-type {
     margin-bottom: 5px;
@@ -112,9 +111,7 @@ const LoginForm = styled.form`
   input {
     background-color: #ccc;
   }
-  button {
-    cursor: pointer;
-  }
+
   .findPwd {
     margin-bottom: 91px;
   }
