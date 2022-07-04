@@ -5,8 +5,9 @@ const Wrap = props => {
 };
 
 const Container = styled.div`
-  width: 599px;
-  margin: auto;
+  max-width: 599px;
+  height: 100%;
+  margin: 0 auto;
   border: 2px solid black;
 `;
 
