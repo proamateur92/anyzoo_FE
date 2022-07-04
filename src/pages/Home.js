@@ -1,7 +1,9 @@
 import React from 'react';
 
-// 컴포넌트
+// element
 import Wrap from '../elements/Wrap';
+
+// component
 import PostCard from '../components/PostCard';
 import styled from 'styled-components';
 import NoticeSlide from '../components/NoticeSlide'
