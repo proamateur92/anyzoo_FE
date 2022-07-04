@@ -5,7 +5,7 @@ import Wrap from "../elements/Wrap";
 
 // components
 import PostCard from "../components/PostCard";
-import PostHeader from "../elements/PostHeader";
+import SubHeader from "../elements/SubHeader";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
@@ -25,7 +25,7 @@ const Post = () => {
 
   return (
     <Wrap>
-      <PostHeader />
+      <SubHeader title={'자랑하기'}> </SubHeader>
       {posts.map((post, i) => (
         <PostCard key={post.postId} data={post} />
       ))}
