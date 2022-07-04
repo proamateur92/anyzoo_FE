@@ -12,9 +12,14 @@ import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
 
 const PostCard = (props) => {
   const navigate = useNavigate();
-  const postData = props.data
-  console.log(postData)
+  const postData = props.data.boardMain[0]
+  const postId = props.data.postId
 
+  const [bubbleOn, setBubbleOn] = React.useState(false)
+  
+  const menuOpen = () => {
+    setBubbleOn(!bubbleOn)
+  }
 
   return (
     <CardWrap>
@@ -23,8 +28,8 @@ const PostCard = (props) => {
           <div id="profileImg" img={ postData.user[0].img }/>
           <span id="nickName"> { postData.user[0].nickname } </span>
         </UserInfo>
-        <IoMdMore/>
-        <EditBubble/>
+        <IoMdMore id='optionMenu' onClick={menuOpen}/>
+        { bubbleOn ? <EditBubble contentsId={postId} setBubbleOn={setBubbleOn} /> : null}
       </CardHeader>
 
       <ImgPreview img={ postData.imgURL[0]?.imgUrl }/>
@@ -54,6 +59,10 @@ const CardHeader = styled.div`
   align-items: center;
   font-size: 16px;
   position: relative;
+
+  #optionMenu {
+    cursor: pointer;
+  }
 `;
 
 const UserInfo = styled.span`
