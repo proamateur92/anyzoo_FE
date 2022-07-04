@@ -168,5 +168,21 @@
       "username": "테스트95",
       "heart": "댓글테스트5"
     }
+  ],
+
+  "together" : [
+    {
+      "title " : "타이틀",
+      "content" : "",
+      "img" : "",
+      "limitPeople" : "",
+      "date" : "",
+      "category" : "",
+      "location" : "",
+      "peopleCnt" : "",
+      "likeCnt" : "",
+      "viewCnt" : "",
+      "createdAt" : ""
+   }
   ]
 }
