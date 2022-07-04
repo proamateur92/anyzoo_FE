@@ -1,15 +1,17 @@
 import React from 'react';
 
-// 컴포넌트
+// element
 import Wrap from '../elements/Wrap';
+
+// components
 import PostCard from '../components/PostCard';
 import PostHeader from '../elements/PostHeader';
 
-// 리덕스 
+// redux
 import { useSelector, useDispatch } from 'react-redux'
 import { loadPostsDB } from '../redux/modules/postSlice';
 
-// CSS 관련 임포트
+// style
 import styled from 'styled-components';
 
 const Post = () => {

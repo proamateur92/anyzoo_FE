@@ -4,6 +4,7 @@ import React from 'react';
 import Wrap from '../elements/Wrap';
 import PostCard from '../components/PostCard';
 import styled from 'styled-components';
+import NoticeSlide from '../components/NoticeSlide'
 
 
 const Home = () => {
@@ -11,7 +12,7 @@ const Home = () => {
     <Wrap>
       <Logo/>
       <div>
-        <Banner/>
+        <NoticeSlide/>
       </div>
 
       <div>
