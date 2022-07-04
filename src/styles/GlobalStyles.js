@@ -15,10 +15,19 @@ const GlobalStyles = createGlobalStyle`
         /* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
         
         // 기본 폰트 사이즈
-        font-size: 14px;
+        font-size: 16px;
         
         // 기본 폰트 컬러 
         // color: ${props => props.theme.color.blue}
+    }
+    input {
+        outline: none;
+        border: none;
+    }
+    button {
+        cursor: pointer;
+        outline: none;
+        border: none;
     }
 `;
 
