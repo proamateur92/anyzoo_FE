@@ -7,6 +7,8 @@ import Wrap from "../elements/Wrap";
 import PostCard from "../components/PostCard";
 import NoticeSlide from "../components/NoticeSlide";
 
+import Comment from "../components/Comment";
+
 // style
 import styled from "styled-components";
 import { GrNext } from "react-icons/gr";
@@ -26,10 +28,8 @@ const Home = () => {
   return (
     <Wrap>
       <Logo />
-      <div>
-        <NoticeSlide />
-      </div>
-
+      <NoticeSlide />
+    
       <RealTimeRanking>
         <h3>오늘의 인기상(실시간 랭킹)</h3>
         <RealTimeTopRanker>

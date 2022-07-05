@@ -75,4 +75,6 @@ const Banner = styled.div`
   min-width: 100%;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat center;
   background-size: cover;
+
+  cursor:pointer;
 `;
