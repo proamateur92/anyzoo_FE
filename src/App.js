@@ -32,33 +32,33 @@ function App() {
   console.log(heartList);
   console.log(commentList);
 
-  const getLogin = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/user');
-    dispatch(loadUserDB(response.data));
-  }, [dispatch]);
+  // const getLogin = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/user');
+  //   dispatch(loadUserDB(response.data));
+  // }, [dispatch]);
 
-  const getPost = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/post');
-    dispatch(loadPostDB(response.data));
-  }, [dispatch]);
+  // // const getPost = useCallback(async () => {
+  // //   const response = await axios.get('http://localhost:5000/post');
+  // //   dispatch(loadPostDB(response.data));
+  // // }, [dispatch]);
 
-  const getHeart = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/heart');
-    dispatch(loadHeartDB(response.data));
-  }, [dispatch]);
+  // const getHeart = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/heart');
+  //   dispatch(loadHeartDB(response.data));
+  // }, [dispatch]);
 
-  const getComment = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/comment');
-    dispatch(loadCommentDB(response.data));
-  }, [dispatch]);
+  // const getComment = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/comment');
+  //   dispatch(loadCommentDB(response.data));
+  // }, [dispatch]);
 
-  useEffect(() => {
-    getLogin();
-    getPost();
-    getHeart();
-    getComment();
-  }, [getLogin, getPost, getHeart, getComment]);
-  // redux 테스트 코드 끝
+  // useEffect(() => {
+  //   getLogin();
+  //   getPost();
+  //   getHeart();
+  //   getComment();
+  // }, [getLogin, getPost, getHeart, getComment]);
+  // // redux 테스트 코드 끝
 
   const theme = defaultTheme;
 
