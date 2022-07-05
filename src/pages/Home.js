@@ -29,8 +29,6 @@ const Home = () => {
     <Wrap>
       <Logo />
 
-      <Comment postId='0'/>
-      
       <NoticeSlide />
     
       <RealTimeRanking>
