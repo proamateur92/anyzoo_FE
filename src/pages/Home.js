@@ -28,6 +28,9 @@ const Home = () => {
   return (
     <Wrap>
       <Logo />
+
+      <Comment postId='0'/>
+      
       <NoticeSlide />
     
       <RealTimeRanking>
