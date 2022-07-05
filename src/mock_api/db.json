@@ -21,6 +21,7 @@
   ],
   "post": [
     {
+<<<<<<< HEAD
       "postId": "1",
       "postCategory": [
         {
@@ -103,7 +104,18 @@
         "viewCnt": "444",
         "createdAt": "2022-07-04"
       }]
+=======
+      "id": "0",
+      "username": "히수",
+      "content": "푸는 귀여워~~~~~~~~~~~~~~~~",
+      "category": "PRETTY",
+      "imgUrl": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe-mT5HNR1pmVQdZUZhnvBKX4sbhVnzda1kw&usqp=CAU"
+      ]
+      
+>>>>>>> de0c738002aa9e500db1c0a7337179be2a170768
     }
+   
   ],
   "comment": [
     {
@@ -137,36 +149,10 @@
       "content": "댓글테스트5"
     }
   ],
-  "heart": [
+  "Heart": [
     {
-      "id": "0",
-      "postId": "0",
-      "username": "테스트99",
-      "heart": "댓글테스트1"
-    },
-    {
-      "id": "1",
-      "postId": "0",
-      "username": "테스트98",
-      "heart": "댓글테스트2"
-    },
-    {
-      "id": "2",
-      "postId": "1",
-      "username": "테스트97",
-      "heart": "댓글테스트3"
-    },
-    {
-      "id": "3",
-      "postId": "2",
-      "username": "테스트96",
-      "heart": "댓글테스트4"
-    },
-    {
-      "id": "4",
-      "postId": "2",
-      "username": "테스트95",
-      "heart": "댓글테스트5"
+      "id":"0"
+    
     }
   ]
 }
