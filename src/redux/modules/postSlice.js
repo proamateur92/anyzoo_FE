@@ -2,17 +2,17 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
-//읽기
-export const getDataDB = () => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.get("http://localhost:5000/post");
-      dispatch(setData(response.data));
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
+// //읽기
+// export const getDataDB = () => {
+//   return async (dispatch) => {
+//     try {
+//       const response = await axios.get("http://localhost:5000/post");
+//       dispatch(setData(response.data));
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+// };
 
 // 추가하기
 export const addDataDB = (data) => {
