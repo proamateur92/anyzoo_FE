@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios'
+// import instance from '../../shared/axios';
 
 
+<<<<<<< HEAD
 // //읽기
 // export const getDataDB = () => {
 //   return async (dispatch) => {
@@ -13,6 +15,25 @@ import axios from "axios";
 //     }
 //   };
 // };
+=======
+export const loadPostsDB = createAsyncThunk(
+  'loadPost', async() => {
+    const response = await axios.get('http://localhost:5000/post').catch((err) => console.log(err))
+    return response.data
+  }
+);
+
+export const getDataDB = () => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get("http://localhost:5000/post");
+      dispatch(setData(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+>>>>>>> feature/home
 
 // 추가하기
 export const addDataDB = (data) => {
@@ -96,6 +117,12 @@ const postSlice = createSlice({
       );
     }
   },
+
+  extraReducers: {
+    [loadPostsDB.fulfilled] : (state, { payload }) => {
+      state.list = payload
+    }
+  }
 });
 
 export const { setData, addData, removeData, modifyData } = postSlice.actions;

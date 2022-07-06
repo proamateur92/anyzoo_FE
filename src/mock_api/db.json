@@ -35,32 +35,37 @@
   "comment": [
     {
       "id": "0",
+      "userId": 0,
       "postId": "0",
-      "username": "테스트99",
+      "nickname": "테스트99",
       "content": "댓글테스트1"
     },
     {
       "id": "1",
+      "userId": 1,
       "postId": "0",
-      "username": "테스트98",
+      "nickname": "테스트98",
       "content": "댓글테스트2"
     },
     {
       "id": "2",
+      "userId": 0,
       "postId": "1",
-      "username": "테스트97",
+      "nickname": "테스트97",
       "content": "댓글테스트3"
     },
     {
       "id": "3",
+      "userId": 0,
       "postId": "2",
-      "username": "테스트96",
+      "nickname": "테스트96",
       "content": "댓글테스트4"
     },
     {
       "id": "4",
+      "userId": 0,
       "postId": "2",
-      "username": "테스트95",
+      "nickname": "테스트95",
       "content": "댓글테스트5"
     }
   ],
