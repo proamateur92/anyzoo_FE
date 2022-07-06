@@ -7,17 +7,16 @@ import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { removeDataDB } from "../redux/modules/postSlice";
 
 const PostDetail = () => {
-  const params = useParams();
-  const [data, setData] = useState();
-  const [select, setSelect] = useState();
-  const dispatch = useDispatch()
+  const params = useParams(); 
+  const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
+  const dispatch = useDispatch() 
   const navigate = useNavigate();
 
-
+// axios에서 데이터를 받아오는 이벤트 훅
 useEffect(() => {
   axios.get("http://localhost:5000/post/" + params.id)
     .then(response => {
-      setData(response.data)
+      setData(response.data) //useState의 data에 넣어준다.
       console.log(response.data)
     })
 
@@ -25,8 +24,8 @@ useEffect(() => {
 }, []);
   
 const deletePost = (e) => {
-    e.preventDefault();
-    dispatch(removeDataDB(params.id))
+    e.preventDefault(); 
+    dispatch(removeDataDB(params.id)) //removeDateDB에 id 전달해줌.
   }
 
   return (
@@ -41,7 +40,7 @@ const deletePost = (e) => {
               src="https://item.kakaocdn.net/do/d8b92364bb23fd5c3dcf4c08f6422d63617ea012db208c18f6e83b1a90a7baa7"
               alt=""
             />
-            <UserName>{data?.username}</UserName>
+            <UserName>{data?.username}</UserName> 
           </User>
           <Jum>
             <JumImg src={require("../images/jum.png.png")} />
