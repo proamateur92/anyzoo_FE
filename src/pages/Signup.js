@@ -28,8 +28,8 @@ const Signup = () => {
 
   const handleSignup = async userData => {
     try {
-      // const response = await instance.post('user/signup', { ...userData });
-      const response = await axios.post('http://localhost:5000/user', { ...userData });
+      const response = await instance.post('/user/signup', { ...userData });
+      // const response = await axios.post('http://localhost:5000/user', { ...userData });
       console.log(response.data);
       navigate('/');
     } catch (error) {

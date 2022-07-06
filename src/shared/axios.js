@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getStorage } from './storage';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://43.200.52.184:8080',
 });
 
 // 가지고 있는 토큰 넣어주기!

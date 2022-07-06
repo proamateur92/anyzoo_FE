@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import instance from '../../shared/axios';
+import instance from '../../shared/axios';
 
 // 예시
 export const loadUserDB = userData => {
@@ -12,18 +12,29 @@ export const loadUserDB = userData => {
   };
 };
 
+export const getUserDB = () => {
+  return async function (dispatch) {
+    try {
+      // 토큰 값으로 해당 유저 정보 받아오기
+      // instance.get()
+      // dispatch(getUser(userData));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     list: [],
   },
-
   reducers: {
     // 예시
     // changeName: (state, action) => {
     //   state.name = action.payload;
     // },
-    addUser: (state, action) => {
+    getUser: (state, action) => {
       console.log(action.payload);
       state.list = action.payload;
     },
@@ -35,5 +46,5 @@ const userSlice = createSlice({
 });
 
 export const userActions = userSlice.actions;
-export const { addUser, loadUser } = userSlice.actions;
+export const { getUser, loadUser } = userSlice.actions;
 export default userSlice.reducer;
