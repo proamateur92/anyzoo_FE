@@ -1,6 +1,12 @@
+
 import Wrap from '../elements/Wrap';
+//style
 import styled from 'styled-components';
+
+//react 
 import React, { useRef, useState } from 'react';
+
+//redux
 import { useDispatch } from 'react-redux/es/exports';
 import { addDataDB, removeDataDB} from '../redux/modules/postSlice';
 
@@ -14,12 +20,13 @@ const PostWrite = () => {
  
 
  
-
+ // 카테고리 값 select으로 넣기
   const category = (e) => {
     setSelect(e.target.value)
     // console.log(e.target.value)
   }
-  
+
+  //data 설정해 reducer로 보내기(더하기)
   const addPost = (e) => {
     e.preventDefault();
     const data = {

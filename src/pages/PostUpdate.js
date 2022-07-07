@@ -1,9 +1,18 @@
 import Wrap from '../elements/Wrap';
+//style
 import styled from 'styled-components';
-import React, { useRef, useState,useEffect } from 'react';
+
+//react
+import React, { useRef, useState, useEffect } from 'react';
+
+//redux
 import { useDispatch } from 'react-redux/es/exports';
-import { addDataDB, modifyDataDB, removeDataDB} from '../redux/modules/postSlice';
+import { addDataDB, modifyDataDB, removeDataDB } from '../redux/modules/postSlice';
+
+//axios
 import axios from "axios"
+
+//router
 import { useParams, useNavigate } from "react-router-dom"
 
 
@@ -21,12 +30,14 @@ const PostUpdate = () => {
  
 
  
-
+  
   const category = (e) => {
     setSelect(e.target.value)
     console.log(e.target.value)
   }
 
+
+  //수정할때 데이터 value 값으로 불러오기
   useEffect(() => {
   axios.get("http://localhost:5000/post/" + params.id)
     .then(response => {
@@ -37,6 +48,7 @@ const PostUpdate = () => {
  
 }, []);
   
+//data 수정해 reducer로 보내기(수정하기하기)
   const updatePost = (e) => {
     e.preventDefault();
     const data = {

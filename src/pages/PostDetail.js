@@ -6,13 +6,23 @@ import axios from "axios"
 import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { removeDataDB } from "../redux/modules/postSlice";
 
+import { IoMdMore } from "react-icons/io";
+import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
+
+import EditBubble from "../elements/EditBubble";
+
 const PostDetail = () => {
   const params = useParams(); 
   const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
   const dispatch = useDispatch() 
   const navigate = useNavigate();
+  const [bubbleOn, setBubbleOn] = React.useState(false);
 
-// axios에서 데이터를 받아오는 이벤트 훅
+  const menuOpen = () => {
+    setBubbleOn(!bubbleOn);
+  };
+
+// axios에서 데이터를 받아오기
 useEffect(() => {
   axios.get("http://localhost:5000/post/" + params.id)
     .then(response => {
@@ -28,10 +38,12 @@ const deletePost = (e) => {
     dispatch(removeDataDB(params.id)) //removeDateDB에 id 전달해줌.
   }
 
+  
+
   return (
     <Wrap>
       <div>
-        <Back src={require("../images/back.png.png")} alt="" />
+        <Back onClick={() => { navigate("/post") }} src={require("../assets/images/back.png.png")} alt="" />
       </div>
       <All>
         <UserInfo>
@@ -43,16 +55,27 @@ const deletePost = (e) => {
             <UserName>{data?.username}</UserName> 
           </User>
           <Jum>
-            <JumImg src={require("../images/jum.png.png")} />
+            <JumMom>
+              <IoMdMore id="optionMenu" onClick={menuOpen} />
+              {bubbleOn ? <EditBubble contentsId={data?.postId} setBubbleOn={setBubbleOn} /> : null}
+            </JumMom>
           </Jum>
         </UserInfo>
         <ImgBox>
                 <MainImg src={data?.imgUrl[0]}/>
         </ImgBox>
         <Content>{data?.content}</Content>
-        <button onClick={() =>navigate('/post/update/' + params.id)}>수정</button>
-        <button onClick={deletePost}>삭제</button>
+        <Reactions>
+        <span>
+          <IoHeartOutline /> {data?.likeCnt}{" "}
+        </span>
+        <span>
+          <IoChatbubbleOutline /> {data?.viewCnt}{" "}
+        </span>
+      </Reactions>
       </All>
+        
+      
     </Wrap>
   );
 };
@@ -98,6 +121,11 @@ const Jum = styled.div`
   
 `
 
+const JumMom = styled.div`
+  position: relative;
+  font-size: 30px;
+`
+
 const ImgBox = styled.div`
   text-align: center;
 `
@@ -111,6 +139,15 @@ const Content = styled.p`
   padding: 20px;
   margin-left: 10px;
 `
+
+const Reactions = styled.div`
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+
+  span {
+    margin-right: 10px;
+  }
+`;
 
 
 
