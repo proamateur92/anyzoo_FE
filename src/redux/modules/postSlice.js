@@ -21,6 +21,7 @@ export const getDataDB = () => {
   };
 };
 
+// 추가하기
 export const addDataDB = (data) => {
   return async (dispatch) => {
     try {
@@ -33,17 +34,19 @@ export const addDataDB = (data) => {
   };
 };
 
+// 삭제하기
 export const removeDataDB = (id) => {
   return async (dispatch) => {
     try {
       const response = await axios.delete(`http://localhost:5000/post/${id}`);
-      dispatch(removeData(id));
+      dispatch(removeData(id)); 
     } catch (err) {
       console.log(err);
     }
   }
 }
 
+//수정하기
 export const modifyDataDB = (id, data) => {
   return async (dispatch) => {
     try {
@@ -62,16 +65,19 @@ const postSlice = createSlice({
     list: []
   },
   reducers: {
+    //read
     setData: (state, action) => {
       state.list = action.payload;
     },
+    // 추가하기
     addData: (state, action) => {
       state.list.push(action.payload);
     },
+    // 삭제하기 
     removeData: (state, action) => {
       state.list = state.list.filter(
         (post) => {
-          if (post.id === action.payload) {
+          if (post.id === action.payload) { // 받아온 id와 저장되어 있는 데이터의 id가 같으면 
             // action.payload => id
             return false;
           } else {
@@ -80,10 +86,11 @@ const postSlice = createSlice({
         }
       )
     },
+    //수정하기
     modifyData: (state, action) => {
       state.list = state.list.map(
         (post) => {
-          if (post.id === action.payload.id) {
+          if (post.id === action.payload.id) { // 받아온 id와 저장되어 있는 데이터의 id가 같으면 
             return {
               ...post, 
               subject: action.payload.data.subject,

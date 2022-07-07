@@ -165,13 +165,6 @@
       "postId": "2",
       "nickname": "테스트95",
       "content": "댓글테스트5"
-    },
-    {
-      "postId": "0",
-      "userId": 0,
-      "nickname": "test",
-      "content": "",
-      "id": "0L27qqg"
     }
   ],
   "heart": [

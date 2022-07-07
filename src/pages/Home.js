@@ -10,6 +10,8 @@ import RealTimeRank from "../components/RealtimeRank";
 import WeeklyRank from "../components/WeeklyRank";
 import FindMateCard from "../components/FindMateCard";
 
+import Comment from "../components/Comment";
+
 // style
 import styled from "styled-components";
 import { GrNext } from "react-icons/gr";
@@ -21,15 +23,30 @@ import { loadPostsDB } from "../redux/modules/postSlice";
 const Home = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.list);
+  const postRef = React.useRef()
+
+
+  const loadPosts = () => {
+    dispatch(loadPostsDB())
+  }
+
+
 
   React.useEffect(() => {
-    dispatch(loadPostsDB());
-  }, []);
+    
+  })
+
+  const observer = new IntersectionObserver(loadPosts, { threshold : 0.5 });
+
+  
+
 
   return (
     <Wrap>
       <Logo />
 
+
+    <Comment postId={0}/>
       <NoticeSlide />
       <RealTimeRank />
       <WeeklyRank />
@@ -41,7 +58,7 @@ const Home = () => {
 
       <FindMateCard />
 
-      <SubTitle>
+      <SubTitle ref={postRef}>
         <h3>자랑하기</h3>
         <GrNext />
       </SubTitle>
