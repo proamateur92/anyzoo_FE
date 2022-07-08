@@ -5,7 +5,7 @@ import Wrap from '../elements/Wrap';
 import { IoIosArrowBack } from 'react-icons/io';
 
 // compoenents
-import Step from '../components/Step';
+import Step from '../components/Step/Step';
 
 // react
 import { useState } from 'react';
@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // axios
-import axios from 'axios';
 import instance from '../shared/axios';
 
 const Signup = () => {
@@ -29,28 +28,37 @@ const Signup = () => {
   const handleSignup = async userData => {
     try {
       const response = await instance.post('/user/signup', { ...userData });
-      // const response = await axios.post('http://localhost:5000/user', { ...userData });
-      console.log(response.data);
+      alert(response.data.msg);
       navigate('/');
+      return;
     } catch (error) {
       console.log(error);
-      navigate('/signup');
     }
+    navigate('/signup');
   };
 
   return (
     <Wrap>
       <SignupForm>
-        <IoIosArrowBack
-          size={30}
-          style={{ padding: '83px 0 100px 30px', cursor: 'pointer' }}
-          onClick={() => navigate('/')}
-        />
+        <Top>
+          <IoIosArrowBack style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
+          <span>{`${step + 1}/5`}</span>
+        </Top>
         <Step step={step} onCountChange={handleCoutValue} onSignup={handleSignup} />
       </SignupForm>
     </Wrap>
   );
 };
 
-const SignupForm = styled.div``;
+const Top = styled.div`
+  display: flex;
+  font-size: 30px;
+  padding: 83px 0 100px 0;
+  justify-content: space-between;
+`;
+
+const SignupForm = styled.div`
+  padding: 0 10%;
+`;
+
 export default Signup;

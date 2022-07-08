@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // react
 import { useEffect, useState } from 'react';
 
@@ -8,10 +10,10 @@ import { AiFillEyeInvisible, AiFillEye, AiOutlineCheckCircle } from 'react-icons
 import styled from 'styled-components';
 
 // image
-import profile from '../assets/images/noProfile.png';
+import profile from '../../assets/images/noProfile.png';
 
 // axios
-import instance from '../shared/axios';
+import instance from '../../shared/axios';
 
 const Step = ({ step, onCountChange, onSignup }) => {
   // 패스워드 일치 여부
@@ -25,7 +27,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     let regExp = '';
 
     if (curData === 'nickname') {
-      regExp = /[a-zA-Z가-힣0-9]{2,9}$/g;
+      regExp = /^[a-zA-Z가-힣0-9]{3,9}$/;
     }
 
     if (curData === 'username') {
@@ -44,6 +46,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const [userInfo, setUserInfo] = useState({ nickname: '', username: '', password: '', img: '' });
+
   const [passwordCheckValue, setPasswordCheckValue] = useState('');
 
   const userInfoArr = ['agree', 'nickname', 'username', 'password', 'img'];
@@ -54,40 +57,37 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 이전에 입력된 input의 이름
   const prevData = step !== 0 && userInfoArr[step - 1];
 
-  // 업로드 이미지 -> 서버 통신
-  const uploadImage = async uploadFile => {
-    const formData = new FormData();
-    formData.append('file', uploadFile);
-    console.log(formData);
+  const [imageData, setImageData] = useState({ previewImage: '', imageFile: '' });
 
+  // 업로드 이미지 -> 서버 통신
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append('file', imageData.imageFile);
     try {
       // 서버 이미지 업로드 api 필요
-      const response = await instance.post('', {
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(response);
+      const response = await instance.post('/user/image', formData);
 
       // 유저 정보에 서버 이미지 url 저장
-      // setUserInfo({ ...userInfo, [curData]: imageUrl });
+      setUserInfo({ ...userInfo, [curData]: response.data.url });
     } catch (error) {
       console.log(error);
     }
   };
 
   // 입력 값 유저 정보 state에 넣기
-  const handleEnteredInfo = event => {
+  const handleEnteredInfo = async event => {
     // 이미지 업로드할 때
     if (curData === 'img') {
       const uploadFile = event.target.files[0];
-      console.log(uploadFile);
+
       if (uploadFile) {
-        uploadImage(uploadFile);
+        const previewImagePath = URL.createObjectURL(uploadFile);
+        setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
       } else {
-        setUserInfo({ ...userInfo, [curData]: '' });
+        setImageData({ previewImage: '', imageFile: '' });
+        return;
       }
+
       return;
     }
 
@@ -112,10 +112,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 이전 단계, 다음 단계 이동
   const handleStepMove = moveStep => {
     if (step !== 0 && moveStep === -1) {
-      setUserInfo({ ...userInfo, [prevData]: '' });
-      setValidation({ ...validation, [prevData]: false });
-      if (step === 3) {
+      setUserInfo({ ...userInfo, [prevData]: '', [curData]: '' });
+      setValidation({ ...validation, [prevData]: false, [curData]: false });
+
+      if (step === 3 || (step === 4 && moveStep === -1)) {
         setPasswordCheckValue('');
+        setIsShowPassword(false);
       }
     }
     onCountChange(moveStep);
@@ -123,11 +125,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 가입하기
   const singup = () => {
+    uploadImage();
     onSignup(userInfo);
   };
 
   // step별 화면 보여주기
   let content = '';
+
+  const [agreeArr, setAgreeArr] = useState({ 0: false, 1: false, 2: false, 3: false });
+  const check = () => {
+    console.log(1);
+  };
 
   if (step === 0) {
     content = (
@@ -138,7 +146,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <div>blah blah blah blah</div>
             <div>blah blah blah blah</div>
           </GuideBox>
-          <GuideList>
+          <GuideList onClick={() => check()} agree={agreeArr[0]}>
             <label htmlFor='first'>첫번째 약관 동의</label>
             <input id='first' type='checkbox' />
             <div className='box'></div>
@@ -162,6 +170,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <span className='strong'>별명</span>은?
           </p>
         </span>
+        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
+          <Validation>
+            * 영문자, 특수문자, 숫자, 3~10글자
+            <br />
+          </Validation>
+        )}
         <input value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='별명을 입력해주세요.' />
       </>
     );
@@ -171,11 +185,19 @@ const Step = ({ step, onCountChange, onSignup }) => {
     content = (
       <>
         <span className='desc'>
+          <p>본인 인증을 위해</p>
           <p>
-            <span className='strong'>이메일</span>을
+            <span className='strong'>인증코드</span>를
           </p>
           <p>입력해주세요.</p>
         </span>
+        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
+          <Validation>
+            * 이메일 형식이 유효하지 않아요.
+            <br />
+          </Validation>
+        )}
+        {/* <span>* 이미 등록된 이메일입니다.</span> */}
         <input
           value={userInfo.username}
           onChange={handleEnteredInfo}
@@ -195,7 +217,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
           </p>
           <p>입력해주세요.</p>
         </span>
-        <span className='notice'>* 대문자, 특수문자를 포함해주세요. (8~16글자)</span>
+        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
+          <Validation>
+            * 대문자, 특수문자를 포함해주세요. (8~16글자)
+            <br />
+          </Validation>
+        )}
         <InputBox>
           <input
             value={userInfo.password}
@@ -203,7 +230,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
             className='pwd'
             type={!isShowPassword ? 'password' : 'text'}
             placeholder='비밀번호를 입력해주세요.'
-            maxLength={16}
           />
           <Icon>
             {!isShowPassword && <AiFillEyeInvisible onClick={() => setIsShowPassword(true)} />}
@@ -217,18 +243,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
             className='pwd-check'
             type='password'
             placeholder='비밀번호를 다시 입력해주세요.'
-            maxLength={16}
           />
           <Icon>
-            <AiOutlineCheckCircle
-              style={{ color: passwordMatch ? 'green' : userInfo[curData].trim().length === 0 ? '' : 'red' }}
-            />
+            {passwordCheckValue.trim().length === 0 && <AiOutlineCheckCircle />}
+            {passwordCheckValue.trim().length !== 0 && (
+              <AiOutlineCheckCircle style={{ color: passwordMatch ? 'green' : 'red' }} />
+            )}
           </Icon>
         </InputBox>
       </>
     );
   }
-
   // 기본 이미지 클릭하면 파일 선택하기 창 띄우기
   const handleSelectImg = () => {
     const img = document.querySelector('.selectImg');
@@ -248,12 +273,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
         <Profile>
           <img
             className='defaultImg'
-            src={userInfo[curData] || profile}
+            src={imageData.previewImage || profile}
             alt='profile'
             accept='image/*'
             onClick={handleSelectImg}
           />
-          <input className='selectImg' onChange={handleEnteredInfo} type='file' />
+          <input className='selectImg' onChange={handleEnteredInfo} type='file' accept='image/*' />
         </Profile>
       </>
     );
@@ -279,14 +304,15 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  if (step === 4) {
-    <ButtonBox step={step} validation={validation[curData]}>
-      <button onClick={() => handleStepMove(-1)}>이전 단계</button>
-      <button step={step} onClick={() => singup()}>
-        가입하기
-      </button>
-    </ButtonBox>;
-  }
+  if (step === 4)
+    buttons = (
+      <ButtonBox step={step} validation={validation[curData]}>
+        <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
+        <PrevBtn step={step} onClick={() => singup()}>
+          가입하기
+        </PrevBtn>
+      </ButtonBox>
+    );
 
   return (
     <Container>
@@ -303,7 +329,7 @@ const Container = styled.div`
   .desc {
     display: block;
     font-size: 20px;
-    margin-bottom: 48px;
+    margin-bottom: 20px;
   }
   .strong {
     font-weight: bold;
@@ -337,7 +363,7 @@ const Container = styled.div`
 
 const Profile = styled.div`
   text-align: center;
-  margin-bottom: 10%;
+  margin: 10% 0 15% 0;
   .defaultImg {
     cursor: pointer;
     border-radius: 50%;
@@ -396,10 +422,12 @@ const GuideBox = styled.div`
 
 const GuideList = styled.div`
   display: flex;
-  cursor: pointer;
   margin-bottom: 10px;
   input {
     display: none;
+  }
+  label {
+    cursor: pointer;
   }
   .box {
     display: flex;
@@ -410,14 +438,24 @@ const GuideList = styled.div`
     padding: 2px;
     border-radius: 5px;
     border: 2px solid #ababab;
+    transition: 0.4s ease-in-out;
   }
   #first:checked + .box {
+    & {
+      background-color: violet;
+    }
     &::after {
       color: #ffffff;
       content: '✔';
-      background-color: red;
+      padding: 2px;
     }
   }
+`;
+
+const Validation = styled.span`
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10%;
 `;
 
 const PrevBtn = styled.button``;
@@ -432,16 +470,20 @@ const ButtonBox = styled.div`
     background-color: #ccc;
     border-radius: 10px;
   }
+  ${PrevBtn} {
+    transition: 0.5s;
+  }
   ${PrevBtn}:hover {
-    background-color: #949494;
+    background-color: ${props => props.theme.color.activeBtn};
   }
   ${NextBtn} {
     width: ${props => props.width};
-    background-color: ${props => (props.validation ? '#949494' : '#bdbdbd')};
+    background-color: ${props => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
     cursor: ${props => props.validation && 'pointer'};
+    transition: 0.5s;
   }
   ${NextBtn}:hover {
-    background-color: ${props => props.width && '#949494'};
+    background-color: ${props => props.width && props.theme.color.activeBtn};
   }
 `;
 
