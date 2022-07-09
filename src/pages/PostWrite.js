@@ -9,16 +9,19 @@ import React, { useRef, useState } from 'react';
 //redux
 import { useDispatch } from 'react-redux/es/exports';
 import { addDataDB, removeDataDB} from '../redux/modules/postSlice';
+import {  useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const PostWrite = () => {
-  const imgRef = useRef()
-  const contentRef = useRef()
+  const imgRef = useRef();
+  const contentRef = useRef();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [select, setSelect] = useState();
+  const [showImages, setShowImages] = useState([]);
+  const [getImages, setGetImages] = useState([])
+
   
-  const dispatch = useDispatch()
-  const [select, setSelect] = useState()
-
- 
-
  
  // 카테고리 값 select으로 넣기
   const category = (e) => {
@@ -27,71 +30,226 @@ const PostWrite = () => {
   }
 
   //data 설정해 reducer로 보내기(더하기)
-  const addPost = (e) => {
+  const addPost = async (e) => {
     e.preventDefault();
+    console.log(getImages)
+    const img = getImages
+    const formData = new FormData();
+    for (let i = 0; i < img.length; i++){
+      formData.append("file", img[i])
+    }
+    
+    await axios.post("http://43.200.52.184:8080/image/post", {
+      data: formData, headers: {
+      'Content-type':'multipart/form-data'
+      },
+    })
     const data = {
-      category: select,
+      CategoryName: select,
       content: contentRef.current.value,
-      imgUrl:["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe-mT5HNR1pmVQdZUZhnvBKX4sbhVnzda1kw&usqp=CAU"]
     }
     console.log(data)
     dispatch(addDataDB(data));
   }
 
+  const handelAddImg = (e) => {
+    // console.log(e.target.files, "img")
+    const imageLists = e.target.files;
+    
+
+
+    let imageUrlLists = [...showImages];
+
+    for (let i = 0; i < imageLists.length; i++){
+     
+      const currentImgUrl = URL.createObjectURL(imageLists[i]);
+      // console.log(currentImgUrl, "url")
+      imageUrlLists.push(currentImgUrl)
+    }
+    
+    if (imageUrlLists.length > 5) {
+      imageUrlLists = imageUrlLists(0,5)
+    }
+
+    setShowImages(imageUrlLists)
+    
+    const getImagesLists = e.target.files;
+    
+    setGetImages(getImagesLists)
+
+  }
+
+  // X버튼 클릭 시 이미지 삭제
+  const handleDeleteImage = (id) => {
+    setShowImages(showImages.filter((_, index) => index !== id));
+  };
   
+
 
   return (
     <Wrap>
       <TitleBox>
-        <h1>자랑하기</h1>
+        <h1 style={{ fontSize : "20px" }}>자랑하개</h1>
       </TitleBox>
       <InputBox>
-        <select onChange={category}>
-        <option value="PRETTY" >이쁨</option>
-        <option value="COOL">멋짐</option>
-        <option value="CUTE">귀여움</option>
-        <option value="COMIC">웃김</option>
+        
+        <p>카테고리</p>
+        <select  onChange={category}>
+        <option value="pretty" >이쁨</option>
+        <option value="cool">멋짐</option>
+        <option value="cute">귀여움</option>
+        <option value="comic">웃김</option>
         </select>
-        <div>
-          <input type="file" ref={imgRef}/>
-        </div>
+        <p>게시글 제목</p>
+        <Preview>
+          {showImages&&showImages.map((image, id) => {
+            return (
+              <div key={id}>
+                <PreviewImg src={image} />
+                <DeleteImg onClick={() => handleDeleteImage(id)} >x</DeleteImg>
+              </div>
+            )
+          })}
+          {showImages.length === 5 ? null :
+            <label onChange={handelAddImg}>
+              
+                <input type="file" id="input-file" multiple style={{ display: "none" }} /> 
+              
+            
+            <PlusImgBox>
+              <PlusImg><p>+</p></PlusImg>
+            </PlusImgBox>
+            </label>
+          }
+         
+            
+        </Preview>
       
-      <p>content</p>
+      <p>게시글 내용</p>
         <Content ref={contentRef}/>
         <ButtonBox>
-        <button onClick={addPost}>올리기</button>
+          <CancelBtn onClick={()=>navigate('/post')}>취소</CancelBtn>
+          <AddBtn onClick={addPost}>작성하기</AddBtn>
         </ButtonBox>
-        
       </InputBox>
+      
     </Wrap>
   );
 };
 
 const TitleBox = styled.div`
   text-align: center;
-  padding: 10px;
+   padding: 19px 150px 18px 151px;
+  margin-top: 20px;
 
   h1{
-    font-size: 30px;
+    font-size: 20px;
+    font-weight: bold;
   }
 `
 
+
 const InputBox = styled.div`
-display: block;
-  padding: 30px;
+text-align: center;
+
+
+  p{
+    color: #000;
+    font-size: 16px;
+    opacity: 0.5;
+    margin: 15px 0;
+  }
+
+  select{
+    font-size: 16px;
+    opacity: 20%;
+    padding: 3px;
+    width: 300px;
+    height: 30px;
+    border-radius: 10px;
+  }
 `
-const Content = styled.textarea`
+const ImgPut = styled.input`
+  margin-top: 5px;
+`
+
+const Preview = styled.div`
+justify-content: center;
+  display: flex;
+`
+
+const PreviewImg = styled.img`
+ width: 68px;
+ height: 68px;
+ border-radius: 5px;
+ margin-top: 10px;
+`
+
+const PlusImgBox = styled.div`
+display: flex;
+justify-content: center;
+  width: 68px;
+  height: 68px;
+  margin-top: 11px;
+  /* background-color: aqua; */
+`
+
+const PlusImg = styled.div`
+  border: 2px solid #000;
+  opacity: 0.3;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  margin-top: 20px;
+  border-radius: 20px;
+  padding: 2px;
   
-    width: 100%;
-    height: 6.25em;
-    border: solid black 1px;
-    resize: none;
+  p{
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: -5px;
+  }
+`
+
+const DeleteImg = styled.button`
+  background-color: transparent;
+  color: gray;
+  left: 2px;
+`
+
+const Content = styled.textarea`
+  border: none;
+  width: 300px;
+  height: 380px;
+  margin: 5px 0 0;
+  border-radius: 10px;
+  background-color: #f8f8f8;
   
 `
 
 const ButtonBox = styled.div`
   text-align: center;
   padding: 20px;
+`
+
+const CancelBtn = styled.button`
+  width: 130px;
+  height: 50px;
+  flex-grow: 0;
+  margin: 0 20px 0 0;
+  padding: 16px 51px 15px 49px;
+  border-radius: 10px;
+  background-color: #f2f2f2;
+`
+const AddBtn = styled.button`
+  width: 130px;
+  height: 50px;
+  flex-grow: 0;
+  margin: 0 0 0 20px;
+  padding: 16px 36px 15px 35px;
+  border-radius: 10px;
+  background-color: #44dcd3;
 `
 
 export default PostWrite;

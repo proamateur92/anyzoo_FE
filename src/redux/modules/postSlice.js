@@ -8,7 +8,7 @@ import axios from 'axios'
 
 export const loadPostsDB = createAsyncThunk(
   'loadPost', async() => {
-    const response = await axios.get('http://localhost:5000/post').catch((err) => console.log(err))
+    const response = await axios.get('http://43.200.52.184:8080/post').catch((err) => console.log(err))
     return response.data
   }
 );
@@ -16,7 +16,7 @@ export const loadPostsDB = createAsyncThunk(
 // export const getDataDB = () => {
 //   return async (dispatch) => {
 //     try {
-//       const response = await axios.get("http://localhost:5000/post");
+//       const response = await axios.get("http://43.200.52.184:8080/post");
 //       dispatch(setData(response.data));
 //     } catch (err) {
 //       console.log(err);
@@ -28,7 +28,7 @@ export const loadPostsDB = createAsyncThunk(
 export const addDataDB = (data) => {
   return async (dispatch) => {
     try {
-      const response = await axios.post("http://localhost:5000/post", data);
+      const response = await axios.post("http://43.200.52.184:8080/post", data);
       console.log(response.data)
       dispatch(addData(response.data));
     } catch (err) {
@@ -41,7 +41,7 @@ export const addDataDB = (data) => {
 export const removeDataDB = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/post/${id}`);
+      const response = await axios.delete(`http://43.200.52.184:8080/post/${id}`);
       dispatch(removeData(id)); 
     } catch (err) {
       console.log(err);
@@ -53,7 +53,7 @@ export const removeDataDB = (id) => {
 export const modifyDataDB = (id, data) => {
   return async (dispatch) => {
     try {
-      const response = await axios.patch(`http://localhost:5000/post/${id}`, data);
+      const response = await axios.patch(`http://43.200.52.184:8080/post/${id}`, data);
       dispatch(modifyData({id, data}));
     } catch (err) {
       console.log(err);

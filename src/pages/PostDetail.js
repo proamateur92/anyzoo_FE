@@ -17,6 +17,7 @@ const PostDetail = () => {
   const dispatch = useDispatch() 
   const navigate = useNavigate();
   const [bubbleOn, setBubbleOn] = React.useState(false);
+  const [testImg, setTestImg] = useState([{url:"https://img.animalplanet.co.kr/news/2020/07/15/700/e05t9x1o0e3trklpwrr3.jpg"}, {url:"https://cdn.mediaville.co.kr/news/photo/202104/496_554_4651.jpg"},{url:"https://img.khan.co.kr/news/2019/11/29/l_2019112901003607500286631.jpg"}])
 
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
@@ -24,7 +25,7 @@ const PostDetail = () => {
 
 // axios에서 데이터를 받아오기
 useEffect(() => {
-  axios.get("http://localhost:5000/post/" + params.id)
+  axios.get("http://43.200.52.184:8080/post/" + params.id)
     .then(response => {
       setData(response.data) //useState의 data에 넣어준다.
       console.log(response.data)
@@ -37,6 +38,11 @@ const deletePost = (e) => {
     e.preventDefault(); 
     dispatch(removeDataDB(params.id)) //removeDateDB에 id 전달해줌.
   }
+
+  const clickHeart = () => {
+    axios.post("http://43.200.52.184:8080/heart/" + data?.boardMainId)
+      .then()
+}
 
   
 
@@ -52,7 +58,7 @@ const deletePost = (e) => {
               src="https://item.kakaocdn.net/do/d8b92364bb23fd5c3dcf4c08f6422d63617ea012db208c18f6e83b1a90a7baa7"
               alt=""
             />
-            <UserName>{data?.username}</UserName> 
+            <UserName>{data?.userNickname}</UserName> 
           </User>
           <Jum>
             <JumMom>
@@ -62,12 +68,19 @@ const deletePost = (e) => {
           </Jum>
         </UserInfo>
         <ImgBox>
-                <MainImg src={data?.imgUrl[0]}/>
+          {testImg.map((v, i) => {
+            return (
+              <ImgCard >
+                <MainImg src={v.url}/>
+              </ImgCard>
+            )
+          })}
+                
         </ImgBox>
         <Content>{data?.content}</Content>
         <Reactions>
         <span>
-          <IoHeartOutline /> {data?.likeCnt}{" "}
+            <IoHeartOutline onClick={clickHeart} /> {data?.likeCnt}{" "}
         </span>
         <span>
           <IoChatbubbleOutline /> {data?.viewCnt}{" "}
@@ -127,12 +140,22 @@ const JumMom = styled.div`
 `
 
 const ImgBox = styled.div`
-  text-align: center;
+  display: flex;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+`
+
+const ImgCard = styled.div`
+  flex:none;
+  scroll-snap-align: start;
+  width: 100%;
 `
 
 const MainImg = styled.img`
   padding: 10px;
   width: 90%;
+  display: block;
+  height: 90%;
 `
 
 const Content = styled.p`
