@@ -22,42 +22,42 @@ import { loadHeartDB } from './redux/modules/heartSlice';
 
 function App() {
   // redux 테스트 코드 시작
-  const dispatch = useDispatch();
-  const userList = useSelector(state => state.user?.list);
-  const postList = useSelector(state => state.post?.list);
-  const heartList = useSelector(state => state.heart?.list);
-  const commentList = useSelector(state => state.comment?.list);
-  console.log(userList);
-  console.log(postList);
-  console.log(heartList);
-  console.log(commentList);
+  // const dispatch = useDispatch();
+  // const userList = useSelector(state => state.user?.list);
+  // const postList = useSelector(state => state.post?.list);
+  // const heartList = useSelector(state => state.heart?.list);
+  // const commentList = useSelector(state => state.comment?.list);
+  // console.log(userList);
+  // console.log(postList);
+  // console.log(heartList);
+  // console.log(commentList);
 
-  const getLogin = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/user');
-    dispatch(loadUserDB(response.data));
-  }, [dispatch]);
+  // const getLogin = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/user');
+  //   dispatch(loadUserDB(response.data));
+  // }, [dispatch]);
 
-  const getPost = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/post');
-    dispatch(loadPostDB(response.data));
-  }, [dispatch]);
+  // const getPost = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/post');
+  //   dispatch(loadPostDB(response.data));
+  // }, [dispatch]);
 
-  const getHeart = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/heart');
-    dispatch(loadHeartDB(response.data));
-  }, [dispatch]);
+  // const getHeart = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/heart');
+  //   dispatch(loadHeartDB(response.data));
+  // }, [dispatch]);
 
-  const getComment = useCallback(async () => {
-    const response = await axios.get('http://localhost:5000/comment');
-    dispatch(loadCommentDB(response.data));
-  }, [dispatch]);
+  // const getComment = useCallback(async () => {
+  //   const response = await axios.get('http://localhost:5000/comment');
+  //   dispatch(loadCommentDB(response.data));
+  // }, [dispatch]);
 
-  useEffect(() => {
-    getLogin();
-    getPost();
-    getHeart();
-    getComment();
-  }, [getLogin, getPost, getHeart, getComment]);
+  // useEffect(() => {
+  //   getLogin();
+  //   getPost();
+  //   getHeart();
+  //   getComment();
+  // }, [getLogin, getPost, getHeart, getComment]);
   // redux 테스트 코드 끝
 
   const theme = defaultTheme;
