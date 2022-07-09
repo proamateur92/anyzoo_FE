@@ -39,14 +39,16 @@ const PostWrite = () => {
       formData.append("file", img[i])
     }
     
-    await axios.post("http://43.200.52.184:8080/image/post", {
+    const response = await axios.post("http://43.200.52.184:8080/image/post", {
       data: formData, headers: {
       'Content-type':'multipart/form-data'
       },
     })
+    console.log(response)
     const data = {
       CategoryName: select,
       content: contentRef.current.value,
+      postimages: response
     }
     console.log(data)
     dispatch(addDataDB(data));
