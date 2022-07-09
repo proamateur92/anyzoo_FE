@@ -17,8 +17,18 @@ import styled from 'styled-components';
 // axios
 import instance from '../shared/axios';
 
+// redux
+import { useDispatch } from 'react-redux';
+
+// cookie
+import { setCookie } from '../shared/cookie';
+
+// store
+import { setUserDB } from '../redux/modules/userSlice';
+
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [step, setStep] = useState(0);
 
   const handleCoutValue = num => {
@@ -29,6 +39,15 @@ const Signup = () => {
     try {
       const response = await instance.post('/user/signup', { ...userData });
       alert(response.data.msg);
+
+      console.log('토큰 값 체크');
+      console.log(response.data.data.token);
+
+      setCookie('accessToken', response.data.data.token.accessToken);
+      setCookie('refreshToken', response.data.data.token.refreshToken);
+
+      dispatch(setUserDB);
+
       navigate('/');
       return;
     } catch (error) {

@@ -132,9 +132,42 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // step별 화면 보여주기
   let content = '';
 
-  const [agreeArr, setAgreeArr] = useState({ 0: false, 1: false, 2: false, 3: false });
-  const check = () => {
-    console.log(1);
+  // 약관 동의 체크
+  const [agreeArr, setAgreeArr] = useState({ all: false, first: false, second: false, third: false });
+  const [isAllAgree, setIsAllAgree] = useState(false);
+
+  // 약관 동의 항목 체크 여부
+  useEffect(() => {
+    for (const key in agreeArr) {
+      if (key === 'all') {
+        agreeArr[key] && setIsAllAgree(agreeArr[key]);
+      } else {
+        !agreeArr[key] && setIsAllAgree(agreeArr[key]);
+        // 모든 항목 체크 되면 all을 true로 값 바꿔주기
+        // console.log(Object.values());
+        return;
+      }
+    }
+
+    // 전체 동의가 true면 약관 체크 true처리
+    setAgreeArr({ ...agreeArr, all: true });
+  }, [agreeArr]);
+
+  const handleAgreeCheck = index => {
+    if (index === 'all') {
+      agreeArr['all'] ? setIsAllAgree(true) : setIsAllAgree(false);
+
+      setAgreeArr({
+        all: !agreeArr['all'],
+        first: !agreeArr['all'],
+        second: !agreeArr['all'],
+        third: !agreeArr['all'],
+      });
+      return;
+    }
+
+    agreeArr[index] && setAgreeArr({ ...agreeArr, all: false, [index]: !agreeArr[index] });
+    !agreeArr[index] && setAgreeArr({ ...agreeArr, [index]: !agreeArr[index] });
   };
 
   if (step === 0) {
@@ -143,18 +176,24 @@ const Step = ({ step, onCountChange, onSignup }) => {
         <span style={{ fontSize: '30px', fontWeight: 'bold' }}>약관동의</span>
         <Guide>
           <GuideBox>
-            <div>blah blah blah blah</div>
-            <div>blah blah blah blah</div>
+            <div>회원가입 전, 애니쥬 약관을 확인해주세요.</div>
           </GuideBox>
-          <GuideList onClick={() => check()} agree={agreeArr[0]}>
-            <label htmlFor='first'>첫번째 약관 동의</label>
-            <input id='first' type='checkbox' />
-            <div className='box'></div>
+          <GuideList onClick={() => handleAgreeCheck('all')}>
+            <div className={agreeArr['all'] ? 'box checked' : 'box'}></div>
+            <span>약관 전체동의</span>
           </GuideList>
-          <GuideList>
-            <label htmlFor='all'>전체 선택</label>
-            <AiOutlineCheckCircle />
-            <input id='all' type='checkbox' />
+          <GuideList onClick={() => handleAgreeCheck('first')}>
+            <div className={agreeArr['first'] ? 'box checked' : 'box'}></div>
+            <span>이용약관 동의(필수)</span>
+          </GuideList>
+          <GuideList onClick={() => handleAgreeCheck('second')}>
+            <div className={agreeArr['second'] ? 'box checked' : 'box'}></div>
+            <span>개인정보 수집 및 이용동의(필수)</span>
+          </GuideList>
+          <GuideList onClick={() => handleAgreeCheck('third')}>
+            <div className={agreeArr['third'] ? 'box checked' : 'box'}></div>
+            <span>E-mail 및 SMS 광고성 정보 수신 동의(선택)</span>
+            <span>* 다양한 이벤트 소식을 보내드립니다.</span>
           </GuideList>
         </Guide>
       </>
@@ -223,6 +262,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <br />
           </Validation>
         )}
+        {passwordCheckValue.trim().length !== 0 && !passwordMatch && (
+          <Validation>* 비밀번호가 일치하지 않아요.</Validation>
+        )}
         <InputBox>
           <input
             value={userInfo.password}
@@ -289,7 +331,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   if (step === 0) {
     buttons = (
-      <ButtonBox step={step} width='100%'>
+      <ButtonBox step={step} width='100%' validation={isAllAgree}>
         <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
@@ -413,22 +455,16 @@ const Guide = styled.div`
 
 const GuideBox = styled.div`
   width: 80%;
-  background-color: #ccc;
   border-radius: 10px;
-  background-color: blue;
   padding: 20px;
   margin-bottom: 27px;
+  box-shadow: 5px 5px 3px 3px #ccc;
 `;
 
 const GuideList = styled.div`
   display: flex;
   margin-bottom: 10px;
-  input {
-    display: none;
-  }
-  label {
-    cursor: pointer;
-  }
+  cursor: pointer;
   .box {
     display: flex;
     justify-content: center;
@@ -436,17 +472,16 @@ const GuideList = styled.div`
     width: 10px;
     height: 10px;
     padding: 2px;
-    border-radius: 5px;
+    border-radius: 50%;
     border: 2px solid #ababab;
-    transition: 0.4s ease-in-out;
+    overflow: hidden;
+    transition: 1s all ease-in-out;
   }
-  #first:checked + .box {
-    & {
-      background-color: violet;
-    }
+  .box.checked {
     &::after {
-      color: #ffffff;
       content: '✔';
+      background-color: violet;
+      color: #ffffff;
       padding: 2px;
     }
   }
@@ -479,11 +514,9 @@ const ButtonBox = styled.div`
   ${NextBtn} {
     width: ${props => props.width};
     background-color: ${props => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
+
     cursor: ${props => props.validation && 'pointer'};
     transition: 0.5s;
-  }
-  ${NextBtn}:hover {
-    background-color: ${props => props.width && props.theme.color.activeBtn};
   }
 `;
 
