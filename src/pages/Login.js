@@ -13,18 +13,8 @@ import { useNavigate } from 'react-router-dom';
 // axios
 import instance from '../shared/axios';
 
-// redux
-import { useDispatch } from 'react-redux';
-
-// storage
-import { setUserDB } from '../redux/modules/userSlice';
-
-// cookie
-import { setCookie } from '../shared/cookie';
-
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const eamilValue = useRef('');
   const pwdValue = useRef('');
@@ -32,13 +22,12 @@ const Login = () => {
   const login = async userInfo => {
     try {
       const response = await instance.post('/user/login', userInfo);
-      setCookie('accessToken', response.data.data.token.accessToken);
-      setCookie('refreshToken', response.data.data.token.refreshToken);
-      alert(response.data.msg);
-      dispatch(setUserDB);
+      alert(response.data);
+      // 토큰값 저장하는 함수 필요
+      // 토큰값으로 유저정보 받아오기 api필요
       navigate('/');
     } catch (error) {
-      window.alert(error.response.data.errorMessage);
+      alert(error);
       navigate('/login');
     }
   };
