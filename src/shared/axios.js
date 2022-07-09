@@ -5,14 +5,14 @@ const instance = axios.create({
   baseURL: 'http://43.200.52.184:8080',
 });
 
-const accessToken = getCookie('accessToken');
-console.log('accessToken: ', accessToken);
+export const setAccessToken = () => {
+  let accessToken = getCookie('accessToken');
 
-if (accessToken) {
-  console.log('header에 토큰 값 넣기');
-  instance.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-} else {
-}
+  if (accessToken) {
+    console.log('header에 토큰 값 넣기');
+    instance.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+  }
+};
 
 // response interceptor
 instance.interceptors.response.use(

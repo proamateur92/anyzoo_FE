@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 // axios
-import instance from '../shared/axios';
+import instance, { setAccessToken } from '../shared/axios';
 
 // redux
 import { useDispatch } from 'react-redux';
@@ -45,10 +45,9 @@ const Signup = () => {
 
       setCookie('accessToken', response.data.data.token.accessToken);
       setCookie('refreshToken', response.data.data.token.refreshToken);
-
+      setAccessToken();
       dispatch(setUserDB);
-
-      navigate('/');
+      // navigate('/');
       return;
     } catch (error) {
       console.log(error);
