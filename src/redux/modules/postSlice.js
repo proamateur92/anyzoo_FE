@@ -4,8 +4,9 @@ import axios from 'axios'
 
 
 export const loadPostsDB = createAsyncThunk(
-  'loadPost', async() => {
-    const response = await axios.get('http://localhost:5000/post').catch((err) => console.log(err))
+  'post/loadPost', async() => {
+    const response = await axios.get('http://43.200.52.1840/api/post/category/all?page=0').catch((err) => console.log(err))
+    console.log(response)
     return response.data
   }
 );
@@ -45,7 +46,7 @@ export const removeDataDB = (id) => {
     }
   }
 }
-
+ 
 //수정하기
 export const modifyDataDB = (id, data) => {
   return async (dispatch) => {

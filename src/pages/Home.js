@@ -25,12 +25,10 @@ const Home = () => {
   const posts = useSelector((state) => state.post.list);
   const postRef = React.useRef()
 
-
   const loadPosts = () => {
     dispatch(loadPostsDB())
+    console.log('요청')
   }
-
-
 
   React.useEffect(() => {
     
@@ -44,10 +42,10 @@ const Home = () => {
   return (
     <Wrap>
       <Logo />
-
-
     <Comment postId={0}/>
+    
       <NoticeSlide />
+
       <RealTimeRank />
       <WeeklyRank />
 
@@ -63,7 +61,7 @@ const Home = () => {
         <GrNext />
       </SubTitle>
 
-      {posts.map((post, i) => (
+      {posts.map((post) => (
         <PostCard key={post.postId} data={post} />
       ))}
     </Wrap>

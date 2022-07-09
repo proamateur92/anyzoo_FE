@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 // 컴포넌트
 import EditBubble from "../elements/EditBubble";
-
+ 
 // CSS 관련 임포트
 import styled from "styled-components";
 import { IoMdMore } from "react-icons/io";
@@ -17,6 +17,7 @@ const PostCard = (props) => {
 
   const [bubbleOn, setBubbleOn] = React.useState(false);
 
+  
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
   };
@@ -28,8 +29,11 @@ const PostCard = (props) => {
           <div id="profileImg" img={postData.user[0].img} />
           <span id="nickName"> {postData.user[0].nickname} </span>
         </UserInfo>
+
         <IoMdMore id="optionMenu" onClick={menuOpen} />
         {bubbleOn ? <EditBubble contentsId={postId} setBubbleOn={setBubbleOn} /> : null}
+
+
       </CardHeader>
 
       <Contents onClick={() => navigate('/post/detail/' + postId)}>
