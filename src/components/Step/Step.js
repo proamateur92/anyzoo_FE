@@ -15,7 +15,12 @@ import profile from '../../assets/images/noProfile.png';
 // axios
 import instance from '../../shared/axios';
 
+// router
+import { useNavigate } from 'react-router-dom';
+
 const Step = ({ step, onCountChange, onSignup }) => {
+  const navigate = useNavigate();
+
   // 패스워드 일치 여부
   const [passwordMatch, setPasswordMatch] = useState(false);
 
@@ -66,7 +71,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     try {
       // 서버 이미지 업로드 api 필요
       const response = await instance.post('/user/image', formData);
-
+      console.log(response.data);
       // 유저 정보에 서버 이미지 url 저장
       setUserInfo({ ...userInfo, [curData]: response.data.url });
     } catch (error) {
@@ -83,6 +88,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
       if (uploadFile) {
         const previewImagePath = URL.createObjectURL(uploadFile);
         setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
+        // window.URL.revokeObjectURL(previewImagePath);
       } else {
         setImageData({ previewImage: '', imageFile: '' });
         return;
@@ -111,6 +117,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 이전 단계, 다음 단계 이동
   const handleStepMove = moveStep => {
+    if (step === 1 && moveStep === -1) {
+      setAgreeArr({ all: false, first: false, second: false });
+      setIsAllAgree(false);
+    }
+
     if (step !== 0 && moveStep === -1) {
       setUserInfo({ ...userInfo, [prevData]: '', [curData]: '' });
       setValidation({ ...validation, [prevData]: false, [curData]: false });
@@ -127,47 +138,41 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const singup = () => {
     uploadImage();
     onSignup(userInfo);
+    navigate('/');
   };
 
   // step별 화면 보여주기
   let content = '';
 
   // 약관 동의 체크
-  const [agreeArr, setAgreeArr] = useState({ all: false, first: false, second: false, third: false });
+  const [agreeArr, setAgreeArr] = useState({ all: false, first: false, second: false });
   const [isAllAgree, setIsAllAgree] = useState(false);
-
-  // 약관 동의 항목 체크 여부
-  useEffect(() => {
-    for (const key in agreeArr) {
-      if (key === 'all') {
-        agreeArr[key] && setIsAllAgree(agreeArr[key]);
-      } else {
-        !agreeArr[key] && setIsAllAgree(agreeArr[key]);
-        // 모든 항목 체크 되면 all을 true로 값 바꿔주기
-        // console.log(Object.values());
-        return;
-      }
-    }
-
-    // 전체 동의가 true면 약관 체크 true처리
-    setAgreeArr({ ...agreeArr, all: true });
-  }, [agreeArr]);
 
   const handleAgreeCheck = index => {
     if (index === 'all') {
-      agreeArr['all'] ? setIsAllAgree(true) : setIsAllAgree(false);
+      const result = agreeArr['all'] ? true : false;
 
+      setIsAllAgree(!result);
       setAgreeArr({
-        all: !agreeArr['all'],
-        first: !agreeArr['all'],
-        second: !agreeArr['all'],
-        third: !agreeArr['all'],
+        all: !result,
+        first: !result,
+        second: !result,
       });
       return;
     }
 
-    agreeArr[index] && setAgreeArr({ ...agreeArr, all: false, [index]: !agreeArr[index] });
+    for (const key in agreeArr) {
+      if (key !== 'all' && index !== key && !agreeArr[index] && agreeArr[key]) {
+        setAgreeArr({ ...agreeArr, all: true, [index]: !agreeArr[index] });
+        setIsAllAgree(true);
+        return;
+      } else {
+        setIsAllAgree(false);
+      }
+    }
+
     !agreeArr[index] && setAgreeArr({ ...agreeArr, [index]: !agreeArr[index] });
+    agreeArr[index] && setAgreeArr({ ...agreeArr, all: false, [index]: !agreeArr[index] });
   };
 
   if (step === 0) {
@@ -179,21 +184,16 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <div>회원가입 전, 애니쥬 약관을 확인해주세요.</div>
           </GuideBox>
           <GuideList onClick={() => handleAgreeCheck('all')}>
-            <div className={agreeArr['all'] ? 'box checked' : 'box'}></div>
             <span>약관 전체동의</span>
+            <div className={agreeArr['all'] ? 'box checked' : 'box'}></div>
           </GuideList>
           <GuideList onClick={() => handleAgreeCheck('first')}>
-            <div className={agreeArr['first'] ? 'box checked' : 'box'}></div>
             <span>이용약관 동의(필수)</span>
+            <div className={agreeArr['first'] ? 'box checked' : 'box'}></div>
           </GuideList>
           <GuideList onClick={() => handleAgreeCheck('second')}>
-            <div className={agreeArr['second'] ? 'box checked' : 'box'}></div>
             <span>개인정보 수집 및 이용동의(필수)</span>
-          </GuideList>
-          <GuideList onClick={() => handleAgreeCheck('third')}>
-            <div className={agreeArr['third'] ? 'box checked' : 'box'}></div>
-            <span>E-mail 및 SMS 광고성 정보 수신 동의(선택)</span>
-            <span>* 다양한 이벤트 소식을 보내드립니다.</span>
+            <div className={agreeArr['second'] ? 'box checked' : 'box'}></div>
           </GuideList>
         </Guide>
       </>
@@ -332,7 +332,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 0) {
     buttons = (
       <ButtonBox step={step} width='100%' validation={isAllAgree}>
-        <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
+        <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
   }
@@ -454,7 +454,7 @@ const Guide = styled.div`
 `;
 
 const GuideBox = styled.div`
-  width: 80%;
+  width: 95%;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 27px;
@@ -462,27 +462,34 @@ const GuideBox = styled.div`
 `;
 
 const GuideList = styled.div`
+  width: 95%;
+  padding: 0 20px;
   display: flex;
-  margin-bottom: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
   cursor: pointer;
+
   .box {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 10px;
-    height: 10px;
-    padding: 2px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
     border-radius: 50%;
     border: 2px solid #ababab;
     overflow: hidden;
-    transition: 1s all ease-in-out;
   }
   .box.checked {
     &::after {
       content: '✔';
-      background-color: violet;
+      background-color: ${props => props.theme.color.activeBtn};
       color: #ffffff;
-      padding: 2px;
+      font-size: 20px;
+      width: 100%;
+      height: 100%;
     }
   }
 `;
