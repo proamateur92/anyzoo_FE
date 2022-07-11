@@ -13,7 +13,7 @@ import { loadPostsDB } from "../redux/modules/postSlice";
 
 const Post = () => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.post.list[0]);
+  const posts = useSelector((state) => state.post.list);
   console.log(posts)
  
   React.useEffect(() => {
