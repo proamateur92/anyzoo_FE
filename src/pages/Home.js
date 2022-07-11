@@ -2,13 +2,14 @@ import React from "react";
 
 // element
 import Wrap from "../elements/Wrap";
-
+import SubHeader from "../elements/SubHeader";
 // component
 import PostCard from "../components/PostCard";
 import NoticeSlide from "../components/NoticeSlide";
 import RealTimeRank from "../components/RealtimeRank";
 import WeeklyRank from "../components/WeeklyRank";
 import FindMateCard from "../components/FindMateCard";
+
 
 import Comment from "../components/Comment";
 
@@ -44,6 +45,12 @@ const Home = () => {
       <NoticeSlide />
 
       <RealTimeRank />
+
+      <SubTitle>
+        <h3>주간</h3>
+        <GrNext />
+      </SubTitle>
+
       <WeeklyRank />
 
       <SubTitle>
