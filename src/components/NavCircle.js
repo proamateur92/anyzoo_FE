@@ -25,30 +25,30 @@ const NavCircle = (props) => {
     document.body.style.overflow = "hidden";
   }, []);
 
-  const closeCicle = (e) => {
-    if (e.target === backDropRef.current) {
-      document.body.style.overflow = "unset";
-      setCircleOn(false);
-    }
-  };
-
   const moveTo = (url) => {
     navigate(url)
     document.body.style.overflow = "unset";
     setCircleOn(false); 
   }
 
+  const closePlus = (e) => {
+    if (e.target === backDropRef.current) {
+      document.body.style.overflow = "unset";
+      setCircleOn(false);
+    }
+  };
+
   return (
     <Portal>
-      <BackDrop ref={backDropRef} onClick={(e) => closeCicle(e)}>
+      <BackDrop ref={backDropRef} onClick={(e) => closePlus(e)}>
 
       {
         plusOpen ?
         <WriteMenu>
-          <div onClick={() => moveTo('/')}> 자랑글 작성 </div>
-          <div> 산책글 작성 </div>
-          <div> 산책모집 작성 </div>
-          <div> 릴스 작성 </div>
+          <div onClick={() => moveTo('/post/write')}> 자랑글 작성 </div>
+          <div onClick={() => moveTo('/')}> 산책글 작성 </div>
+          <div onClick={() => moveTo('/')}> 산책모집 작성 </div>
+          <div onClick={() => moveTo('/')}> 릴스 작성 </div>
         </WriteMenu> 
         : null
       }

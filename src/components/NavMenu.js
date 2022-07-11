@@ -4,7 +4,6 @@ import React from "react";
 import styled from "styled-components";
 
 // element
-import Wrap from "../elements/Wrap";
 import { BsPlusLg } from "react-icons/bs";
 
 //component
@@ -18,14 +17,12 @@ const NavMenu = () => {
   const [circleOn, setCircleOn] = React.useState(false);
 
   return (
-    <Wrap>
       <NavWrap>
         <div onClick={()=> navigate('/post')}> 자랑하기 </div>
         <button onClick={()=> setCircleOn(true)}> <BsPlusLg/> </button>
         { circleOn ? <NavCircle setCircleOn={setCircleOn}/> : null }
         <div onClick={()=> navigate('/')}> 릴스 </div>
       </NavWrap>
-    </Wrap>
   );
 };
 
