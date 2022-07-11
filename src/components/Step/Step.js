@@ -136,7 +136,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 가입하기
   const singup = () => {
-    uploadImage();
+    userInfo.img && uploadImage();
     onSignup(userInfo);
     navigate('/');
   };
@@ -151,7 +151,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const handleAgreeCheck = index => {
     if (index === 'all') {
       const result = agreeArr['all'] ? true : false;
-
       setIsAllAgree(!result);
       setAgreeArr({
         all: !result,

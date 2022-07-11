@@ -8,7 +8,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import Step from '../components/Step/Step';
 
 // react
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // router
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,7 @@ import instance, { setAccessToken } from '../shared/axios';
 import { useDispatch } from 'react-redux';
 
 // cookie
-import { setCookie } from '../shared/cookie';
+import { getCookie, setCookie } from '../shared/cookie';
 
 // store
 import { setUserDB } from '../redux/modules/userSlice';
@@ -30,6 +30,11 @@ const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [step, setStep] = useState(0);
+  const isLogin = getCookie('accessToken') ? true : false;
+
+  useEffect(() => {
+    if (isLogin) navigate('/');
+  });
 
   const handleCoutValue = num => {
     setStep(prev => prev + num);
@@ -37,20 +42,17 @@ const Signup = () => {
 
   const handleSignup = async userData => {
     try {
+      console.table(userData);
       const response = await instance.post('/user/signup', { ...userData });
       alert(response.data.msg);
-
-      console.log('토큰 값 체크');
-      console.log(response.data.data.token);
-
       setCookie('accessToken', response.data.data.token.accessToken);
       setCookie('refreshToken', response.data.data.token.refreshToken);
       setAccessToken();
-      dispatch(setUserDB);
-      // navigate('/');
+      dispatch(setUserDB());
+      navigate('/');
       return;
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
     navigate('/signup');
   };
