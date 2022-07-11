@@ -31,8 +31,8 @@ const Home = () => {
   }
 
   React.useEffect(() => {
-    
-  })
+    // loadPosts()
+  },[])
 
   const observer = new IntersectionObserver(loadPosts, { threshold : 0.5 });
 
@@ -42,7 +42,7 @@ const Home = () => {
   return (
     <Wrap>
       <Logo />
-    <Comment postId={0}/>
+    {/* <Comment postId={0}/> */}
     
       <NoticeSlide />
 

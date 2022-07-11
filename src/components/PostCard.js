@@ -12,9 +12,10 @@ import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
 
 const PostCard = (props) => {
   const navigate = useNavigate();
-  const postData = props.data.boardMain[0];
+  const postData = props.data
   const postId = props.data.postId;
 
+  console.log(postData)
   const [bubbleOn, setBubbleOn] = React.useState(false);
 
   

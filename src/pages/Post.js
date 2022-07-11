@@ -13,8 +13,8 @@ import { loadPostsDB } from "../redux/modules/postSlice";
 
 const Post = () => {
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.post.list);
-  // console.log(posts)
+  const posts = useSelector((state) => state.post.list[0]);
+  console.log(posts)
  
   React.useEffect(() => {
     dispatch(loadPostsDB());
@@ -24,7 +24,7 @@ const Post = () => {
     <Wrap>
       <SubHeader title={'자랑하기'}> </SubHeader>
       {posts.map((post) => (
-        <PostCard key={post.postId} data={post} />
+        <PostCard key={post.boardMainId} data={post} />
       ))}
     </Wrap>
   );

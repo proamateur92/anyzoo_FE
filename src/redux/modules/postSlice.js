@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios'
-// import instance from '../../shared/axios';
+import instance from '../../shared/axios';
 
 
 export const loadPostsDB = createAsyncThunk(
   'post/loadPost', async() => {
-    const response = await axios.get('http://43.200.52.1840/api/post/category/all?page=0').catch((err) => console.log(err))
-    console.log(response)
+    const response = await instance.get('/api/post/category/all?page=0').catch((err) => console.log(err))
+    console.log(response.data)
     return response.data
   }
 );
@@ -107,7 +107,8 @@ const postSlice = createSlice({
 
   extraReducers: {
     [loadPostsDB.fulfilled] : (state, { payload }) => {
-      state.list = payload
+      console.log(payload)
+      state.list = [...state.list, payload.content]
     }
   }
 });

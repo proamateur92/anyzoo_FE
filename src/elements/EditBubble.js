@@ -9,7 +9,6 @@ const EditBubble = (props) => {
   const contentsId = props.contentsId;
   const setBubbleOn = props.setBubbleOn;
   const bubbleRef = React.useRef();
-  const backDropRef = React.useRef();
 
   const backDropClose = () => {
       setBubbleOn(false);
@@ -29,7 +28,7 @@ const EditBubble = (props) => {
       <p onClick={moveToEdit}>수정하기</p>
       <p onClick={deleteAction}>삭제하기</p>
     </Bubble>
-    <BackDrop ref={backDropRef} onClick={backDropClose}/>
+    <BackDrop onClick={backDropClose}/>
     </>
   );
 };
