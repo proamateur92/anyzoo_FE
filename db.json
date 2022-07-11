@@ -288,36 +288,253 @@
       "createdAt": ""
     }
   ],
-  "rank-now": [{
-    "postId": 22,
-    "boardMainId": 22,
-    "boardKind": "POST",
-    "postCategory": "PRETTY",
-    "contents": "랄랄랄랄토바이",
-    "likeCnt": 8,
-    "dateTime": "2022-07-11T16:41:10.751",
-    "userNickname": "22",
-    "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
-    "img": [        {
-      "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+  "rank-now": [
+    {
+      "postId": 22,
+      "boardMainId": 22,
+      "boardKind": "POST",
+      "postCategory": "PRETTY",
+      "contents": "랄랄랄랄토바이",
+      "likeCnt": 8,
+      "dateTime": "2022-07-11T16:41:10.751",
+      "userNickname": "22",
+      "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+      "img": [
+        {
+          "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+        }
+      ]
+    },
+    {
+      "postId": 23,
+      "boardMainId": 23,
+      "boardKind": "POST",
+      "postCategory": "PRETTY",
+      "contents": "랄랄랄랄토바이",
+      "likeCnt": 2,
+      "dateTime": "2022-07-11T16:41:10.751",
+      "userNickname": "23",
+      "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+      "img": [
+        {
+          "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+        }
+      ]
     }
-  ]
-  },
-  {
-    "postId": 23,
-    "boardMainId": 23,
-    "boardKind": "POST",
-    "postCategory": "PRETTY",
-    "contents": "랄랄랄랄토바이",
-    "likeCnt": 2,
-    "dateTime": "2022-07-11T16:41:10.751",
-    "userNickname": "23",
-    "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
-    "img": [        {
-      "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+  ],
+
+  "rank-week":[
+    {
+      "category": "cute",
+      "content" : [
+        {
+          "postId": 1,
+          "boardMainId": 1,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 1111,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "1",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 2,
+          "boardMainId": 2,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 222,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "2",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 3,
+          "boardMainId": 3,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 33,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "3",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "cool",
+      "content" : [
+        {
+          "postId": 4,
+          "boardMainId": 4,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 444,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "4",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 5,
+          "boardMainId": 5,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 55,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "5",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 6,
+          "boardMainId": 6,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 6,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "6",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "comic",
+      "content" : [
+        {
+          "postId": 7,
+          "boardMainId": 7,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 777,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "7",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 8,
+          "boardMainId": 8,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 88,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "8",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 9,
+          "boardMainId": 9,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 9,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "99",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "category": "pretty",
+      "content" : [
+        {
+          "postId": 1000,
+          "boardMainId": 1000,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 1000,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "23",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 999,
+          "boardMainId": 999,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 999,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "999",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        },
+        {
+          "postId": 88,
+          "boardMainId": 88,
+          "boardKind": "POST",
+          "postCategory": "PRETTY",
+          "contents": "랄랄랄랄토바이",
+          "likeCnt": 88,
+          "dateTime": "2022-07-11T16:41:10.751",
+          "userNickname": "8",
+          "userProfileImg": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png",
+          "img": [
+            {
+              "url": "https://anyzoo-photo-bucket.s3.ap-northeast-2.amazonaws.com/user/45deb63e-1432-4a41-8637-74314093895a%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+            }
+          ]
+        }
+      ]
     }
-  ]
-  }
   ]
 }
-
