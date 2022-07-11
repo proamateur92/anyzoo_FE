@@ -27,16 +27,13 @@ const Home = () => {
 
   const loadPosts = () => {
     dispatch(loadPostsDB())
-    console.log('요청')
   }
 
   React.useEffect(() => {
-    // loadPosts()
+    loadPosts()
   },[])
 
   const observer = new IntersectionObserver(loadPosts, { threshold : 0.5 });
-
-  
 
 
   return (
@@ -62,8 +59,9 @@ const Home = () => {
       </SubTitle>
 
       {posts.map((post) => (
-        <PostCard key={post.postId} data={post} />
+        <PostCard key={post.boardMainId} data={post} />
       ))}
+      
     </Wrap>
   );
 };
