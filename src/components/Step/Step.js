@@ -24,7 +24,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     nickname: false,
     username: false,
     password: false,
-    phonenumber: false,
+    phoneNumber: false,
   });
 
   // 유효성 검사 함수
@@ -44,7 +44,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
         regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
         break;
       }
-      case 'phonenumber': {
+      case 'phoneNumber': {
         regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{5})$/;
         break;
       }
@@ -64,13 +64,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
     nickname: '',
     username: '',
     password: '',
-    phonenumber: null,
+    phoneNumber: '',
     userImage: '',
   });
 
   const [passwordCheckValue, setPasswordCheckValue] = useState('');
 
-  const userInfoArr = ['agree', 'nickname', 'username', 'password', 'phonenumber', 'userImage'];
+  const userInfoArr = ['agree', 'nickname', 'username', 'password', 'phoneNumber', 'userImage'];
 
   // 현재 입력될 input의 이름
   const curData = userInfoArr[step];
@@ -101,11 +101,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
       setUserInfo({ ...userInfo, [curData]: response.data.id });
     } catch (error) {
       console.log(error);
+      setIsSubmit(false);
     }
   };
 
   // 입력 값에 따른 중복 체크
-  const [matchValue, setMatchValue] = useState({ nickname: true, username: true, phonenumber: true });
+  const [matchValue, setMatchValue] = useState({ nickname: true, username: true, phoneNumber: true });
 
   // 입력 값 유저 정보 state에 넣기
   const handleEnteredInfo = async event => {
@@ -125,7 +126,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
 
     // 숫자 이외의 값 입력 방지
-    if (curData === 'phonenumber') {
+    if (curData === 'phoneNumber') {
       if (isNaN(Number(event.target.value))) {
         return;
       } else {
@@ -344,12 +345,16 @@ const Step = ({ step, onCountChange, onSignup }) => {
           )}
         </Validation>
         <input
-          value={userInfo.phonenumber}
+          value={userInfo.phoneNumber}
           onChange={handleEnteredInfo}
           type='text'
           placeholder="'-'없이 입력해 주세요."
           maxLength={11}
         />
+        <Authorize>
+          <Input placeholder='인증 번호를 입력해 주세요.'></Input>
+          <AuthBtn>인증</AuthBtn>
+        </Authorize>
       </>
     );
   }
@@ -550,6 +555,12 @@ const GuideList = styled.div`
       height: 100%;
     }
   }
+`;
+
+const Input = styled.input``;
+const AuthBtn = styled.button``;
+const Authorize = styled.div`
+  position: relative;
 `;
 
 const Validation = styled.span`

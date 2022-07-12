@@ -42,8 +42,9 @@ const Signup = () => {
 
   const handleSignup = async userData => {
     try {
+      console.log('회원정보');
       console.table(userData);
-      const response = await instance.post('/user/signup', { ...userData });
+      const response = await instance.post('/user/signup', userData);
       alert(response.data.msg);
       setCookie('accessToken', response.data.data.token.accessToken);
       setCookie('refreshToken', response.data.data.token.refreshToken);
@@ -62,7 +63,7 @@ const Signup = () => {
       <SignupForm>
         <Top>
           <IoIosArrowBack style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
-          <span>{`${step + 1}/5`}</span>
+          <span>{`${step + 1}/6`}</span>
         </Top>
         <Step step={step} onCountChange={handleCoutValue} onSignup={handleSignup} />
       </SignupForm>
