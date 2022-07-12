@@ -15,12 +15,7 @@ import profile from '../../assets/images/noProfile.png';
 // axios
 import instance from '../../shared/axios';
 
-// router
-import { useNavigate } from 'react-router-dom';
-
 const Step = ({ step, onCountChange, onSignup }) => {
-  const navigate = useNavigate();
-
   // 패스워드 일치 여부
   const [passwordMatch, setPasswordMatch] = useState(false);
 
@@ -36,20 +31,26 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const checkValidation = value => {
     let regExp = '';
 
-    if (curData === 'nickname') {
-      regExp = /^[a-zA-Z가-힣0-9]{3,9}$/;
-    }
-
-    if (curData === 'username') {
-      regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    }
-
-    if (curData === 'password') {
-      regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
-    }
-
-    if (curData === 'phonenumber') {
-      regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    switch (curData) {
+      case 'nickname': {
+        regExp = /^[a-zA-Z가-힣0-9]{3,9}$/;
+        break;
+      }
+      case 'username': {
+        regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        break;
+      }
+      case 'password': {
+        regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
+        break;
+      }
+      case 'phonenumber': {
+        regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{5})$/;
+        break;
+      }
+      default: {
+        return;
+      }
     }
 
     const result = regExp.test(value);
@@ -63,7 +64,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     nickname: '',
     username: '',
     password: '',
-    phonenumber: '',
+    phonenumber: null,
     userImage: '',
   });
 
@@ -123,16 +124,16 @@ const Step = ({ step, onCountChange, onSignup }) => {
       return;
     }
 
-    // img 외의 값 유효성 검사
-    checkValidation(event.target.value);
-
+    // 숫자 이외의 값 입력 방지
     if (curData === 'phonenumber') {
-      console.log(isNaN(parseInt(event.target.value)));
-      //   if (isNaN(parseInt(event.target.value))) {
-      //     return false;
-      //   }
+      if (isNaN(Number(event.target.value))) {
+        return;
+      } else {
+      }
     }
 
+    // img 외의 값 유효성 검사
+    checkValidation(event.target.value);
     setUserInfo({ ...userInfo, [curData]: event.target.value });
   };
   console.log(userInfo);
@@ -337,7 +338,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
           </p>
         </span>
 
-        <Validation></Validation>
+        <Validation>
+          {userInfo[curData].trim().length !== 0 && !validation[curData] && (
+            <Validation>* 휴대폰 번호가 유효하지 않아요.</Validation>
+          )}
+        </Validation>
         <input
           value={userInfo.phonenumber}
           onChange={handleEnteredInfo}
