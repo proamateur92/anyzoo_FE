@@ -25,7 +25,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [passwordMatch, setPasswordMatch] = useState(false);
 
   // 유효성 검사 체크
-  const [validation, setValidation] = useState({ nickname: false, username: false, password: false });
+  const [validation, setValidation] = useState({
+    nickname: false,
+    username: false,
+    password: false,
+    phonenumber: false,
+  });
 
   // 유효성 검사 함수
   const checkValidation = value => {
@@ -43,6 +48,10 @@ const Step = ({ step, onCountChange, onSignup }) => {
       regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
     }
 
+    if (curData === 'phonenumber') {
+      regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+    }
+
     const result = regExp.test(value);
     setValidation({ ...validation, [curData]: result });
   };
@@ -50,11 +59,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 비밀번호 보이기, 안보이기
   const [isShowPassword, setIsShowPassword] = useState(false);
 
-  const [userInfo, setUserInfo] = useState({ nickname: '', username: '', password: '', img: '' });
+  const [userInfo, setUserInfo] = useState({
+    nickname: '',
+    username: '',
+    password: '',
+    phonenumber: '',
+    userImage: '',
+  });
 
   const [passwordCheckValue, setPasswordCheckValue] = useState('');
 
-  const userInfoArr = ['agree', 'nickname', 'username', 'password', 'img'];
+  const userInfoArr = ['agree', 'nickname', 'username', 'password', 'phonenumber', 'userImage'];
 
   // 현재 입력될 input의 이름
   const curData = userInfoArr[step];
@@ -64,6 +79,15 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   const [imageData, setImageData] = useState({ previewImage: '', imageFile: '' });
 
+  // 회원가입 버튼을 클릭하면
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  useEffect(() => {
+    if (isSubmit) {
+      onSignup(userInfo);
+    }
+  }, [isSubmit]);
+
   // 업로드 이미지 -> 서버 통신
   const uploadImage = async () => {
     const formData = new FormData();
@@ -71,37 +95,47 @@ const Step = ({ step, onCountChange, onSignup }) => {
     try {
       // 서버 이미지 업로드 api 필요
       const response = await instance.post('/user/image', formData);
-      console.log(response.data);
+      console.log(response.data.id);
       // 유저 정보에 서버 이미지 url 저장
-      setUserInfo({ ...userInfo, [curData]: response.data.url });
+      setUserInfo({ ...userInfo, [curData]: response.data.id });
     } catch (error) {
       console.log(error);
     }
   };
 
+  // 입력 값에 따른 중복 체크
+  const [matchValue, setMatchValue] = useState({ nickname: true, username: true, phonenumber: true });
+
   // 입력 값 유저 정보 state에 넣기
   const handleEnteredInfo = async event => {
     // 이미지 업로드할 때
-    if (curData === 'img') {
+    if (curData === 'userImage') {
       const uploadFile = event.target.files[0];
 
       if (uploadFile) {
         const previewImagePath = URL.createObjectURL(uploadFile);
         setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
-        // window.URL.revokeObjectURL(previewImagePath);
       } else {
         setImageData({ previewImage: '', imageFile: '' });
+        setUserInfo({ ...userInfo, userImage: '' });
         return;
       }
-
       return;
     }
 
     // img 외의 값 유효성 검사
     checkValidation(event.target.value);
+
+    if (curData === 'phonenumber') {
+      console.log(isNaN(parseInt(event.target.value)));
+      //   if (isNaN(parseInt(event.target.value))) {
+      //     return false;
+      //   }
+    }
+
     setUserInfo({ ...userInfo, [curData]: event.target.value });
   };
-
+  console.log(userInfo);
   // 비밀번호 일치 여부
   const handleEnteredPwdCheck = event => {
     setPasswordCheckValue(event.target.value);
@@ -121,7 +155,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
       setAgreeArr({ all: false, first: false, second: false });
       setIsAllAgree(false);
     }
-
     if (step !== 0 && moveStep === -1) {
       setUserInfo({ ...userInfo, [prevData]: '', [curData]: '' });
       setValidation({ ...validation, [prevData]: false, [curData]: false });
@@ -135,10 +168,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
   };
 
   // 가입하기
-  const singup = () => {
-    userInfo.img && uploadImage();
-    onSignup(userInfo);
-    navigate('/');
+  const singup = async () => {
+    imageData.previewImage && (await uploadImage());
+    setIsSubmit(true);
   };
 
   // step별 화면 보여주기
@@ -223,9 +255,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
     content = (
       <>
         <span className='desc'>
-          <p>본인 인증을 위해</p>
           <p>
-            <span className='strong'>인증코드</span>를
+            <span className='strong'>이메일</span>을
           </p>
           <p>입력해주세요.</p>
         </span>
@@ -295,13 +326,36 @@ const Step = ({ step, onCountChange, onSignup }) => {
       </>
     );
   }
+
+  if (step === 4) {
+    content = (
+      <>
+        <span className='desc'>
+          <p>본인 확인을 위해</p>
+          <p>
+            <span className='strong'>휴대폰 인증</span>이 필요합니다.
+          </p>
+        </span>
+
+        <Validation></Validation>
+        <input
+          value={userInfo.phonenumber}
+          onChange={handleEnteredInfo}
+          type='text'
+          placeholder="'-'없이 입력해 주세요."
+          maxLength={11}
+        />
+      </>
+    );
+  }
+
   // 기본 이미지 클릭하면 파일 선택하기 창 띄우기
   const handleSelectImg = () => {
     const img = document.querySelector('.selectImg');
     img.addEventListener('click', img.click());
   };
 
-  if (step === 4) {
+  if (step === 5) {
     content = (
       <>
         <span className='desc'>
@@ -336,7 +390,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  if (step > 0 && step < 4) {
+  if (step > 0 && step < 5) {
     buttons = (
       <ButtonBox step={step} validation={step === 3 ? passwordMatch : validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
@@ -345,7 +399,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  if (step === 4)
+  if (step === 5)
     buttons = (
       <ButtonBox step={step} validation={validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
