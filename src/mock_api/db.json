@@ -24,13 +24,14 @@
       "id": "0",
       "username": "히수",
       "content": "푸는 귀여워~~~~~~~~~~~~~~~~",
-      "category": "PRETTY",
+      "category": "CUTE",
       "imgUrl": [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe-mT5HNR1pmVQdZUZhnvBKX4sbhVnzda1kw&usqp=CAU"
+      ],
+      "img": [
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe-mT5HNR1pmVQdZUZhnvBKX4sbhVnzda1kw&usqp=CAU"
       ]
-      
     }
-   
   ],
   "comment": [
     {
@@ -71,8 +72,7 @@
   ],
   "Heart": [
     {
-      "id":"0"
-    
+      "id": "0"
     }
   ]
 }
