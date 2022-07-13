@@ -4,20 +4,20 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 //axios
 import axios from 'axios'
 import instance from '../../shared/axios';
-// import instance from '../../shared/axios';
 
 
 export const loadPostsDB = createAsyncThunk(
-  'loadPost', async() => {
-    const response = await instance.get('/api/post').catch((err) => console.log(err))
-    return response.data
+  'post/loadPost', async(pageNo) => {
+    // const response = await instance.get('/api/post/category/all?page=0').catch((err) => console.log(err))
+    const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
+    return response.data[0]
   }
 );
 
 // export const getDataDB = () => {
 //   return async (dispatch) => {
 //     try {
-//       const response = await instance.get("/post");
+//       const response = await axios.get("http://localhost:5000/post");
 //       dispatch(setData(response.data));
 //     } catch (err) {
 //       console.log(err);
@@ -52,7 +52,7 @@ export const removeDataDB = (id) => {
     }
   }
 }
-
+ 
 //수정하기
 export const modifyDataDB = (id, data) => {
   console.log(data, "sddsddf")
@@ -71,7 +71,9 @@ export const modifyDataDB = (id, data) => {
 const postSlice = createSlice({
   name: "post",
   initialState: {
-    list: []
+    list: [],
+    pageNumber:0,
+    last: false,
   },
   reducers: {
     //read
@@ -116,7 +118,13 @@ const postSlice = createSlice({
 
   extraReducers: {
     [loadPostsDB.fulfilled] : (state, { payload }) => {
-      state.list = payload
+      if (payload.pageable.pageNumber === 0) {
+        state.list = [...payload.content]
+      } else {
+        state.list = [...state.list, ...payload.content]
+      }
+      state.pageNumber = payload.pageable.pageNumber
+      state.last = payload.last
     }
   }
 });

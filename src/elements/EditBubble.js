@@ -17,11 +17,11 @@ const EditBubble = (props) => {
   const params = useParams(); 
   const dispatch = useDispatch();
 
-  const backDropClose = (e) => {
+  const backDropClose = () => {
       setBubbleOn(false);
   };
 
-  const moveToEdit = (e) => {
+  const moveToEdit = () => {
     navigate("/post/update/" + contentsId);
   };
 
@@ -37,7 +37,7 @@ const EditBubble = (props) => {
       <p onClick={() =>navigate('/post/update/' + params.id)}>수정하기</p>
       <p onClick={(e) => deleteAction(e)} style={{ color : "red"}}>삭제하기</p>
     </Bubble>
-    <BackDrop ref={backDropRef} onClick={(e)=>backDropClose(e)}/>
+    <BackDrop onClick={backDropClose}/>
     </>
   );
 };
@@ -48,8 +48,8 @@ const BackDrop = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 0;
 `;
 
