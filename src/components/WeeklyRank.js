@@ -16,13 +16,12 @@ const WeeklyRank = () => {
     },[]);
 
   const changeCategory = async (categoryName) => {
-    // const response = await instance.get('/api/rank/week/'+categoryName).catch((err) => console.log(err))
-    const response = await axios
-      .get("http://localhost:5000/rank-week?category=" + categoryName)
-      .catch((err) => console.log(err));
-    setList(response.data[0].content);
-    console.log(response.data[0].content)
-    setTotalVote(response.data[0].content.reduce((acc,ranker)=>( acc + ranker.likeCnt),0))
+    const response = await instance.get('/api/rank/week/'+categoryName).catch((err) => console.log(err))
+    // const response = await axios
+    //   .get("http://localhost:5000/rank-week?category=" + categoryName)
+    //   .catch((err) => console.log(err));
+    setList(response.data);
+    setTotalVote(response.data.reduce((acc,ranker)=>( acc + ranker.likeCnt),0))
     setCategory(categoryName);
   };
 

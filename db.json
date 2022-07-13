@@ -239,6 +239,17 @@
       "nickname": "test",
       "content": "",
       "id": "osxcyPc"
+    },
+    {
+      "postId": "11",
+      "userId": 0,
+      "nickname": "test",
+      "content": "ㅇㅇㅇㅇㅇㅇㅇㅇㅇ",
+      "id": "i1kE-gz"
+    },
+    {
+      "content": "dddddd",
+      "id": "hiKqx2A"
     }
   ],
   "heart": [
@@ -322,11 +333,10 @@
       ]
     }
   ],
-
-  "rank-week":[
+  "rank-week": [
     {
       "category": "cute",
-      "content" : [
+      "content": [
         {
           "postId": 1,
           "boardMainId": 1,
@@ -379,7 +389,7 @@
     },
     {
       "category": "cool",
-      "content" : [
+      "content": [
         {
           "postId": 4,
           "boardMainId": 4,
@@ -432,7 +442,7 @@
     },
     {
       "category": "comic",
-      "content" : [
+      "content": [
         {
           "postId": 7,
           "boardMainId": 7,
@@ -485,7 +495,7 @@
     },
     {
       "category": "pretty",
-      "content" : [
+      "content": [
         {
           "postId": 1000,
           "boardMainId": 1000,

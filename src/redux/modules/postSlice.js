@@ -8,9 +8,10 @@ import instance from '../../shared/axios';
 
 export const loadPostsDB = createAsyncThunk(
   'post/loadPost', async(pageNo) => {
-    // const response = await instance.get('/api/post/category/all?page=0').catch((err) => console.log(err))
-    const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
-    return response.data[0]
+    const response = await instance.get('/api/post/category/all?page='+ pageNo).catch((err) => console.log(err))
+    // console.log(response)
+    // const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
+    return response.data
   }
 );
 

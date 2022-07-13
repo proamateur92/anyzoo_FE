@@ -13,8 +13,8 @@ const RealTimeRank = () => {
   const [rankers, setRankers] = React.useState([null, null]);
 
   React.useState(async () => {
-    // const list = await instance.get('/api/rank/now').catch((err) => console.log(err))
-    const list = await axios.get("http://localhost:5000/rank-now").catch((err) => console.log(err));
+    const list = await instance.get('/api/rank/day').catch((err) => console.log(err))
+    // const list = await axios.get("http://localhost:5000/rank-now").catch((err) => console.log(err));
     setRankers(list.data);
   }, []);
 
