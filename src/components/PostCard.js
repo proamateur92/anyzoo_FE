@@ -42,13 +42,12 @@ const PostCard = (props) => {
         {bubbleOn ? <EditBubble contentsId={boardMainId} setBubbleOn={setBubbleOn} /> : null}
       </CardHeader>
 
-      {/* <Contents onClick={() => navigate("/post/detail/" + boardMainId)}> */}
       <Contents>
         <ImgPreview>
-          <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg}/>
+          <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
           <span id="imgcount">{photoPg+1}/{postData.img.length}</span>
         </ImgPreview>
-        <TextPreview> {postData.contents} </TextPreview>
+        <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> {postData.contents} </TextPreview>
       </Contents>
 
       <Reactions>

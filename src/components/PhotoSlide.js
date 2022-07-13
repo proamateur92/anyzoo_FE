@@ -1,11 +1,10 @@
 import React from "react";
-
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
 
 const PhotoSlide = (props) => {
   const photos = props.photos
   const setPhotoPg = props.setPhotoPg
+  const clickAction = props.clickAction
 
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const totalSlide = photos.length - 1;
@@ -21,13 +20,13 @@ const PhotoSlide = (props) => {
   };
 
   const moveSlide = () => {
-    console.log("start?", startX, " &end?", endX);
+    // console.log("start?", startX, " &end?", endX);
     const distance = Math.abs(startX - endX)
 
     if (distance > 10 && startX !== 0 && endX !== 0) {
       startX - endX > 0 ? showNext() : showPrev();
-    } else if (distance < 10 && startX !== 0 && endX !== 0) {
-      console.log('이때는 공지 상세로 이동')
+    } else if (distance < 20 && startX !== 0 && endX !== 0) {
+      clickAction()
     }
   };
 
