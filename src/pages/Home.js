@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 // element
 import Wrap from "../elements/Wrap";
@@ -9,7 +9,6 @@ import NoticeSlide from "../components/NoticeSlide";
 import RealTimeRank from "../components/RealtimeRank";
 import WeeklyRank from "../components/WeeklyRank";
 import FindMateCard from "../components/FindMateCard";
-
 
 import Comment from "../components/Comment";
 
@@ -24,27 +23,41 @@ import { loadPostsDB } from "../redux/modules/postSlice";
 const Home = () => {
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.list);
-  const postRef = React.useRef()
+  const isLastPg = useSelector((state) => state.post.last);
+  const postEndRef = React.useRef();
+  const [page, setPage] = React.useState(-1);
 
-  const loadPosts = () => {
-    dispatch(loadPostsDB())
-    console.log('요청')
-  }
+  const loadinghandler = useCallback((entries) => {
+    if (entries[0].isIntersecting && !isLastPg) {
+      setPage((page) => page + 1);
+    }
+  }, [isLastPg]);
 
   React.useEffect(() => {
-    // loadPosts()
-  },[])
+    const observer = new IntersectionObserver(loadinghandler, { threshold: 0.5 });
+    if (postEndRef.current) {
+      observer.observe(postEndRef.current);
+    }
+    return () => {
+      observer.disconnect();
+    };
+  }, [loadinghandler]);
 
-  const observer = new IntersectionObserver(loadPosts, { threshold : 0.5 });
 
-  
-
+  React.useEffect(() => {
+    if ( page >= 0 && !isLastPg) {
+      dispatch(loadPostsDB(page));
+      console.log("새 페이지 로딩");
+    } else {
+      console.log("마지막 페이지");
+    }
+  }, [page, dispatch, isLastPg]);
 
   return (
     <Wrap>
       <Logo />
-    {/* <Comment postId={0}/> */}
-    
+      {/* <Comment postId={0}/> */}
+
       <NoticeSlide />
 
       <RealTimeRank />
@@ -63,14 +76,16 @@ const Home = () => {
 
       <FindMateCard />
 
-      <SubTitle ref={postRef}>
+      <SubTitle>
         <h3>자랑하기</h3>
         <GrNext />
       </SubTitle>
 
       {posts.map((post) => (
-        <PostCard key={post.postId} data={post} />
+        <PostCard key={post.boardMainId} data={post} />
       ))}
+
+      <div ref={postEndRef} />
     </Wrap>
   );
 };
