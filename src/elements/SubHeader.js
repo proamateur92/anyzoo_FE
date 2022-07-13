@@ -1,18 +1,16 @@
-import Wrap from '../elements/Wrap';
-
 // CSS 관련 임포트
 import styled from 'styled-components';
 
-const PostHeader = () => {
+const SubHeader = (props) => {
   return (
     <HeaderWrap>
-      <span>자랑하기</span>
-      
+      <span>{ props.title }</span>
+      { props.children }
     </HeaderWrap>
   );
 };
 
-export default PostHeader;
+export default SubHeader;
 
 const HeaderWrap = styled.div`
 box-sizing: border-box;

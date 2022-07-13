@@ -1,34 +1,34 @@
-import React from 'react';
+import React from "react";
 
-// 컴포넌트
-import Wrap from '../elements/Wrap';
-import PostCard from '../components/PostCard';
-import PostHeader from '../elements/PostHeader';
+// element
+import Wrap from "../elements/Wrap";
 
-// 리덕스 
-import { useSelector, useDispatch } from 'react-redux'
-import { loadPostsDB } from '../redux/modules/postSlice';
+// components
+import PostCard from "../components/PostCard";
+import SubHeader from "../elements/SubHeader";
 
-// CSS 관련 임포트
-import styled from 'styled-components';
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { loadPostsDB } from "../redux/modules/postSlice";
+
+// style
+import styled from "styled-components";
 
 const Post = () => {
-  const dispatch = useDispatch()
-  const posts = useSelector(state => state.post.list)
-  console.log(posts)
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.post.list);
+  // console.log(posts)
 
   React.useEffect(() => {
-    dispatch(loadPostsDB())
-  }, [])
+    dispatch(loadPostsDB());
+  }, []);
 
   return (
     <Wrap>
-      <PostHeader/>
-
-      {
-        posts.map((post,i) => <PostCard key={post.postId} data={post.boardMain[0]}/>)
-      }
-
+      <SubHeader title={'자랑하기'}> </SubHeader>
+      {posts.map((post, i) => (
+        <PostCard key={post.postId} data={post} />
+      ))}
     </Wrap>
   );
 };

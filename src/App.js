@@ -20,6 +20,9 @@ import { loadPostDB } from './redux/modules/postSlice';
 import { loadCommentDB } from './redux/modules/commentSlice';
 import { loadHeartDB } from './redux/modules/heartSlice';
 
+// Test
+import Comment from './components/Comment';
+
 function App() {
   // redux 테스트 코드 시작
   // const dispatch = useDispatch();
@@ -80,6 +83,8 @@ function App() {
           <Route path='/notice' element={<Notice />} />
           <Route path='/notice/detail/:id' element={<NoticeDetail />} />
           <Route path='*' element={<NotFound />} />
+
+          <Route path='/Comment' element={<Comment />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
