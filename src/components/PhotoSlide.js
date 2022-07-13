@@ -4,21 +4,24 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 
 const PhotoSlide = (props) => {
-  const photos = []
+  const photos = props.photos
+  const setPhotoPg = props.setPhotoPg
 
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const totalSlide = photos.length - 1;
 
   const showNext = () => {
     currentSlide < totalSlide ? setCurrentSlide(currentSlide + 1) : setCurrentSlide(0);
+    setPhotoPg(currentSlide + 1)
   };
 
   const showPrev = () => {
     currentSlide > 0 ? setCurrentSlide(currentSlide - 1) : setCurrentSlide(photos.length - 1);
+    setPhotoPg(currentSlide - 1)
   };
 
   const moveSlide = () => {
-    // console.log("start?", startX, " &end?", endX);
+    console.log("start?", startX, " &end?", endX);
     const distance = Math.abs(startX - endX)
 
     if (distance > 10 && startX !== 0 && endX !== 0) {
@@ -45,7 +48,7 @@ const PhotoSlide = (props) => {
         onTouchEnd={(e) => setEndX(e.clientX)}
       >
         {photos.map((v) => (
-          <Photo key={v.id} img={v.img} />
+          <Photo key={v.id} img={v.url} />
         ))}
       </Slider>
     </SliderWrap>
@@ -72,6 +75,8 @@ const Slider = styled.div`
 const Photo = styled.div`
   height: 100%;
   width: 100%;
+  min-width: 100%;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat center;
   background-size: cover;
+  background-position: center;
 `;

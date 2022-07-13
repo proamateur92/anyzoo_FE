@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 // 컴포넌트
 import EditBubble from "../elements/EditBubble";
+import PhotoSlide from "./PhotoSlide";
 
 // CSS 관련 임포트
 import styled from "styled-components";
@@ -19,6 +20,8 @@ const PostCard = (props) => {
   const cardWrapRef = React.useRef();
   const [cardWidth, setCardWidth] = React.useState(null);
 
+  const [photoPg, setPhotoPg] = React.useState(0);
+
   React.useEffect(() => {
     setCardWidth(cardWrapRef?.current?.offsetWidth);
   }, [cardWrapRef?.current?.offsetWidth]);
@@ -26,8 +29,6 @@ const PostCard = (props) => {
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
   };
-
-  console.log(postData)
 
   return (
     <CardWrap ref={cardWrapRef} cardWidth={cardWidth}>
@@ -41,9 +42,11 @@ const PostCard = (props) => {
         {bubbleOn ? <EditBubble contentsId={boardMainId} setBubbleOn={setBubbleOn} /> : null}
       </CardHeader>
 
-      <Contents onClick={() => navigate("/post/detail/" + boardMainId)}>
-        <ImgPreview img={postData.img[0]?.url}>
-          <span id="imgcount">2/5</span>
+      {/* <Contents onClick={() => navigate("/post/detail/" + boardMainId)}> */}
+      <Contents>
+        <ImgPreview>
+          <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg}/>
+          <span id="imgcount">{photoPg+1}/{postData.img.length}</span>
         </ImgPreview>
         <TextPreview> {postData.contents} </TextPreview>
       </Contents>
@@ -118,20 +121,19 @@ const ImgPreview = styled.div`
   width: 100%;
   height: 79.07%;
   border-radius: 2rem;
-  background: url(${(props) =>
-    props.img
-      ? props.img
-      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png"});
-  background-size: cover;
-  background-position: center;
   margin: auto;
 
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  border: 1px solid #eee;
+  position: relative;
+  overflow: hidden;
 
   #imgcount {
-    margin: 4.65% 5.33%;
+    position:absolute;
+    bottom: 5.9%;
+    right: 6.7%;
     height: 15.88%;
     width: 13%;
     display: flex;
