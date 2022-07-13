@@ -3,12 +3,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 //axios
 import axios from 'axios'
+import instance from '../../shared/axios';
 // import instance from '../../shared/axios';
 
 
 export const loadPostsDB = createAsyncThunk(
   'loadPost', async() => {
-    const response = await axios.get('http://43.200.52.184:8080/post').catch((err) => console.log(err))
+    const response = await instance.get('/api/post').catch((err) => console.log(err))
     return response.data
   }
 );
@@ -16,7 +17,7 @@ export const loadPostsDB = createAsyncThunk(
 // export const getDataDB = () => {
 //   return async (dispatch) => {
 //     try {
-//       const response = await axios.get("http://43.200.52.184:8080/post");
+//       const response = await instance.get("/post");
 //       dispatch(setData(response.data));
 //     } catch (err) {
 //       console.log(err);
@@ -27,10 +28,13 @@ export const loadPostsDB = createAsyncThunk(
 // 추가하기
 export const addDataDB = (data) => {
   return async (dispatch) => {
+    console.log(data,"??")
+    
     try {
-      const response = await axios.post("http://43.200.52.184:8080/post", data);
+      const response = await instance.post("/api/post", data);
       console.log(response.data)
-      dispatch(addData(response.data));
+      const newPoster = { ...data, boardmainId: response.data.boardMainId }
+      dispatch(addData(newPoster));
     } catch (err) {
       console.log(err);
     }
@@ -41,7 +45,7 @@ export const addDataDB = (data) => {
 export const removeDataDB = (id) => {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(`http://43.200.52.184:8080/post/${id}`);
+      const response = await instance.delete(`/api/post/${id}`);
       dispatch(removeData(id)); 
     } catch (err) {
       console.log(err);
@@ -51,9 +55,11 @@ export const removeDataDB = (id) => {
 
 //수정하기
 export const modifyDataDB = (id, data) => {
+  console.log(data, "sddsddf")
   return async (dispatch) => {
     try {
-      const response = await axios.patch(`http://43.200.52.184:8080/post/${id}`, data);
+      const response = await instance.patch("/api/post/" + id, data);
+      console.log(response)
       dispatch(modifyData({id, data}));
     } catch (err) {
       console.log(err);
@@ -93,6 +99,7 @@ const postSlice = createSlice({
     modifyData: (state, action) => {
       state.list = state.list.map(
         (post) => {
+          console.log(post, "짝")
           if (post.id === action.payload.id) { // 받아온 id와 저장되어 있는 데이터의 id가 같으면 
             return {
               ...post, 

@@ -7,9 +7,12 @@ import { useDispatch } from "react-redux/es/hooks/useDispatch";
 import { removeDataDB } from "../redux/modules/postSlice";
 
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
+import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
+
 
 import EditBubble from "../elements/EditBubble";
+
+import instance from "../shared/axios";
 
 const PostDetail = () => {
   const params = useParams(); 
@@ -18,6 +21,7 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const [bubbleOn, setBubbleOn] = React.useState(false);
   const [testImg, setTestImg] = useState([{url:"https://img.animalplanet.co.kr/news/2020/07/15/700/e05t9x1o0e3trklpwrr3.jpg"}, {url:"https://cdn.mediaville.co.kr/news/photo/202104/496_554_4651.jpg"},{url:"https://img.khan.co.kr/news/2019/11/29/l_2019112901003607500286631.jpg"}])
+  const [like, setLike] = useState()
 
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
@@ -25,13 +29,18 @@ const PostDetail = () => {
 
 // axios에서 데이터를 받아오기
 useEffect(() => {
-  axios.get("http://43.200.52.184:8080/post/" + params.id)
+  instance.get("/api/post/"+params.id)
     .then(response => {
       setData(response.data) //useState의 data에 넣어준다.
       console.log(response.data)
     })
-
- 
+}, [like]);
+  
+  useEffect(() => {
+  instance.get("/api/post/category/all?page=0")
+    .then(response => {
+      console.log(response.data)
+    })
 }, []);
   
 const deletePost = (e) => {
@@ -40,9 +49,22 @@ const deletePost = (e) => {
   }
 
   const clickHeart = () => {
-    axios.post("http://43.200.52.184:8080/heart/" + data?.boardMainId)
-      .then()
-}
+    instance.post("/api/heart/" + params.id)
+      .then(res => {
+        console.log(res)
+        setLike(!like)
+      })
+    
+  }
+  
+  useEffect(() => {
+    instance.get("/api/heart/"+params.id)
+      .then(res => {
+        console.log(res)
+        setLike(res.data)
+      
+    })
+  },[])
 
   
 
@@ -55,10 +77,10 @@ const deletePost = (e) => {
         <UserInfo>
           <User>
             <UserImg
-              src="https://item.kakaocdn.net/do/d8b92364bb23fd5c3dcf4c08f6422d63617ea012db208c18f6e83b1a90a7baa7"
+              src={data?.userProfileImg}
               alt=""
             />
-            <UserName>{data?.userNickname}</UserName> 
+            <UserName>{data?.nickname}</UserName> 
           </User>
           <Jum>
             <JumMom>
@@ -68,19 +90,20 @@ const deletePost = (e) => {
           </Jum>
         </UserInfo>
         <ImgBox>
-          {testImg.map((v, i) => {
+          {data?.img.map((v, i) => {
             return (
-              <ImgCard >
+              <ImgCard key={v.id} >
                 <MainImg src={v.url}/>
               </ImgCard>
             )
           })}
                 
         </ImgBox>
-        <Content>{data?.content}</Content>
+        <Content>{data?.contents}</Content>
         <Reactions>
-        <span>
-            <IoHeartOutline onClick={clickHeart} /> {data?.likeCnt}{" "}
+          <span>
+            {like === true ? <IoHeartOutline  onClick={clickHeart}/>  : <IoHeart onClick={clickHeart}/>}
+            <span>{data?.likeCnt}</span>{" "}
         </span>
         <span>
           <IoChatbubbleOutline /> {data?.viewCnt}{" "}
@@ -137,18 +160,23 @@ const Jum = styled.div`
 const JumMom = styled.div`
   position: relative;
   font-size: 30px;
+  margin-top: 10px;
 `
 
 const ImgBox = styled.div`
   display: flex;
   overflow: auto;
   scroll-snap-type: x mandatory;
+  width: 80%;
+  height: 60%;
+  margin: 0 10% ;
 `
 
 const ImgCard = styled.div`
   flex:none;
   scroll-snap-align: start;
   width: 100%;
+  height: 98%;
 `
 
 const MainImg = styled.img`

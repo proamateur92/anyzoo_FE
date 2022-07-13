@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux/es/exports';
 import { addDataDB, removeDataDB} from '../redux/modules/postSlice';
 import {  useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import instance from '../shared/axios';
 
 const PostWrite = () => {
   const imgRef = useRef();
@@ -20,7 +21,7 @@ const PostWrite = () => {
   const [select, setSelect] = useState();
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([])
-
+  
   
  
  // 카테고리 값 select으로 넣기
@@ -31,24 +32,34 @@ const PostWrite = () => {
 
   //data 설정해 reducer로 보내기(더하기)
   const addPost = async (e) => {
+    window.URL.revokeObjectURL(showImages)
     e.preventDefault();
     console.log(getImages)
-    const img = getImages
+    let img = getImages
     const formData = new FormData();
-    for (let i = 0; i < img.length; i++){
-      formData.append("file", img[i])
-    }
+    let files = [];
     
-    const response = await axios.post("http://43.200.52.184:8080/image/post", {
-      data: formData, headers: {
-      'Content-type':'multipart/form-data'
-      },
-    })
-    console.log(response)
+    for (let i = 0; i < img.length; i++){
+      //  console.log(img[i])
+       formData.append("file", img[i]);   
+      // files.push(img[i])
+     }
+    // console.log(img[i], "뭐냐")
+    // console.log(files)
+
+    // formData.append("file", img)
+
+    
+    const response = await instance.post("/api/post/image", 
+      formData
+     
+    )
+    console.log(response.data)
+
     const data = {
-      CategoryName: select,
+      categoryName: select,
       content: contentRef.current.value,
-      postimages: response
+      postImages: response.data
     }
     console.log(data)
     dispatch(addDataDB(data));
@@ -57,16 +68,17 @@ const PostWrite = () => {
   const handelAddImg = (e) => {
     // console.log(e.target.files, "img")
     const imageLists = e.target.files;
-    
-
 
     let imageUrlLists = [...showImages];
+
+    let getImagesLists = [...getImages]
 
     for (let i = 0; i < imageLists.length; i++){
      
       const currentImgUrl = URL.createObjectURL(imageLists[i]);
       // console.log(currentImgUrl, "url")
       imageUrlLists.push(currentImgUrl)
+      getImagesLists.push(imageLists[i])
     }
     
     if (imageUrlLists.length > 5) {
@@ -75,7 +87,9 @@ const PostWrite = () => {
 
     setShowImages(imageUrlLists)
     
-    const getImagesLists = e.target.files;
+   
+
+   
     
     setGetImages(getImagesLists)
 
@@ -84,6 +98,7 @@ const PostWrite = () => {
   // X버튼 클릭 시 이미지 삭제
   const handleDeleteImage = (id) => {
     setShowImages(showImages.filter((_, index) => index !== id));
+    setGetImages(getImages.filter((_, index) => index !== id))
   };
   
 
@@ -102,7 +117,7 @@ const PostWrite = () => {
         <option value="cute">귀여움</option>
         <option value="comic">웃김</option>
         </select>
-        <p>게시글 제목</p>
+        <p>사진 첨부 (최대 5장)</p>
         <Preview>
           {showImages&&showImages.map((image, id) => {
             return (
@@ -152,7 +167,8 @@ const TitleBox = styled.div`
 
 
 const InputBox = styled.div`
-text-align: center;
+width: 80%;
+margin: 10%;
 
 
   p{
@@ -178,6 +194,7 @@ const ImgPut = styled.input`
 const Preview = styled.div`
 justify-content: center;
   display: flex;
+  
 `
 
 const PreviewImg = styled.img`
@@ -222,7 +239,7 @@ const DeleteImg = styled.button`
 
 const Content = styled.textarea`
   border: none;
-  width: 300px;
+  width: 100%;
   height: 380px;
   margin: 5px 0 0;
   border-radius: 10px;
@@ -236,20 +253,19 @@ const ButtonBox = styled.div`
 `
 
 const CancelBtn = styled.button`
-  width: 130px;
+  width: 40%;
   height: 50px;
   flex-grow: 0;
-  margin: 0 20px 0 0;
-  padding: 16px 51px 15px 49px;
+  
+  
   border-radius: 10px;
   background-color: #f2f2f2;
 `
 const AddBtn = styled.button`
-  width: 130px;
+  width: 40%;
   height: 50px;
   flex-grow: 0;
-  margin: 0 0 0 20px;
-  padding: 16px 36px 15px 35px;
+  margin-left: 7%;
   border-radius: 10px;
   background-color: #44dcd3;
 `

@@ -35,7 +35,7 @@ const EditBubble = (props) => {
     <>
     <Bubble ref={bubbleRef}>
       <p onClick={() =>navigate('/post/update/' + params.id)}>수정하기</p>
-      <p onClick={(e) => deleteAction(e)}>삭제하기</p>
+      <p onClick={(e) => deleteAction(e)} style={{ color : "red"}}>삭제하기</p>
     </Bubble>
     <BackDrop ref={backDropRef} onClick={(e)=>backDropClose(e)}/>
     </>
