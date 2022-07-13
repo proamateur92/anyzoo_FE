@@ -46,7 +46,8 @@ const Home = () => {
 
   React.useEffect(() => {
     if ( page >= 0 && !isLastPg) {
-      dispatch(loadPostsDB(page));
+      const pageInfo = { page: page, sorting: 'all' }
+      dispatch(loadPostsDB(pageInfo));
       console.log("새 페이지 로딩");
     } else {
       console.log("마지막 페이지");
