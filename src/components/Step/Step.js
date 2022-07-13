@@ -105,9 +105,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
   };
 
-  // 입력 값에 따른 중복 체크
-  const [matchValue, setMatchValue] = useState({ nickname: true, username: true, phoneNumber: true });
-
   // 입력 값 유저 정보 state에 넣기
   const handleEnteredInfo = async event => {
     // 이미지 업로드할 때
@@ -129,7 +126,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
     if (curData === 'phoneNumber') {
       if (isNaN(Number(event.target.value))) {
         return;
-      } else {
+      }
+    }
+
+    // 별명, 이메일, 핸드폰 번호 중복 여부 갱신
+    if (curData === 'nickname' || curData === 'username' || curData === 'phoneNumber') {
+      setIsDuplicated({ ...isDuplicated, [curData]: false });
+      if (curData === 'phoneNumber') {
+        setIsDuplicated({ ...isDuplicated, [curData]: true });
+        setIsAuthorized(false);
+        setPhoneMessage(false);
+        setAuthMessage(false);
       }
     }
 
@@ -137,12 +144,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
     checkValidation(event.target.value);
     setUserInfo({ ...userInfo, [curData]: event.target.value });
   };
-  console.log(userInfo);
-  // 비밀번호 일치 여부
+
+  // 비밀번호 확인 값 업데이트
   const handleEnteredPwdCheck = event => {
     setPasswordCheckValue(event.target.value);
   };
 
+  // 비밀번호 일치 확인
   useEffect(() => {
     if (validation.password && userInfo.password === passwordCheckValue) {
       setPasswordMatch(true);
@@ -157,17 +165,39 @@ const Step = ({ step, onCountChange, onSignup }) => {
       setAgreeArr({ all: false, first: false, second: false });
       setIsAllAgree(false);
     }
+
+    // 페이지 이동이 일어날 때
     if (step !== 0 && moveStep === -1) {
       setUserInfo({ ...userInfo, [prevData]: '', [curData]: '' });
       setValidation({ ...validation, [prevData]: false, [curData]: false });
 
+      // 비밀번호 입력 페이지
+      // 비밀번호 관련 값 초기화
       if (step === 3 || (step === 4 && moveStep === -1)) {
         setPasswordCheckValue('');
         setIsShowPassword(false);
       }
+
+      // 휴대폰 인증 페이지
+      // 인증 관련 값 초기화
+      if (step === 4 || (step === 5 && moveStep === -1)) {
+        setAuthNumber('');
+        setIsAuthorized(false);
+      }
+
+      // 별명, 이메일, 휴대폰 인증 중복 체크
+      if (step === 1 || step === 2 || step === 4) {
+        setIsDuplicated({ ...isDuplicated, [curData]: false });
+      }
     }
+
+    // 페이지 이동
     onCountChange(moveStep);
   };
+
+  // 인증했는지 여부
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isDuplicated, setIsDuplicated] = useState({ nickname: true, username: true, phoneNumber: true });
 
   // 가입하기
   const singup = async () => {
@@ -208,6 +238,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     agreeArr[index] && setAgreeArr({ ...agreeArr, all: false, [index]: !agreeArr[index] });
   };
 
+  // 약관 동의 페이지
   if (step === 0) {
     content = (
       <>
@@ -233,6 +264,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
+  // 별명 페이지
   if (step === 1) {
     content = (
       <>
@@ -243,16 +275,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
           </p>
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-          <Validation>
-            * 영문자, 특수문자, 숫자, 3~10글자
-            <br />
-          </Validation>
+          <Validation>* 영문자, 특수문자, 숫자, 3~10글자</Validation>
+        )}
+        {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
+          <Validation>*이미 등록된 별명이에요.</Validation>
         )}
         <input value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='별명을 입력해주세요.' />
       </>
     );
   }
 
+  // 이메일 페이지
   if (step === 2) {
     content = (
       <>
@@ -263,12 +296,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
           <p>입력해주세요.</p>
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-          <Validation>
-            * 이메일 형식이 유효하지 않아요.
-            <br />
-          </Validation>
+          <Validation>*이메일 형식이 유효하지 않아요.</Validation>
         )}
-        {/* <span>* 이미 등록된 이메일입니다.</span> */}
+        {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
+          <Validation>*이미 등록된 이메일이에요.</Validation>
+        )}
         <input
           value={userInfo.username}
           onChange={handleEnteredInfo}
@@ -279,6 +311,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
+  // 비밀번호 페이지
   if (step === 3) {
     content = (
       <>
@@ -290,12 +323,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
           <Validation>
-            * 대문자, 특수문자를 포함해주세요. (8~16글자)
+            *대문자, 특수문자를 포함해주세요. (8~16글자)
             <br />
           </Validation>
         )}
         {passwordCheckValue.trim().length !== 0 && !passwordMatch && (
-          <Validation>* 비밀번호가 일치하지 않아요.</Validation>
+          <Validation>*비밀번호가 일치하지 않아요.</Validation>
         )}
         <InputBox>
           <input
@@ -329,6 +362,58 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
+  useEffect(() => {}, [isDuplicated.phoneNumber]);
+
+  // 휴대폰 중복확인 후 인증 코드 날리기
+  const confirmCode = () => {
+    if (userInfo.phoneNumber.length < 11) {
+      setPhoneMessage(true);
+      return;
+    }
+
+    setPhoneMessage(false);
+    handleInputDuplicated();
+  };
+
+  // 인증코드 입력
+  const [authNumber, setAuthNumber] = useState('');
+
+  // 인증번호 입력 값
+  const handleEnteredAuthNumber = event => {
+    setAuthNumber(event.target.value);
+  };
+
+  // 인증 코드 일치 여부 확인
+  const checkedAuthNumber = async () => {
+    if (isDuplicated.phoneNumber) {
+      setAuthMessage(true);
+      return;
+    }
+
+    setAuthMessage(false);
+
+    console.log('핸드폰 번호: ', userInfo.phoneNumber);
+    console.log('인증 번호: ', authNumber);
+
+    let result = false;
+
+    try {
+      const response = await instance.post('/user/confirm/phoneVerification', {
+        phoneNumber: userInfo.phoneNumber,
+        numStr: authNumber,
+      });
+      console.log(response.data);
+      result = response.data;
+    } catch (error) {
+      console.log(error);
+    }
+    // setIsAuthorized(result);
+  };
+
+  const [phoneMessage, setPhoneMessage] = useState(false);
+  const [authMessage, setAuthMessage] = useState(false);
+
+  // 휴대폰 인증 페이지
   if (step === 4) {
     content = (
       <>
@@ -338,23 +423,28 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <span className='strong'>휴대폰 인증</span>이 필요합니다.
           </p>
         </span>
-
-        <Validation>
-          {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-            <Validation>* 휴대폰 번호가 유효하지 않아요.</Validation>
-          )}
-        </Validation>
-        <input
-          value={userInfo.phoneNumber}
-          onChange={handleEnteredInfo}
-          type='text'
-          placeholder="'-'없이 입력해 주세요."
-          maxLength={11}
-        />
+        {phoneMessage && <Validation>*휴대폰 번호를 입력해주세요.</Validation>}
+        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
+          <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>
+        )}
+        {validation[curData] && isDuplicated[curData] && <Validation>*이미 등록된 번호에요.</Validation>}
+        {authMessage && <Validation>*휴대폰 인증을 진행해주세요.</Validation>}
         <Authorize>
-          <Input placeholder='인증 번호를 입력해 주세요.'></Input>
-          <AuthBtn>인증</AuthBtn>
+          <Input
+            value={userInfo.phoneNumber}
+            onChange={handleEnteredInfo}
+            type='text'
+            placeholder="'-'없이 입력해 주세요."
+            maxLength={11}
+          />
+          <AuthBtn onClick={confirmCode}>코드 받기</AuthBtn>
         </Authorize>
+        <input
+          value={authNumber}
+          onChange={handleEnteredAuthNumber}
+          type='text'
+          placeholder='인증 코드를 입력해주세요.'
+        />
       </>
     );
   }
@@ -365,6 +455,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     img.addEventListener('click', img.click());
   };
 
+  // 프로필 이미지 페이지
   if (step === 5) {
     content = (
       <>
@@ -389,7 +480,67 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  // step 4 마지막 가입 단계일 때
+  // 핸드폰으로 코드 받기
+  const sendCode = async () => {
+    console.log('코드 발급 함수 실행');
+    try {
+      const response = await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
+      alert(response.data);
+      setAuthMessage(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 사용자 입력 중복체크
+  const handleInputDuplicated = async () => {
+    if (curData === 'nickname') {
+      console.log('별명 중복체크');
+      try {
+        const response = await instance.get(`/user/checkNickname/${userInfo.nickname}`);
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        handleStepMove(1);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (curData === 'username') {
+      console.log('이메일 중복체크');
+      try {
+        const response = await instance.get(`/user/checkUsername/${userInfo.username}`);
+
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        handleStepMove(1);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (curData === 'phoneNumber') {
+      try {
+        const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
+
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        sendCode();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  // step 5 마지막 가입 단계일 때
   let buttons = '';
 
   if (step === 0) {
@@ -400,11 +551,29 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  if (step > 0 && step < 5) {
+  if (step === 1 || step === 2) {
+    buttons = (
+      <ButtonBox step={step} validation={validation[curData]}>
+        <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
+        <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn>
+      </ButtonBox>
+    );
+  }
+
+  if (step === 3) {
     buttons = (
       <ButtonBox step={step} validation={step === 3 ? passwordMatch : validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
         <NextBtn onClick={() => validation[curData] && handleStepMove(1)}>다음 단계</NextBtn>
+      </ButtonBox>
+    );
+  }
+
+  if (step === 4) {
+    buttons = (
+      <ButtonBox step={step} validation={!isDuplicated[curData]}>
+        <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
+        <NextBtn onClick={() => checkedAuthNumber()}>다음 단계</NextBtn>
       </ButtonBox>
     );
   }
@@ -430,7 +599,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 50px;
   .desc {
     display: block;
     font-size: 20px;
@@ -557,16 +725,31 @@ const GuideList = styled.div`
   }
 `;
 
-const Input = styled.input``;
-const AuthBtn = styled.button``;
+const Input = styled.input`
+  width: 55%;
+  border: none;
+`;
+const AuthBtn = styled.button`
+  position: absolute;
+  right: 0;
+  width: 40%;
+  height: 70%;
+  font-size: 14px;
+  background-color: ${props => props.theme.color.activeBtn};
+  border-radius: 10px;
+`;
 const Authorize = styled.div`
   position: relative;
+  width: 100%;
 `;
 
 const Validation = styled.span`
   color: red;
   font-size: 14px;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
+  &:last-of-type {
+    margin-bottom: 10%;
+  }
 `;
 
 const PrevBtn = styled.button``;
