@@ -7,7 +7,7 @@ const PhotoSlide = (props) => {
   const clickAction = props.clickAction
 
   const [currentSlide, setCurrentSlide] = React.useState(0);
-  const totalSlide = photos.length - 1;
+  const totalSlide = photos?.length - 1;
 
   const showNext = () => {
     currentSlide < totalSlide ? setCurrentSlide(currentSlide + 1) : setCurrentSlide(0);
@@ -15,7 +15,7 @@ const PhotoSlide = (props) => {
   };
 
   const showPrev = () => {
-    currentSlide > 0 ? setCurrentSlide(currentSlide - 1) : setCurrentSlide(photos.length - 1);
+    currentSlide > 0 ? setCurrentSlide(currentSlide - 1) : setCurrentSlide(photos?.length - 1);
     setPhotoPg(currentSlide - 1)
   };
 
@@ -38,6 +38,7 @@ const PhotoSlide = (props) => {
   }, [endX]);
 
   return (
+    photos ?
     <SliderWrap>
       <Slider
         currentSlide={currentSlide}
@@ -50,7 +51,8 @@ const PhotoSlide = (props) => {
           <Photo key={v.id} img={v.url} />
         ))}
       </Slider>
-    </SliderWrap>
+    </SliderWrap> 
+    : null
   );
 };
 

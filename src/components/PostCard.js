@@ -45,9 +45,12 @@ const PostCard = (props) => {
       <Contents>
         <ImgPreview>
           <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
-          <span id="imgcount">{photoPg+1}/{postData.img.length}</span>
+          <span id="imgcount">{photoPg+1}/{postData.img?.length}</span>
         </ImgPreview>
-        <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> {postData.contents} </TextPreview>
+        <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> 
+          { postData.contents?.substr(0,13)}
+          { postData.contents?.length > 13 ? "…" : null } 
+        </TextPreview>
       </Contents>
 
       <Reactions>
