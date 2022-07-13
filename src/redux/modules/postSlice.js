@@ -4,10 +4,9 @@ import instance from '../../shared/axios';
 
 
 export const loadPostsDB = createAsyncThunk(
-  'post/loadPost', async() => {
+  'post/loadPost', async(pageNo) => {
     // const response = await instance.get('/api/post/category/all?page=0').catch((err) => console.log(err))
-    const response = await axios.get('http://localhost:5000/post?page=0').catch((err) => console.log(err))
-    // console.log(response.data)
+    const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
     return response.data[0]
   }
 );
@@ -66,7 +65,7 @@ const postSlice = createSlice({
   initialState: {
     list: [],
     pageNumber:0,
-    last: true,
+    last: false,
   },
   reducers: {
     //read
@@ -110,7 +109,11 @@ const postSlice = createSlice({
 
   extraReducers: {
     [loadPostsDB.fulfilled] : (state, { payload }) => {
-      state.list = [...state.list, ...payload.content]
+      if (payload.pageable.pageNumber === 0) {
+        state.list = [...payload.content]
+      } else {
+        state.list = [...state.list, ...payload.content]
+      }
       state.pageNumber = payload.pageable.pageNumber
       state.last = payload.last
     }
