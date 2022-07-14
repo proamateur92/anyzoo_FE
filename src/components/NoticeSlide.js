@@ -18,7 +18,7 @@ const NoticeSlide = () => {
   };
 
   const moveSlide = () => {
-    // console.log("start?", startX, " &end?", endX);
+    console.log("start?", startX, " &end?", endX);
     const distance = Math.abs(startX - endX)
 
     if (distance > 10 && startX !== 0 && endX !== 0) {
@@ -48,7 +48,15 @@ const NoticeSlide = () => {
         {notices.map((v) => (
           <Banner key={v.id} img={v.img} />
         ))}
+
+
       </Slider>
+      
+      <Dots>
+      {notices.map((v,i) => (
+          <Dot key={v.id} order={i} currentSlide={currentSlide} />
+        ))}
+      </Dots>
     </NoticeWrap>
   );
 };
@@ -56,13 +64,15 @@ const NoticeSlide = () => {
 export default NoticeSlide;
 
 const NoticeWrap = styled.div`
-  height: 240px;
+  height: 40vw;
+  max-height: 24rem;
   width: 100%;
   overflow: hidden;
+  position: relative;
 `;
 
 const Slider = styled.div`
-  height: 240px;
+  height: 100%;
   width: 100%;
   display: flex;
   transition: all 0.5s ease-in-out;
@@ -71,10 +81,27 @@ const Slider = styled.div`
 `;
 
 const Banner = styled.div`
-  height: 240px;
+  height: 100%;
   min-width: 100%;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat center;
   background-size: cover;
 
   cursor:pointer;
 `;
+
+const Dots = styled.div`
+position: absolute;
+bottom: 6.7%;
+left: 50%;
+transform: translate(-50%, 0);
+
+display: flex;
+gap: 0.5rem;
+`
+
+const Dot = styled.div`
+  height: 1rem;
+  width: 1rem;
+  border-radius: 1rem;
+  background: ${(props)=> props?.order === props?.currentSlide ? '#34d8ce': '#EDEDED'};
+`
