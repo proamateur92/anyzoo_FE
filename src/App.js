@@ -3,22 +3,36 @@ import React, { useEffect, useCallback } from 'react';
 
 // route
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup } from './pages/Index';
+import {
+  FindPwd,
+  Home,
+  Login,
+  Mypage,
+  UserEdit,
+  NotFound,
+  Notice,
+  NoticeDetail,
+  Post,
+  PostDetail,
+  PostWrite,
+  PostUpdate,
+  Signup,
+} from './pages/Index';
 
 // style
 import GlobalStyles from './styles/GlobalStyles';
 import { defaultTheme } from './styles/theme';
 import { ThemeProvider } from 'styled-components';
 
-// axios
-import axios from 'axios';
+// store
+import { setAccessToken } from './shared/axios';
+import { getCookie } from './shared/cookie';
 
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-import { loadUserDB } from './redux/modules/userSlice';
-import { loadPostDB } from './redux/modules/postSlice';
-import { loadCommentDB } from './redux/modules/commentSlice';
-import { loadHeartDB } from './redux/modules/heartSlice';
+import { useDispatch } from 'react-redux';
+
+// userSlice
+import { setUserDB } from './redux/modules/userSlice';
 
 //component
 import NavMenu from './components/NavMenu';
@@ -28,6 +42,15 @@ import Comment from './components/Comment';
 
 function App() {
   const theme = defaultTheme;
+  setAccessToken();
+  
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (getCookie('accessToken')) {
+      dispatch(setUserDB());
+    }
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

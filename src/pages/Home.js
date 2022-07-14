@@ -1,15 +1,16 @@
+// react
 import React, { useCallback } from "react";
 
 // element
 import Wrap from "../elements/Wrap";
 import SubHeader from "../elements/SubHeader";
+
 // component
 import PostCard from "../components/PostCard";
 import NoticeSlide from "../components/NoticeSlide";
 import RealTimeRank from "../components/RealtimeRank";
 import WeeklyRank from "../components/WeeklyRank";
 import FindMateCard from "../components/FindMateCard";
-
 import Comment from "../components/Comment";
 
 // style
@@ -18,6 +19,8 @@ import { GrNext } from "react-icons/gr";
 
 // redux
 import { useSelector, useDispatch } from "react-redux";
+
+// postSlice
 import { loadPostsDB } from "../redux/modules/postSlice";
 
 const Home = () => {

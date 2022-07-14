@@ -6,8 +6,8 @@ const Wrap = props => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 599px;
   height: 100%;
+  max-width: 599px;
   margin: 0 auto 12.2vh;
   border: 1px solid #ddd;
   position: relative;
