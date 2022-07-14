@@ -9,11 +9,11 @@ import instance from "../shared/axios";
 const WeeklyRank = () => {
   const [category, setCategory] = React.useState("cute");
   const [list, setList] = React.useState([null, null, null]);
-  const [totalVote, setTotalVote] = React.useState(0);
+  const [mostVotes, setMostVotes] = React.useState(0);
 
   React.useEffect(() => {
       changeCategory(category)
-    },[]);
+    },[category]);
 
   const changeCategory = async (categoryName) => {
     const response = await instance.get('/api/rank/week/'+categoryName).catch((err) => console.log(err))
@@ -21,7 +21,7 @@ const WeeklyRank = () => {
     //   .get("http://localhost:5000/rank-week?category=" + categoryName)
     //   .catch((err) => console.log(err));
     setList(response.data);
-    setTotalVote(response.data.reduce((acc,ranker)=>( acc + ranker.likeCnt),0))
+    setMostVotes(response.data[0]?.likeCnt)
     setCategory(categoryName);
   };
 
@@ -47,10 +47,10 @@ const WeeklyRank = () => {
 
       {list.map((ranker,i) => (
         <CategoryRanking key={ranker ? ranker.boardMainId : i}>
-          <div className="cateRankerPic" img={ranker?.img[0]?.url}/>
+          <CateRankerPic img={ranker?.img[0]?.url}/>
           <div>
-              <span>{i+1}위</span> {ranker?.userNickname}
-            <VoteBar votes={ranker?.likeCnt} totalVote={totalVote}> {ranker?.likeCnt}표 </VoteBar>
+              <span>{i+1}위</span> {ranker?.nickname}
+            <VoteBar votes={ranker?.likeCnt} mostVotes={mostVotes}> {ranker?.likeCnt}표 </VoteBar>
           </div>
         </CategoryRanking>
       ))}
@@ -69,21 +69,20 @@ const CategoryRanking = styled.div`
     display: flex;
     align-items: center;
     border-bottom: 2px solid #ddd;
+`;
 
-  .cateRankerPic {
-    width: 80px;
-    height: 80px;
-    margin: 10px;
-    border-radius: 80px;
+const CateRankerPic = styled.div`
+  width: 80px;
+  height: 80px;
+  margin: 10px;
+  border-radius: 80px;
+  border: 1px solid #eee;
 
-    background: url(${(props) =>
-    props.img
-      ? props.img
-      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png"});
+  background: ${(props) => props.img ? 'url('+props.img+')' : '#ddd'};
   background-size: cover;
   background-position: center;
-  }
-`;
+`
+
 const CategoryTitle = styled.div`
   display: flex;
   justify-content: space-between;
@@ -113,5 +112,5 @@ const VoteBar = styled.div`
     justify-content: flex-end;
     align-items: center;
     padding: 0px 20px;
-    width: ${(props)=> (props.votes/props.totalVote)*100}%;
+    width: ${(props)=> (props.votes/props.mostVotes)*100}%;
 `

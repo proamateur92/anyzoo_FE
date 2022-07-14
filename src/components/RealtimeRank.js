@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 // style
 import styled from "styled-components";
+import { FiAward } from "react-icons/fi";
+
 
 const RealTimeRank = () => {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const RealTimeRank = () => {
 
   return (
     <RealTimeRanking>
-      <h3>오늘의 인기상</h3>
+      <h3> <FiAward id="icon"/> 오늘의 인기상</h3>
       <RealTimeTopRanker>
         <RankerPreview
           img={rankers[0]?.img[0]?.url}
@@ -51,6 +53,7 @@ const RealTimeRanking = styled.div`
   padding: 30px;
 
   h3 {
+    font-size:1.8rem;
     font-weight: bold;
     margin-bottom: 20px;
   }
