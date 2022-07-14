@@ -12,6 +12,9 @@ import styled from 'styled-components';
 // image
 import profile from '../../assets/images/noProfile.png';
 
+// sweetalert
+import Swal from 'sweetalert2';
+
 // axios
 import instance from '../../shared/axios';
 
@@ -133,10 +136,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
     if (curData === 'nickname' || curData === 'username' || curData === 'phoneNumber') {
       setIsDuplicated({ ...isDuplicated, [curData]: false });
       if (curData === 'phoneNumber') {
-        setIsDuplicated({ ...isDuplicated, [curData]: true });
+        setIsDuplicated({ ...isDuplicated, [curData]: false });
         setIsAuthorized(false);
         setPhoneMessage(false);
         setAuthMessage(false);
+        setIsSendCode(false);
       }
     }
 
@@ -241,7 +245,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 약관 동의 페이지
   if (step === 0) {
     content = (
-      <>
+      <StepBox>
         <span style={{ fontSize: '30px', fontWeight: 'bold' }}>약관동의</span>
         <Guide>
           <GuideBox>
@@ -260,35 +264,34 @@ const Step = ({ step, onCountChange, onSignup }) => {
             <div className={agreeArr['second'] ? 'box checked' : 'box'}></div>
           </GuideList>
         </Guide>
-      </>
+      </StepBox>
     );
   }
 
   // 별명 페이지
   if (step === 1) {
     content = (
-      <>
+      <StepBox>
         <span className='desc'>
-          <p>당신의</p>
           <p>
-            <span className='strong'>별명</span>은?
+            당신의 <span className='strong'>별명</span>은?
           </p>
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-          <Validation>* 영문자, 특수문자, 숫자, 3~10글자</Validation>
+          <Validation>*영문자, 한글, 숫자, 3~10글자</Validation>
         )}
         {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
           <Validation>*이미 등록된 별명이에요.</Validation>
         )}
-        <input value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='별명을 입력해주세요.' />
-      </>
+        <input value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='홍길동' />
+      </StepBox>
     );
   }
 
   // 이메일 페이지
   if (step === 2) {
     content = (
-      <>
+      <StepBox>
         <span className='desc'>
           <p>
             <span className='strong'>이메일</span>을
@@ -307,14 +310,14 @@ const Step = ({ step, onCountChange, onSignup }) => {
           type='text'
           placeholder='이메일을 입력해주세요.'
         />
-      </>
+      </StepBox>
     );
   }
 
   // 비밀번호 페이지
   if (step === 3) {
     content = (
-      <>
+      <StepBox>
         <span className='desc'>
           <p>
             <span className='strong'>비밀번호</span>를
@@ -323,8 +326,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
           <Validation>
-            *대문자, 특수문자를 포함해주세요. (8~16글자)
+            *대문자, 특수문자를 포함해주세요.
             <br />
+            (8~16자 이하)
           </Validation>
         )}
         {passwordCheckValue.trim().length !== 0 && !passwordMatch && (
@@ -336,7 +340,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             onChange={handleEnteredInfo}
             className='pwd'
             type={!isShowPassword ? 'password' : 'text'}
-            placeholder='비밀번호를 입력해주세요.'
+            placeholder='비밀번호를 입력하세요.'
           />
           <Icon>
             {!isShowPassword && <AiFillEyeInvisible onClick={() => setIsShowPassword(true)} />}
@@ -349,7 +353,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             onChange={handleEnteredPwdCheck}
             className='pwd-check'
             type='password'
-            placeholder='비밀번호를 다시 입력해주세요.'
+            placeholder='다시 입력하세요.'
           />
           <Icon>
             {passwordCheckValue.trim().length === 0 && <AiOutlineCheckCircle />}
@@ -358,7 +362,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             )}
           </Icon>
         </InputBox>
-      </>
+      </StepBox>
     );
   }
 
@@ -383,9 +387,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
     setAuthNumber(event.target.value);
   };
 
-  // 인증 코드 일치 여부 확인
+  // 인증번호 일치 여부 확인
   const checkedAuthNumber = async () => {
-    if (isDuplicated.phoneNumber) {
+    // true면 등록된 번호, false면 미등록 번호
+    console.log('인증번호 비교');
+    console.log(isDuplicated.phoneNumber);
+
+    if (isDuplicated.phoneNumber || !isSendCode) {
       setAuthMessage(true);
       return;
     }
@@ -395,28 +403,30 @@ const Step = ({ step, onCountChange, onSignup }) => {
     console.log('핸드폰 번호: ', userInfo.phoneNumber);
     console.log('인증 번호: ', authNumber);
 
-    let result = false;
-
     try {
       const response = await instance.post('/user/confirm/phoneVerification', {
         phoneNumber: userInfo.phoneNumber,
         numStr: authNumber,
       });
+
+      // 인증코드가 일치하면 true, 다르면 false
+      console.log('코드 일치 여부');
       console.log(response.data);
-      result = response.data;
+      setIsAuthorized(response.data);
+      response.data && handleStepMove(1);
     } catch (error) {
       console.log(error);
     }
-    // setIsAuthorized(result);
   };
 
   const [phoneMessage, setPhoneMessage] = useState(false);
   const [authMessage, setAuthMessage] = useState(false);
+  const [isSendCode, setIsSendCode] = useState(false);
 
   // 휴대폰 인증 페이지
   if (step === 4) {
     content = (
-      <>
+      <StepBox>
         <span className='desc'>
           <p>본인 확인을 위해</p>
           <p>
@@ -439,13 +449,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
           />
           <AuthBtn onClick={confirmCode}>코드 받기</AuthBtn>
         </Authorize>
-        <input
+        <AuthCode
           value={authNumber}
           onChange={handleEnteredAuthNumber}
           type='text'
           placeholder='인증 코드를 입력해주세요.'
         />
-      </>
+      </StepBox>
     );
   }
 
@@ -458,7 +468,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 프로필 이미지 페이지
   if (step === 5) {
     content = (
-      <>
+      <StepBox>
         <span className='desc'>
           <p>마지막으로</p>
           <p>
@@ -476,7 +486,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
           />
           <input className='selectImg' onChange={handleEnteredInfo} type='file' accept='image/*' />
         </Profile>
-      </>
+      </StepBox>
     );
   }
 
@@ -485,7 +495,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
     console.log('코드 발급 함수 실행');
     try {
       const response = await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
-      alert(response.data);
+      Swal.fire({
+        title: '인증번호 발송했어요!',
+        icon: 'success',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#44DCD3',
+      });
+      setIsSendCode(true);
       setAuthMessage(false);
     } catch (error) {
       console.log(error);
@@ -525,14 +541,16 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
 
     if (curData === 'phoneNumber') {
+      console.log('번호 중복 체크');
       try {
         const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
-
+        console.log(response.data);
         if (response.data) {
           setIsDuplicated({ ...isDuplicated, [curData]: response.data });
           return;
         }
         setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        setIsSendCode(true);
         sendCode();
       } catch (error) {
         console.log(error);
@@ -540,7 +558,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
   };
 
-  // step 5 마지막 가입 단계일 때
   let buttons = '';
 
   if (step === 0) {
@@ -599,18 +616,14 @@ const Step = ({ step, onCountChange, onSignup }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   .desc {
     display: block;
-    font-size: 20px;
-    margin-bottom: 20px;
+    font-size: 2.3rem;
+    margin-bottom: 2.3rem;
   }
   .strong {
     font-weight: bold;
-  }
-  .notice {
-    display: block;
-    margin-bottom: 27px;
-    font-size: 14px;
   }
   p {
     display: block;
@@ -618,16 +631,18 @@ const Container = styled.div`
   }
   input {
     box-sizing: border-box;
-    height: 55px;
-    padding: 0 10px;
+    width: 100%;
+    padding: 3.25% 10px;
     font-size: 20px;
-    border-bottom: 3px solid #ccc;
+    border-bottom: 3px solid #000000;
   }
   input:last-of-type {
     margin-bottom: 20px;
   }
   input::placeholder {
-    font-size: 16px;
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.1);
   }
   input[type='file'] {
     display: none;
@@ -640,30 +655,31 @@ const Profile = styled.div`
   .defaultImg {
     cursor: pointer;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 10rem;
   }
 `;
 
+const StepBox = styled.div``;
 const InputBox = styled.div`
   position: relative;
-  border-bottom: 3px solid #ccc;
+  border-bottom: 3px solid #000000;
   input {
     box-sizing: border-box;
-    height: 55px;
-    padding: 0 10px;
-    font-size: 20px;
+    padding: 3.25% 10px;
+    font-size: 2.3rem;
     border: none;
   }
   input:last-of-type {
     margin-bottom: 0;
   }
   input::placeholder {
-    font-size: 16px;
+    font-size: 2.3rem;
+    font-weight: 800;
     color: #ccc;
   }
   &:nth-of-type(2) {
-    margin-bottom: 20px;
+    margin-bottom: 10%;
   }
 `;
 
@@ -700,7 +716,6 @@ const GuideList = styled.div`
   align-items: center;
   margin-bottom: 20px;
   cursor: pointer;
-
   .box {
     display: flex;
     justify-content: center;
@@ -725,30 +740,38 @@ const GuideList = styled.div`
   }
 `;
 
+const AuthCode = styled.input`
+  padding: 3.25% 0;
+`;
+
 const Input = styled.input`
-  width: 55%;
+  width: 50%;
+  padding: 3.25% 0;
   border: none;
 `;
+
 const AuthBtn = styled.button`
   position: absolute;
   right: 0;
-  width: 40%;
+  width: 32%;
   height: 70%;
   font-size: 14px;
   background-color: ${props => props.theme.color.activeBtn};
   border-radius: 10px;
 `;
+
 const Authorize = styled.div`
   position: relative;
   width: 100%;
 `;
 
 const Validation = styled.span`
+  display: block;
   color: red;
-  font-size: 14px;
+  font-size: 1.6rem;
   margin-bottom: 2%;
   &:last-of-type {
-    margin-bottom: 10%;
+    margin-bottom: 8.3%;
   }
 `;
 
@@ -756,16 +779,19 @@ const PrevBtn = styled.button``;
 const NextBtn = styled.button``;
 const ButtonBox = styled.div`
   display: flex;
+  height: 5.9%;
   justify-content: space-between;
   button {
-    font-size: 16px;
-    width: 45%;
-    height: 50px;
+    font-size: 1.9rem;
+    width: 47%;
+    height: 100%;
     background-color: #ccc;
     border-radius: 10px;
   }
   ${PrevBtn} {
     transition: 0.5s;
+    color: rgba(0, 0, 0, 0.6);
+    background-color: #f2f2f2;
   }
   ${PrevBtn}:hover {
     background-color: ${props => props.theme.color.activeBtn};
@@ -773,7 +799,6 @@ const ButtonBox = styled.div`
   ${NextBtn} {
     width: ${props => props.width};
     background-color: ${props => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
-
     cursor: ${props => props.validation && 'pointer'};
     transition: 0.5s;
   }

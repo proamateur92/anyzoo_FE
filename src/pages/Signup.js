@@ -73,13 +73,14 @@ const Signup = () => {
 
 const Top = styled.div`
   display: flex;
-  font-size: 30px;
+  font-size: 2.4rem;
   padding: 83px 0 100px 0;
   justify-content: space-between;
 `;
 
 const SignupForm = styled.div`
-  padding: 0 10%;
+  margin: 0 11.5%;
+  height: 100%;
 `;
 
 export default Signup;
