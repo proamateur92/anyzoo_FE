@@ -5,7 +5,7 @@ import Wrap from '../elements/Wrap';
 import styled from 'styled-components';
 
 // react
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 // router
 import { useNavigate } from 'react-router-dom';
@@ -13,18 +13,17 @@ import { useNavigate } from 'react-router-dom';
 // axios
 import instance, { setAccessToken } from '../shared/axios';
 
-// redux
-import { useDispatch } from 'react-redux';
-
-// storage
-import { setUserDB } from '../redux/modules/userSlice';
-
 // cookie
-import { setCookie } from '../shared/cookie';
+import { getCookie, setCookie } from '../shared/cookie';
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+
+  const isLogin = getCookie('accessToken') ? true : false;
+
+  useEffect(() => {
+    if (isLogin) navigate('/');
+  });
 
   const eamilValue = useRef('');
   const pwdValue = useRef('');
@@ -36,8 +35,8 @@ const Login = () => {
       setCookie('refreshToken', response.data.data.token.refreshToken);
       alert(response.data.msg);
       setAccessToken();
-      dispatch(setUserDB());
       navigate('/');
+      // dispatch(setUserDB());
     } catch (error) {
       window.alert(error.response.data.errorMessage);
       navigate('/login');

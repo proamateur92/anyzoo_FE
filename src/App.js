@@ -3,64 +3,47 @@ import React, { useEffect, useCallback } from 'react';
 
 // route
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
-import { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup } from './pages/Index';
+import {
+  FindPwd,
+  Home,
+  Login,
+  Mypage,
+  UserEdit,
+  NotFound,
+  Notice,
+  NoticeDetail,
+  Post,
+  PostDetail,
+  PostWrite,
+  PostUpdate,
+  Signup,
+} from './pages/Index';
 
 // style
 import GlobalStyles from './styles/GlobalStyles';
 import { defaultTheme } from './styles/theme';
 import { ThemeProvider } from 'styled-components';
 
-// axios
-import axios from 'axios';
+// store
+import { setAccessToken } from './shared/axios';
+import { getCookie } from './shared/cookie';
 
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-import { loadUserDB } from './redux/modules/userSlice';
-import { loadPostDB } from './redux/modules/postSlice';
-import { loadCommentDB } from './redux/modules/commentSlice';
-import { loadHeartDB } from './redux/modules/heartSlice';
+import { useDispatch } from 'react-redux';
+
+import { setUserDB } from './redux/modules/userSlice';
 
 function App() {
-  // redux 테스트 코드 시작
-  // const dispatch = useDispatch();
-  // const userList = useSelector(state => state.user?.list);
-  // const postList = useSelector(state => state.post?.list);
-  // const heartList = useSelector(state => state.heart?.list);
-  // const commentList = useSelector(state => state.comment?.list);
-  // console.log(userList);
-  // console.log(postList);
-  // console.log(heartList);
-  // console.log(commentList);
+  const dispatch = useDispatch();
 
-  // const getLogin = useCallback(async () => {
-  //   const response = await axios.get('http://localhost:5000/user');
-  //   dispatch(loadUserDB(response.data));
-  // }, [dispatch]);
-
-  // const getPost = useCallback(async () => {
-  //   const response = await axios.get('http://localhost:5000/post');
-  //   dispatch(loadPostDB(response.data));
-  // }, [dispatch]);
-
-  // const getHeart = useCallback(async () => {
-  //   const response = await axios.get('http://localhost:5000/heart');
-  //   dispatch(loadHeartDB(response.data));
-  // }, [dispatch]);
-
-  // const getComment = useCallback(async () => {
-  //   const response = await axios.get('http://localhost:5000/comment');
-  //   dispatch(loadCommentDB(response.data));
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   getLogin();
-  //   getPost();
-  //   getHeart();
-  //   getComment();
-  // }, [getLogin, getPost, getHeart, getComment]);
-  // redux 테스트 코드 끝
+  useEffect(() => {
+    if (getCookie('accessToken')) {
+      dispatch(setUserDB());
+    }
+  }, [dispatch]);
 
   const theme = defaultTheme;
+  setAccessToken();
 
   return (
     <ThemeProvider theme={theme}>
