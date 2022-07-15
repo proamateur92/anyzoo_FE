@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 // element
 import Portal from "../elements/Portal";
@@ -15,21 +15,20 @@ const NavCircle = (props) => {
   const location = useLocation();
   const setCircleOn = props.setCircleOn;
   const backDropRef = React.useRef();
-
   const [plusOpen, setPlusOpen] = React.useState(false);
-
-  console.log(location.pathname);
+  const [writeOpt, setWriteOpt] = React.useState(null);
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
   }, []);
 
-  const moveTo = (url) => {
+  const moveTo = useCallback((url) => {
     navigate(url);
     document.body.style.overflow = "unset";
     setCircleOn(false);
-  };
+  },[navigate, setCircleOn]);
 
+  
   const closePlus = (e) => {
     if (e.target === backDropRef.current) {
       document.body.style.overflow = "unset";
@@ -37,15 +36,36 @@ const NavCircle = (props) => {
     }
   };
 
+  React.useEffect(() => {
+    switch (location.pathname) {
+      case '/reels' :
+        setWriteOpt (
+        <> 
+          <div onClick={() => moveTo("/")}> 릴스 작성 </div> 
+        </>)
+        break
+      case '/community' :
+        setWriteOpt(          
+        <>
+          <div onClick={() => moveTo("/")}> 커뮤니티 글 작성 </div>
+          <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
+        </>)
+        break
+      default :
+      setWriteOpt(          
+        <>
+          <div onClick={() => moveTo("/post/write")}> 자랑글 작성 </div>
+        </>)
+        break
+    }
+  }, [location.pathname, moveTo])
+
   return (
     <Portal>
       <BackDrop ref={backDropRef} onClick={(e) => closePlus(e)}>
         {plusOpen ? (
           <WriteMenu>
-            <div onClick={() => moveTo("/post/write")}> 자랑글 작성 </div>
-            <div onClick={() => moveTo("/")}> 산책글 작성 </div>
-            <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
-            <div onClick={() => moveTo("/")}> 릴스 작성 </div>
+            {writeOpt}
           </WriteMenu>
         ) : null}
 
@@ -69,12 +89,12 @@ const NavCircle = (props) => {
             <h5> 홈 </h5>
           </Menu>
 
-          <Menu order={3} onClick={() => moveTo("/post")}>
+          <Menu order={3} onClick={() => moveTo("/community")}>
             <FiStar className={"icons"} />
-            <h5> 자랑하기 </h5>
+            <h5> 커뮤니티 </h5>
           </Menu>
 
-          <Menu order={4} onClick={() => moveTo("/")}>
+          <Menu order={4} onClick={() => moveTo("/reels")}>
             <FiFilm className={"icons"} />
             <h5> 릴스 </h5>
           </Menu>
@@ -115,8 +135,7 @@ const WriteMenu = styled.div`
 
   div {
     box-sizing: border-box;
-    height: 11vh;
-    max-height: 80px;
+    height: 8.75vh;
     width: 100%;
     border-radius: 11vh;
     background: #fff;
@@ -154,6 +173,8 @@ const Center = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
+  font-size: 2.4rem;
 
   box-shadow: inset 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   color: #fff;

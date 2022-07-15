@@ -17,6 +17,8 @@ import {
   PostWrite,
   PostUpdate,
   Signup,
+  Reels, 
+  CommunityList
 } from './pages/Index';
 
 // style
@@ -38,8 +40,6 @@ import { setUserDB } from './redux/modules/userSlice';
 import NavMenu from './components/NavMenu';
 import ScrollRestore from './elements/ScrollRestore'
 
-// Test
-import Comment from './components/Comment';
 
 function App() {
   const theme = defaultTheme;
@@ -72,8 +72,9 @@ function App() {
           <Route path='/post/detail/:id' element={<PostDetail />} />
           <Route path='/notice' element={<Notice />} />
           <Route path='/notice/detail/:id' element={<NoticeDetail />} />
+          <Route path='/reels' element={<Reels />}/>
+          <Route path='/community' element={<CommunityList />}/>
           <Route path='*' element={<NotFound />} />
-          <Route path='/Comment' element={<Comment />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
