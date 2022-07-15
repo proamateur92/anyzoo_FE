@@ -8,7 +8,6 @@ import instance from '../../shared/axios';
 export const loadCommentsDB = createAsyncThunk(
   'loadComment', async ( data ) => {
     const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
-    console.log(response)
     return response.data.comments
   }
 );
@@ -17,7 +16,6 @@ export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
     const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
-    console.log(response)
     const newComment = {...commentData, id:response.data}
     return newComment;
   }

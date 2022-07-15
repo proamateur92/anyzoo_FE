@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 // component
 import EditBubble from '../elements/EditBubble';
-// import PhotoSlide from "./PhotoSlide";
+import PhotoSlide from "./PhotoSlide";
 
 // style
 import styled from 'styled-components';
@@ -23,8 +23,6 @@ const PostCard = (props) => {
 
   const cardWrapRef = React.useRef();
   const [cardWidth, setCardWidth] = React.useState(null);
-
-  // const [photoPg, setPhotoPg] = React.useState(0);
 
   React.useEffect(() => {
     setCardWidth(cardWrapRef?.current?.offsetWidth);
@@ -48,8 +46,7 @@ const PostCard = (props) => {
 
       <Contents>
         <ImgPreview>
-          {/* <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/> */}
-          <span id='imgcount'>{/* {photoPg + 1}/{postData.img?.length} */}</span>
+          <PhotoSlide photos={postData.img} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
         </ImgPreview>
         <TextPreview onClick={() => navigate('/post/detail/' + boardMainId)}>
           {postData.contents?.substr(0, 13)}
@@ -133,8 +130,9 @@ const ImgPreview = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   border: 1px solid #eee;
-  position: relative;
   overflow: hidden;
+<<<<<<< HEAD
+=======
 
   #imgcount {
     position: absolute;
@@ -149,6 +147,7 @@ const ImgPreview = styled.div`
     background-color: rgba(0, 0, 0, 0.3);
     color: #fff;
   }
+>>>>>>> 74a4804c1ddbf16168e512083613edeb59aab2d6
 `;
 
 const TextPreview = styled.p`
@@ -156,7 +155,7 @@ const TextPreview = styled.p`
   display: flex;
   align-items: center;
   overflow: hidden;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   color: #666;
 `;
 
