@@ -7,7 +7,6 @@ import instance from '../../shared/axios';
 // 예시
 export const loadCommentsDB = createAsyncThunk(
   'loadComment', async ( data ) => {
-    // const response = await axios.get('http://localhost:5000/comment/?postId=' + postId).catch((err) => console.log(err))
     const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
     console.log(response)
     return response.data.comments
@@ -17,9 +16,9 @@ export const loadCommentsDB = createAsyncThunk(
 export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
-       const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
+    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
     console.log(response)
-    const newComment = {...commentData}
+    const newComment = {...commentData, id:response.data}
     return newComment;
   }
 );

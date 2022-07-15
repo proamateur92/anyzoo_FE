@@ -25,11 +25,12 @@ const Comment = (props) => {
 
   // 코멘트 추가하기
   const addComment = async () => {
-    const newComment = {
-      content: commentRef.current.value,
-    };
+    const commentData = {
+      postId: postId,
+      comment: commentRef.current.value,
+    }; 
 
-    await dispatch(addCommentDB(newComment, postId));
+    await dispatch(addCommentDB(commentData));
     commentRef.current.value = '';
   };
 
