@@ -19,8 +19,7 @@ const PhotoSlide = (props) => {
     setPhotoPg(currentSlide - 1)
   };
 
-  const moveSlide = () => {
-    // console.log("start?", startX, " &end?", endX);
+  const moveSlide = (endX) => {
     const distance = Math.abs(startX - endX)
 
     if (distance > 10 && startX !== 0 && endX !== 0) {
@@ -31,11 +30,6 @@ const PhotoSlide = (props) => {
   };
 
   const [startX, setStartX] = React.useState(0);
-  const [endX, setEndX] = React.useState(0);
-
-  React.useEffect(() => {
-    moveSlide();
-  }, [endX]);
 
   return (
     photos ?
@@ -43,9 +37,9 @@ const PhotoSlide = (props) => {
       <Slider
         currentSlide={currentSlide}
         onMouseDown={(e) => setStartX(e.clientX)}
-        onMouseUp={(e) => setEndX(e.clientX)}
+        onMouseUp={(e) => moveSlide(e.clientX)}
         onTouchStart={(e) => setStartX(e.clientX)}
-        onTouchEnd={(e) => setEndX(e.clientX)}
+        onTouchEnd={(e) => moveSlide(e.clientX)}
       >
         {photos.map((v) => (
           <Photo key={v.id} img={v.url} />
