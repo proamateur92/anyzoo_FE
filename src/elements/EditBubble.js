@@ -71,8 +71,8 @@ const Bubble = styled.div`
   background: #fff;
 
   position: absolute;
-  top: 35px;
-  right: 10px;
+  top: 55%;
+  right: 3%;
   z-index: 10;
 
   p {

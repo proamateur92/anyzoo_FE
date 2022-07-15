@@ -5,15 +5,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import instance from '../../shared/axios';
 
 // 자랑하기 글 불러오기
-export const loadPostsDB = createAsyncThunk('post/loadPost', async (pageInfo) => {
-  const response = await instance
-    .get(`/api/post/category/all?page=${pageInfo}`)
-    .catch((err) => console.log(err));
-  // console.log(response)
-  // const response = await axios.get('http://localhost:5000/post?page=%27+ pageNo).catch((err) => console.log(err))
-  return response.data;
-});
-
+export const loadPostsDB = createAsyncThunk(
+  'post/loadPost', async(pageInfo) => {
+    const response = await instance.get( `/api/post/category/${pageInfo.sorting}?page=${pageInfo.page}`).catch((err) => console.log(err))
+    // console.log(response)
+    // const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
+    return response.data
+  }
+);
 // 자랑하기 글 작성
 export const addDataDB = createAsyncThunk('addData', async (data) => {
   console.log(data, '츄가');
@@ -49,7 +48,6 @@ const postSlice = createSlice({
   extraReducers: {
     // 불러오기
     [loadPostsDB.fulfilled]: (state, { payload }) => {
-      state.list = payload;
       if (payload.pageable.pageNumber === 0) {
         state.list = [...payload.content];
       } else {

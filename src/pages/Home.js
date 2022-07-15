@@ -48,9 +48,10 @@ const Home = () => {
   }, [loadinghandler]);
 
   React.useEffect(() => {
-    if (page >= 0 && !isLastPg) {
-      dispatch(loadPostsDB(page));
-      console.log('새 페이지 로딩');
+    if ( page >= 0 && !isLastPg) {
+      const pageInfo = { page: page, sorting: 'all' }
+      dispatch(loadPostsDB(pageInfo));
+      console.log("새 페이지 로딩");
     } else {
       console.log('마지막 페이지');
     }
@@ -58,7 +59,7 @@ const Home = () => {
 
   return (
     <Wrap>
-      <Logo />
+      <Logo> ANYZOO </Logo>
       {/* <Comment postId={0}/> */}
 
       <NoticeSlide />
@@ -98,9 +99,14 @@ export default Home;
 const Logo = styled.div`
   width: 100%;
   height: 80px;
-  background: url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FuVWP5%2FbtrGariHl5C%2FgZPDKkUbrtI4XpAFfR8xm0%2Fimg.png')
-    no-repeat center;
-  background-size: 20%;
+  background: #4addd0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color:#fff;
+  font-weight: bolder;
+  font-size: 3.5rem;
 `;
 
 const SubTitle = styled.div`

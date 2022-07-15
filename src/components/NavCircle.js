@@ -17,19 +17,19 @@ const NavCircle = (props) => {
   const setCircleOn = props.setCircleOn;
   const backDropRef = React.useRef();
 
-  const [plusOpen, setPlusOpen] = React.useState(false)
+  const [plusOpen, setPlusOpen] = React.useState(false);
 
-  console.log(location.pathname)
+  console.log(location.pathname);
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
   }, []);
 
   const moveTo = (url) => {
-    navigate(url)
+    navigate(url);
     document.body.style.overflow = "unset";
-    setCircleOn(false); 
-  }
+    setCircleOn(false);
+  };
 
   const closePlus = (e) => {
     if (e.target === backDropRef.current) {
@@ -41,46 +41,43 @@ const NavCircle = (props) => {
   return (
     <Portal>
       <BackDrop ref={backDropRef} onClick={(e) => closePlus(e)}>
-
-      {
-        plusOpen ?
-        <WriteMenu>
-          <div onClick={() => moveTo('/post/write')}> 자랑글 작성 </div>
-          <div onClick={() => moveTo('/')}> 산책글 작성 </div>
-          <div onClick={() => moveTo('/')}> 산책모집 작성 </div>
-          <div onClick={() => moveTo('/')}> 릴스 작성 </div>
-        </WriteMenu> 
-        : null
-      }
+        {plusOpen ? (
+          <WriteMenu>
+            <div onClick={() => moveTo("/post/write")}> 자랑글 작성 </div>
+            <div onClick={() => moveTo("/")}> 산책글 작성 </div>
+            <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
+            <div onClick={() => moveTo("/")}> 릴스 작성 </div>
+          </WriteMenu>
+        ) : null}
 
         <MenuCircle>
-          <Center onClick={()=> setPlusOpen(!plusOpen)}>
+          <Center onClick={() => setPlusOpen(!plusOpen)}>
             <BsPlusLg />
           </Center>
 
-          <Menu order={0} onClick={() => moveTo('/')}>
+          <Menu order={0} onClick={() => moveTo("/")}>
             <BsChatLeft className={"icons"} />
-            <span> 채팅 </span>
+            <h5> 채팅 </h5>
           </Menu>
 
-          <Menu order={1} onClick={() => moveTo('/mypage')}>
+          <Menu order={1} onClick={() => moveTo("/mypage")}>
             <BsPerson className={"icons"} />
-            <span> 마이페이지 </span>
+            <h5> 마이페이지 </h5>
           </Menu>
 
-          <Menu order={2} onClick={() => moveTo('/')}>
+          <Menu order={2} onClick={() => moveTo("/")}>
             <BiHomeAlt className={"icons"} />
-            <span> 홈 </span>
+            <h5> 홈 </h5>
           </Menu>
 
-          <Menu order={3} onClick={() => moveTo('/post')}>
+          <Menu order={3} onClick={() => moveTo("/post")}>
             <BsStar className={"icons"} />
-            <span> 자랑하기 </span>
+            <h5> 자랑하기 </h5>
           </Menu>
 
-          <Menu order={4} onClick={() => moveTo('/')}>
+          <Menu order={4} onClick={() => moveTo("/")}>
             <BsFilm className={"icons"} />
-            <span> 릴스 </span>
+            <h5> 릴스 </h5>
           </Menu>
         </MenuCircle>
       </BackDrop>
@@ -109,12 +106,12 @@ const BackDrop = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
 `;
 
-const WriteMenu =styled.div`
+const WriteMenu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.6vh;
-  width:47.5%;
+  width: 47.5%;
   margin-bottom: 2.5vh;
 
   div {
@@ -129,7 +126,7 @@ const WriteMenu =styled.div`
     align-items: center;
     cursor: pointer;
   }
-`
+`;
 
 const MenuCircle = styled.div`
   width: 60%;
@@ -150,7 +147,7 @@ const Center = styled.div`
   margin: auto;
   width: 32.4%;
   height: 32.4%;
-  min-height: 61px;
+  min-height: 6rem;
   border-radius: 600px;
 
   background: #44dcd3;
@@ -172,16 +169,22 @@ const Menu = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  flex-shrink:0;
+  white-space: nowrap;
+  gap: 0.5rem;
   color: #b2b2b2;
   cursor: pointer;
 
   transform: rotate(${(props) => (360 / 5) * props.order + "deg"}) translate(0, -170%)
     rotate(${(props) => -(360 / 5) * props.order + "deg"});
 
+    h5 {
+    font-size: 1.2rem;
+  }
+
   .icons {
-    /* stroke: #b2b2b2;
-    stroke-width: 1px; */
-    font-size: 22px;
+    stroke: #b2b2b2;
+    stroke-width: 0.05rem;
+    font-size: 2.5rem;
   }
 `;
