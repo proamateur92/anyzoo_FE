@@ -26,15 +26,6 @@ import { getCookie, setCookie } from '../shared/cookie';
 // store
 import { setUserDB } from '../redux/modules/userSlice';
 
-// redux
-import { useDispatch } from 'react-redux';
-
-// cookie
-import { setCookie } from '../shared/cookie';
-
-// store
-import { setUserDB } from '../redux/modules/userSlice';
-
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,11 +36,11 @@ const Signup = () => {
     if (isLogin) navigate('/');
   });
 
-  const handleCoutValue = num => {
-    setStep(prev => prev + num);
+  const handleCoutValue = (num) => {
+    setStep((prev) => prev + num);
   };
 
-  const handleSignup = async userData => {
+  const handleSignup = async (userData) => {
     try {
       console.log('회원정보');
       console.table(userData);

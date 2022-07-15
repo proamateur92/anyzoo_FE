@@ -5,15 +5,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // component
-import EditBubble from "../elements/EditBubble";
-import PhotoSlide from "./PhotoSlide";
+import EditBubble from '../elements/EditBubble';
+// import PhotoSlide from "./PhotoSlide";
 
 // style
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // icon
-import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
+import { IoMdMore } from 'react-icons/io';
+import { IoHeartOutline, IoChatbubbleOutline } from 'react-icons/io5';
 
 const PostCard = (props) => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const PostCard = (props) => {
       <CardHeader>
         <UserInfo>
           <UserProfile img={postData.userProfileImg} cardWidth={cardWidth} />
-          <span id="nickname"> {postData.nickname} </span>
+          <span id='nickname'> {postData.nickname} </span>
         </UserInfo>
 
         <IoMdMore id='optionMenu' onClick={menuOpen} />
@@ -48,12 +48,14 @@ const PostCard = (props) => {
 
       <Contents>
         <ImgPreview>
-          <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
-          <span id="imgcount">{photoPg+1}/{postData.img?.length}</span>
+          {/* <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/> */}
+          <span id='imgcount'>
+            {photoPg + 1}/{postData.img?.length}
+          </span>
         </ImgPreview>
-        <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> 
-          { postData.contents?.substr(0,13)}
-          { postData.contents?.length > 13 ? "…" : null } 
+        <TextPreview onClick={() => navigate('/post/detail/' + boardMainId)}>
+          {postData.contents?.substr(0, 13)}
+          {postData.contents?.length > 13 ? '…' : null}
         </TextPreview>
       </Contents>
 
@@ -137,7 +139,7 @@ const ImgPreview = styled.div`
   overflow: hidden;
 
   #imgcount {
-    position:absolute;
+    position: absolute;
     bottom: 5.9%;
     right: 6.7%;
     height: 15.88%;
@@ -166,7 +168,7 @@ const Reactions = styled.div`
   height: 12.7%;
   padding: 0px 10%;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
-  color: #B3B3B3;
+  color: #b3b3b3;
   font-size: 1.5rem;
 
   span {
