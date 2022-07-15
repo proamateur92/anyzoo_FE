@@ -39,8 +39,8 @@ const NoticeSlide = () => {
         currentSlide={currentSlide}
         onMouseDown={(e) => setStartX(e.clientX)}
         onMouseUp={(e) => moveSlide(e.clientX)}
-        onTouchStart={(e) => setStartX(e.clientX)}
-        onTouchEnd={(e) => moveSlide(e.clientX)}
+        onTouchStart={(e) => setStartX(e.touches[0].clientX)}
+        onTouchEnd={(e) => moveSlide(e.changedTouches[0].clientX)}
       >
         {notices.map((v) => (
           <Banner key={v.id} img={v.img} />
