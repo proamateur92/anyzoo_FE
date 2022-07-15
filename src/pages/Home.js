@@ -6,7 +6,7 @@ import Wrap from '../elements/Wrap';
 
 // component
 import PostCard from '../components/PostCard';
-import NoticeSlide from '../components/NoticeSlide';
+// import NoticeSlide from '../components/NoticeSlide';
 import RealTimeRank from '../components/RealtimeRank';
 import WeeklyRank from '../components/WeeklyRank';
 import FindMateCard from '../components/FindMateCard';
@@ -48,10 +48,10 @@ const Home = () => {
   }, [loadinghandler]);
 
   React.useEffect(() => {
-    if ( page >= 0 && !isLastPg) {
-      const pageInfo = { page: page, sorting: 'all' }
+    if (page >= 0 && !isLastPg) {
+      const pageInfo = { page: page, sorting: 'all' };
       dispatch(loadPostsDB(pageInfo));
-      console.log("새 페이지 로딩");
+      console.log('새 페이지 로딩');
     } else {
       console.log('마지막 페이지');
     }
@@ -62,7 +62,7 @@ const Home = () => {
       <Logo> ANYZOO </Logo>
       {/* <Comment postId={0}/> */}
 
-      <NoticeSlide />
+      {/* <NoticeSlide /> */}
 
       <RealTimeRank />
 
@@ -104,7 +104,7 @@ const Logo = styled.div`
   justify-content: center;
   align-items: center;
 
-  color:#fff;
+  color: #fff;
   font-weight: bolder;
   font-size: 3.5rem;
 `;

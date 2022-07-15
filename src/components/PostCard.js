@@ -5,15 +5,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // component
-import EditBubble from "../elements/EditBubble";
+import EditBubble from '../elements/EditBubble';
 import PhotoSlide from "./PhotoSlide";
 
 // style
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // icon
-import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
+import { IoMdMore } from 'react-icons/io';
+import { IoHeartOutline, IoChatbubbleOutline } from 'react-icons/io5';
 
 const PostCard = (props) => {
   const navigate = useNavigate();
@@ -23,8 +23,6 @@ const PostCard = (props) => {
 
   const cardWrapRef = React.useRef();
   const [cardWidth, setCardWidth] = React.useState(null);
-
-  const [photoPg, setPhotoPg] = React.useState(0);
 
   React.useEffect(() => {
     setCardWidth(cardWrapRef?.current?.offsetWidth);
@@ -39,7 +37,7 @@ const PostCard = (props) => {
       <CardHeader>
         <UserInfo>
           <UserProfile img={postData.userProfileImg} cardWidth={cardWidth} />
-          <span id="nickname"> {postData.nickname} </span>
+          <span id='nickname'> {postData.nickname} </span>
         </UserInfo>
 
         <IoMdMore id='optionMenu' onClick={menuOpen} />
@@ -48,11 +46,11 @@ const PostCard = (props) => {
 
       <Contents>
         <ImgPreview>
-          <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
+          <PhotoSlide photos={postData.img} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
         </ImgPreview>
-        <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> 
-          { postData.contents?.substr(0,13)}
-          { postData.contents?.length > 13 ? "…" : null } 
+        <TextPreview onClick={() => navigate('/post/detail/' + boardMainId)}>
+          {postData.contents?.substr(0, 13)}
+          {postData.contents?.length > 13 ? '…' : null}
         </TextPreview>
       </Contents>
 
@@ -133,6 +131,23 @@ const ImgPreview = styled.div`
   align-items: flex-end;
   border: 1px solid #eee;
   overflow: hidden;
+<<<<<<< HEAD
+=======
+
+  #imgcount {
+    position: absolute;
+    bottom: 5.9%;
+    right: 6.7%;
+    height: 15.88%;
+    width: 13%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: #fff;
+  }
+>>>>>>> 74a4804c1ddbf16168e512083613edeb59aab2d6
 `;
 
 const TextPreview = styled.p`
@@ -150,7 +165,7 @@ const Reactions = styled.div`
   height: 12.7%;
   padding: 0px 10%;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
-  color: #B3B3B3;
+  color: #b3b3b3;
   font-size: 1.5rem;
 
   span {
