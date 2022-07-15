@@ -70,7 +70,7 @@ const Login = () => {
   return (
     <Wrap>
       <Container>
-        <Logo>로고</Logo>
+        <Logo>ANYZOO</Logo>
         <LoginForm onSubmit={handleSubmit}>
           <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
           <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
@@ -78,9 +78,12 @@ const Login = () => {
             <button onClick={() => handleSubmit}>로그인</button>
             <button onClick={() => navigate('/signup')}>회원가입</button>
           </Buttons>
-          <div className='findPwd' onClick={() => navigate('/findinfo')}>
-            비밀번호 찾기
-          </div>
+          <FindInfo>
+            <div>이메일 계정 찾기</div>
+            <div className='findPwd' onClick={() => navigate('/findinfo')}>
+              비밀번호 재설정
+            </div>
+          </FindInfo>
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
@@ -96,8 +99,9 @@ const Login = () => {
 };
 
 const Container = styled.div`
-  height: 100%;
-  padding-top: 78px;
+  text-align: center;
+  padding: 0 16.5%;
+  background-color: blue;
 `;
 
 const LoginForm = styled.form`
@@ -106,19 +110,19 @@ const LoginForm = styled.form`
   align-items: center;
   input,
   button {
-    width: 226px;
-    height: 50px;
+    width: 100%;
+    height: 6.2%;
+    font-size: 3.8rem;
     border-radius: 10px;
     border: none;
     outline: none;
-    font-size: inherit;
   }
   button {
     cursor: pointer;
   }
   input:first-of-type,
   button:first-of-type {
-    margin-bottom: 5px;
+    margin-bottom: 1.2%;
   }
   input {
     background-color: #ccc;
@@ -129,14 +133,17 @@ const LoginForm = styled.form`
   }
 `;
 
-const Logo = styled.div`
-  width: 86px;
-  height: 36px;
-  margin-bottom: 73px;
+const Logo = styled.span`
+  display: inline-block;
+  font-size: 4.4rem;
+  font-weight: 800;
+  color: ${props => props.theme.color.main};
+  padding: 12.4% 0 6.2% 0;
 `;
 
 const Buttons = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   margin: 15px 0 20px 0;
 `;
@@ -152,9 +159,14 @@ const SimpleLogin = styled.div`
     font-size: 14px;
   }
 `;
+
+const FindInfo = styled.div`
+  display: flex;
+  font-size: 2.3rem;
+`;
+
 const SocialButtons = styled.div`
   display: flex;
-  margin-top: 15px;
   div {
     width: 50px;
     height: 50px;

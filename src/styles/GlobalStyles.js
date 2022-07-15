@@ -10,12 +10,12 @@ const GlobalStyles = createGlobalStyle`
     *{
         box-sizing:boerder-box;
     }
+    html {
+        font-size: 10px;
+    }
     body{
         // 폰트 스타일 적용
         /* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
-        
-        // 기본 폰트 사이즈
-        font-size: 16px;
         
         // 기본 폰트 컬러 
         // color: ${props => props.theme.color.blue}

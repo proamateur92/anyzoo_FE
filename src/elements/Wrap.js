@@ -6,9 +6,8 @@ const Wrap = props => {
 
 const Container = styled.div`
   max-width: 599px;
-  height: 100%;
-  margin: 0 auto;
-  border: 2px solid black;
+  height: 100vh;
+  font-size: inherit;
 `;
 
 export default Wrap;
