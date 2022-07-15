@@ -1,13 +1,14 @@
-import React from "react";
+// react
+import React from 'react';
 
 // style
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import axios from "axios";
-import instance from "../shared/axios";
+// axios
+import instance from '../shared/axios';
 
 const WeeklyRank = () => {
-  const [category, setCategory] = React.useState("cute");
+  const [category, setCategory] = React.useState('cute');
   const [list, setList] = React.useState([null, null, null]);
   const [mostVotes, setMostVotes] = React.useState(0);
 
@@ -16,10 +17,7 @@ const WeeklyRank = () => {
     },[category]);
 
   const changeCategory = async (categoryName) => {
-    const response = await instance.get('/api/rank/week/'+categoryName).catch((err) => console.log(err))
-    // const response = await axios
-    //   .get("http://localhost:5000/rank-week?category=" + categoryName)
-    //   .catch((err) => console.log(err));
+    const response = await instance.get('/api/rank/week/' + categoryName).catch((err) => console.log(err));
     setList(response.data);
     setMostVotes(response.data[0]?.likeCnt)
     setCategory(categoryName);
@@ -28,24 +26,24 @@ const WeeklyRank = () => {
   return (
     <WeeklyRankWrap>
       <CategoryTitle category={category}>
-        <span id="cute" onClick={() => changeCategory("cute")}>
+        <span id='cute' onClick={() => changeCategory('cute')}>
           귀여움
         </span>
 
-        <span id="cool" onClick={() => changeCategory("cool")}>
+        <span id='cool' onClick={() => changeCategory('cool')}>
           멋짐
         </span>
 
-        <span id="pretty" onClick={() => changeCategory("pretty")}>
+        <span id='pretty' onClick={() => changeCategory('pretty')}>
           예쁨
         </span>
 
-        <span id="comic" onClick={() => changeCategory("comic")}>
+        <span id='comic' onClick={() => changeCategory('comic')}>
           웃김
         </span>
       </CategoryTitle>
 
-      {list.map((ranker,i) => (
+      {list.map((ranker, i) => (
         <CategoryRanking key={ranker ? ranker.boardMainId : i}>
           <CateRankerPic img={ranker?.img[0]?.url}/>
           <div>
@@ -60,10 +58,7 @@ const WeeklyRank = () => {
 
 export default WeeklyRank;
 
-
-const WeeklyRankWrap = styled.div`
-
-`
+const WeeklyRankWrap = styled.div``;
 
 const CategoryRanking = styled.div`
     display: flex;

@@ -1,43 +1,49 @@
 // style
-import styled from "styled-components";
+import styled from 'styled-components';
 
-import { useNavigate, useParams } from "react-router-dom";
-import React from "react";
+// router
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useDispatch } from "react-redux/es/hooks/useDispatch";
+// react
+import React from 'react';
 
-import { removeDataDB } from "../redux/modules/postSlice";
+// redux
+import { useDispatch } from 'react-redux';
+
+// postSlice
+import { removeDataDB } from '../redux/modules/postSlice';
 
 const EditBubble = (props) => {
   const navigate = useNavigate();
-  const contentsId = props.contentsId;
+  // const contentsId = props.contentsId;
   const setBubbleOn = props.setBubbleOn;
   const bubbleRef = React.useRef();
-  const backDropRef = React.useRef();
-  const params = useParams(); 
+  const params = useParams();
   const dispatch = useDispatch();
 
   const backDropClose = () => {
-      setBubbleOn(false);
+    setBubbleOn(false);
   };
 
-  const moveToEdit = () => {
-    navigate("/post/update/" + contentsId);
-  };
+  // const moveToEdit = () => {
+  //   navigate('/post/update/' + contentsId);
+  // };
 
   const deleteAction = (e) => {
-    e.preventDefault(); 
-    dispatch(removeDataDB(params.id)) //removeDateDB에 id 전달해줌.
-    window.confirm("정말 삭제하시겠어요?");
+    e.preventDefault();
+    dispatch(removeDataDB(params.id)); //removeDateDB에 id 전달해줌.
+    window.confirm('정말 삭제하시겠어요?');
   };
 
   return (
     <>
-    <Bubble ref={bubbleRef}>
-      <p onClick={() =>navigate('/post/update/' + params.id)}>수정하기</p>
-      <p onClick={(e) => deleteAction(e)} style={{ color : "red"}}>삭제하기</p>
-    </Bubble>
-    <BackDrop onClick={backDropClose}/>
+      <Bubble ref={bubbleRef}>
+        <p onClick={() => navigate('/post/update/' + params.id)}>수정하기</p>
+        <p onClick={(e) => deleteAction(e)} style={{ color: 'red' }}>
+          삭제하기
+        </p>
+      </Bubble>
+      <BackDrop onClick={backDropClose} />
     </>
   );
 };

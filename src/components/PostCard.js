@@ -1,13 +1,17 @@
-import React from "react";
+// react
+import React from 'react';
 
-import { useNavigate } from "react-router-dom";
+// router
+import { useNavigate } from 'react-router-dom';
 
-// 컴포넌트
+// component
 import EditBubble from "../elements/EditBubble";
 import PhotoSlide from "./PhotoSlide";
 
-// CSS 관련 임포트
+// style
 import styled from "styled-components";
+
+// icon
 import { IoMdMore } from "react-icons/io";
 import { IoHeartOutline, IoChatbubbleOutline } from "react-icons/io5";
 
@@ -38,7 +42,7 @@ const PostCard = (props) => {
           <span id="nickname"> {postData.nickname} </span>
         </UserInfo>
 
-        <IoMdMore id="optionMenu" onClick={menuOpen} />
+        <IoMdMore id='optionMenu' onClick={menuOpen} />
         {bubbleOn ? <EditBubble contentsId={boardMainId} setBubbleOn={setBubbleOn} /> : null}
       </CardHeader>
 
@@ -107,7 +111,7 @@ const UserProfile = styled.span`
   background: url(${(props) =>
     props.img
       ? props.img
-      : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png"});
+      : 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FopbGC%2FbtrF9ZNhpja%2FY026LUE8lwKcGmfqJiO3SK%2Fimg.png'});
   background-size: cover;
   background-position: center;
 `;
