@@ -7,7 +7,7 @@ import instance from '../../shared/axios';
 // 자랑하기 글 불러오기
 export const loadPostsDB = createAsyncThunk('post/loadPost', async (pageInfo) => {
   const response = await instance
-    .get(`/api/post/category/${pageInfo.sorting}?page=${pageInfo.page}`)
+    .get(`/api/post/category/all?page=${pageInfo}`)
     .catch((err) => console.log(err));
   // console.log(response)
   // const response = await axios.get('http://localhost:5000/post?page=%27+ pageNo).catch((err) => console.log(err))
