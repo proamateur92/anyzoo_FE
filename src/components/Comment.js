@@ -13,7 +13,7 @@ import styled from 'styled-components';
 const Comment = (props) => {
   const dispatch = useDispatch();
   const postId = props.postId;
-  const userId = 0;
+  const userId = 13;
   const commentRef = React.useRef();
 
   // 코멘트 불러오기
@@ -25,15 +25,12 @@ const Comment = (props) => {
 
   // 코멘트 추가하기
   const addComment = async () => {
-    const newComment = {
+    const commentData = {
       postId: postId,
-      // userId: 0,
-      // nickname: "test",
-      content: commentRef.current.value,
-    };
+      comment: commentRef.current.value,
+    }; 
 
-    console.log(postId);
-    await dispatch(addCommentDB(newComment, postId));
+    await dispatch(addCommentDB(commentData));
     commentRef.current.value = '';
   };
 
@@ -45,29 +42,33 @@ const Comment = (props) => {
     if (v.userId === userId) {
       setIsEdit(true);
       setTargetComment(v);
-      commentRef.current.value = v.content;
+      commentRef.current.value = v.comment;
       commentRef.current.focus();
     } else {
-      window.alert('작성자만 삭제할수 있어요');
+      window.alert('작성자만 수정할수 있어요');
     }
   };
 
   const editComment = async () => {
-    const newContent = {
-      id: targetComment.id,
-      content: commentRef.current.value,
+    const commentData = {
+      commentId: targetComment.id,
+      comment: commentRef.current.value,
     };
-    await dispatch(editCommentDB(newContent));
+    await dispatch(editCommentDB(commentData));
     commentRef.current.value = '';
-    dispatch(loadCommentsDB(postId));
+    dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
     setIsEdit(false);
   };
 
   // 코멘트 삭제하기
   const deleteComment = async (v) => {
     if (v.userId === userId) {
-      await dispatch(deleteCommentDB(v.id));
-      dispatch(loadCommentsDB(postId));
+      const commentData = {
+        commentId: v.id,
+        boardMainId: postId
+      }
+      await dispatch(deleteCommentDB(commentData));
+      dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
     } else {
       window.alert('작성자만 삭제할수 있어요');
     }
@@ -76,10 +77,10 @@ const Comment = (props) => {
   return (
     <CommentsWrap>
       {comments?.length > 0 ? (
-        comments.map((v, i) => (
-          <OneComment key={v.postId}>
+        comments.map((v) => (
+          <OneComment key={v.id}>
             <h5> {v.nickname} </h5>
-            <p> {v.content} </p>
+            <p> {v.comment} </p>
             <sub> 2022-07-05 </sub>
             <span onClick={() => startEdit(v)}> 수정 </span>
             <span onClick={() => deleteComment(v)}> 삭제 </span>
@@ -119,6 +120,10 @@ const OneComment = styled.div`
 
   h5 {
     font-weight: bold;
+  }
+
+  span {
+    cursor: pointer;
   }
 `;
 
