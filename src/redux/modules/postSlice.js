@@ -14,18 +14,28 @@ export const loadPostsDB = createAsyncThunk(
   }
 );
 // 자랑하기 글 작성
-export const addDataDB = createAsyncThunk('addData', async (data) => {
-  console.log(data, '츄가');
-  const response = await instance.post('/api/post', data);
+export const addDataDB = createAsyncThunk("addData", async (data) => {
+  console.log(data, "츄가");
+  const response = await instance
+    .post("/api/post", data)
+    .then((res) => {
+      window.alert("추가되었습니다");
+      window.location.replace("/post");
+    })
+    .catch((err) => console.log(err));
   const newPoster = { ...data, boardmainId: response.data.boardMainId };
   return newPoster;
 });
-
 // 자랑하기 글 수정
-export const modifyDataDB = createAsyncThunk('modifyData', async (newData) => {
-  console.log(newData.data, 'data', newData.id, 'id');
-  await instance.patch('/api/post/' + newData.id, newData.data);
-  window.alert('수정되었습니다');
+export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
+  console.log(newData.data, "data", newData.id, "id");
+  await instance
+    .patch("/api/post/" + newData.id, newData.data)
+    .then((res) => {
+      window.alert("수정되었습니다");
+      window.location.replace("/post");
+    })
+    .catch((err) => console.log(err));
   return newData;
 });
 
