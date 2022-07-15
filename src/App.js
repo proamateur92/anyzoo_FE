@@ -36,6 +36,7 @@ import { setUserDB } from './redux/modules/userSlice';
 
 //component
 import NavMenu from './components/NavMenu';
+import ScrollRestore from './elements/ScrollRestore'
 
 // Test
 import Comment from './components/Comment';
@@ -55,8 +56,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-
       <BrowserRouter>
+        <ScrollRestore/>
         <NavMenu />
         <Routes>
           <Route path='/' element={<Home />} />
