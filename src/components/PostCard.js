@@ -24,7 +24,7 @@ const PostCard = (props) => {
   const cardWrapRef = React.useRef();
   const [cardWidth, setCardWidth] = React.useState(null);
 
-  const [photoPg, setPhotoPg] = React.useState(0);
+  // const [photoPg, setPhotoPg] = React.useState(0);
 
   React.useEffect(() => {
     setCardWidth(cardWrapRef?.current?.offsetWidth);
@@ -49,9 +49,7 @@ const PostCard = (props) => {
       <Contents>
         <ImgPreview>
           {/* <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/> */}
-          <span id='imgcount'>
-            {photoPg + 1}/{postData.img?.length}
-          </span>
+          <span id='imgcount'>{/* {photoPg + 1}/{postData.img?.length} */}</span>
         </ImgPreview>
         <TextPreview onClick={() => navigate('/post/detail/' + boardMainId)}>
           {postData.contents?.substr(0, 13)}
