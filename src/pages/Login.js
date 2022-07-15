@@ -16,7 +16,14 @@ import instance, { setAccessToken } from '../shared/axios';
 // cookie
 import { getCookie, setCookie } from '../shared/cookie';
 
+// userSlice
+import { setUserDB } from '../redux/modules/userSlice';
+
+// redux
+import { useDispatch } from 'react-redux';
+
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isLogin = getCookie('accessToken') ? true : false;
@@ -28,7 +35,7 @@ const Login = () => {
   const eamilValue = useRef('');
   const pwdValue = useRef('');
 
-  const login = async userInfo => {
+  const login = async (userInfo) => {
     try {
       const response = await instance.post('/user/login', userInfo);
       setCookie('accessToken', response.data.data.token.accessToken);
@@ -36,14 +43,14 @@ const Login = () => {
       alert(response.data.msg);
       setAccessToken();
       navigate('/');
-      // dispatch(setUserDB());
+      dispatch(setUserDB());
     } catch (error) {
       window.alert(error.response.data.errorMessage);
       navigate('/login');
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const email = eamilValue.current;
     const password = pwdValue.current;

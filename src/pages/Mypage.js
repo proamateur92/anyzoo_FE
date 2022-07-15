@@ -25,7 +25,9 @@ const Mypage = () => {
   });
 
   // 회원정보 확인
+  useSelector((state) => console.log(state));
   const userInfo = useSelector((state) => state.user.info);
+  console.log('내정보');
   const logout = () => {
     clearCookie('accessToken');
     clearCookie('refreshToken');
