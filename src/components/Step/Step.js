@@ -799,6 +799,7 @@ const ButtonBox = styled.div`
   ${NextBtn} {
     width: ${props => props.width};
     background-color: ${props => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
+
     cursor: ${props => props.validation && 'pointer'};
     transition: 0.5s;
   }

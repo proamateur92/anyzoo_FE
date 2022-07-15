@@ -26,6 +26,15 @@ import { getCookie, setCookie } from '../shared/cookie';
 // store
 import { setUserDB } from '../redux/modules/userSlice';
 
+// redux
+import { useDispatch } from 'react-redux';
+
+// cookie
+import { setCookie } from '../shared/cookie';
+
+// store
+import { setUserDB } from '../redux/modules/userSlice';
+
 const Signup = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
