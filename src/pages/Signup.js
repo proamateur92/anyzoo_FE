@@ -71,16 +71,16 @@ const Signup = () => {
   );
 };
 
+const SignupForm = styled.div`
+  margin: 5% 5% 0 5%;
+  height: 100%;
+`;
+
 const Top = styled.div`
   display: flex;
   font-size: 2.4rem;
-  padding: 83px 0 100px 0;
+  height: 20vw;
   justify-content: space-between;
-`;
-
-const SignupForm = styled.div`
-  margin: 0 11.5%;
-  height: 100%;
 `;
 
 export default Signup;
