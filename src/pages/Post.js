@@ -138,6 +138,7 @@ const Sorting = styled.div`
   width: 80%;
   margin: 1.6rem auto;
   font-size: 1.6rem;
+  pointer: cursor;
 
   span {
    margin-right: 1rem; 

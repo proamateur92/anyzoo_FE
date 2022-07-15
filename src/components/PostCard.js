@@ -49,7 +49,6 @@ const PostCard = (props) => {
       <Contents>
         <ImgPreview>
           <PhotoSlide photos={postData.img} setPhotoPg={setPhotoPg} clickAction={() => navigate("/post/detail/" + boardMainId)}/>
-          <span id="imgcount">{photoPg+1}/{postData.img?.length}</span>
         </ImgPreview>
         <TextPreview onClick={() => navigate("/post/detail/" + boardMainId)}> 
           { postData.contents?.substr(0,13)}
@@ -133,22 +132,7 @@ const ImgPreview = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   border: 1px solid #eee;
-  position: relative;
   overflow: hidden;
-
-  #imgcount {
-    position:absolute;
-    bottom: 5.9%;
-    right: 6.7%;
-    height: 15.88%;
-    width: 13%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 3rem;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: #fff;
-  }
 `;
 
 const TextPreview = styled.p`
@@ -156,7 +140,7 @@ const TextPreview = styled.p`
   display: flex;
   align-items: center;
   overflow: hidden;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   color: #666;
 `;
 
