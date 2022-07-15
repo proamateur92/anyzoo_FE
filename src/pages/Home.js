@@ -6,7 +6,7 @@ import Wrap from '../elements/Wrap';
 
 // component
 import PostCard from '../components/PostCard';
-// import NoticeSlide from '../components/NoticeSlide';
+import NoticeSlide from '../components/NoticeSlide';
 import RealTimeRank from '../components/RealtimeRank';
 import WeeklyRank from '../components/WeeklyRank';
 import FindMateCard from '../components/FindMateCard';
@@ -60,9 +60,8 @@ const Home = () => {
   return (
     <Wrap>
       <Logo> ANYZOO </Logo>
-      {/* <Comment postId={0}/> */}
 
-      {/* <NoticeSlide /> */}
+      <NoticeSlide />
 
       <RealTimeRank />
 
