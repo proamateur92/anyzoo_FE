@@ -29,7 +29,7 @@ const Login = () => {
   const eamilValue = useRef('');
   const pwdValue = useRef('');
 
-  const login = async userInfo => {
+  const login = async (userInfo) => {
     try {
       const response = await instance.post('/user/login', userInfo);
       setCookie('accessToken', response.data.data.token.accessToken);
@@ -44,7 +44,7 @@ const Login = () => {
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const email = eamilValue.current;
     const password = pwdValue.current;
@@ -100,28 +100,32 @@ const Login = () => {
 
 const Container = styled.div`
   text-align: center;
-  padding: 0 16.5%;
   background-color: blue;
+  height: 100vh;
+`;
+
+const Logo = styled.span`
+  display: inline-block;
+  font-size: 4.4rem;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.main};
+  padding: 12.4% 0 6.2% 0;
 `;
 
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  input,
-  button {
+  padding: 0 16.5%;
+  input {
     width: 100%;
-    height: 6.2%;
+    /* height: 6.2%; */
     font-size: 3.8rem;
     border-radius: 10px;
     border: none;
     outline: none;
   }
-  button {
-    cursor: pointer;
-  }
-  input:first-of-type,
-  button:first-of-type {
+  input:first-of-type {
     margin-bottom: 1.2%;
   }
   input {
@@ -133,19 +137,22 @@ const LoginForm = styled.form`
   }
 `;
 
-const Logo = styled.span`
-  display: inline-block;
-  font-size: 4.4rem;
-  font-weight: 800;
-  color: ${props => props.theme.color.main};
-  padding: 12.4% 0 6.2% 0;
-`;
-
 const Buttons = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
   margin: 15px 0 20px 0;
+  button {
+    height: 6.2%;
+    font-size: 3.8rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  button:first-of-type {
+    margin-bottom: 1.2%;
+  }
 `;
 
 const SimpleLogin = styled.div`
@@ -181,4 +188,5 @@ const SocialButtons = styled.div`
     margin: 0 12px;
   }
 `;
+
 export default Login;
