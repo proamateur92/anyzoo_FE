@@ -9,15 +9,15 @@ export const loadCommentsDB = createAsyncThunk(
   'loadComment', async ( data ) => {
     // const response = await axios.get('http://localhost:5000/comment/?postId=' + postId).catch((err) => console.log(err))
     const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
-    return response.data
+    console.log(response)
+    return response.data.comments
   }
 );
 
 export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
-    // const response = await axios.post('http://localhost:5000/comment', commentData)
-    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
+       const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
     console.log(response)
     const newComment = {...commentData}
     return newComment;
@@ -28,8 +28,7 @@ export const editCommentDB = createAsyncThunk(
   'editComment', 
   async (commentData) => {
     console.log(commentData)
-    // await axios.patch('http://localhost:5000/comment/' + commentData.id, commentData)
-    await axios.patch('http://localhost:5000/comment/' + commentData.id, commentData)
+    await instance.patch('/api/comment/edit/' + commentData.commentId, {comment: commentData.comment})
     window.alert('수정되었습니다')
     return commentData
   }
@@ -37,11 +36,10 @@ export const editCommentDB = createAsyncThunk(
 
 export const deleteCommentDB = createAsyncThunk(
   'deleteComment', 
-  async (commentId) => {
-    // await axios.delete('http://localhost:5000/comment/' + commentId)
-    await axios.delete('http://localhost:5000/comment/' + commentId)
+  async (commentData) => {
+    await instance.delete(`/api/comment/edit/${commentData.boardMainId}/${commentData.commentId}`)
     window.alert('삭제되었습니다')
-    return commentId
+    return commentData.commentId
   }
 )
 
