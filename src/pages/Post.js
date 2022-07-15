@@ -49,8 +49,6 @@ const Post = () => {
   React.useEffect(() => {
     if (page >= 0 && !isLastPg) {
       const pageInfo = { page: page, sorting: category + sort };
-      console.log(pageInfo);
-
       dispatch(loadPostsDB(pageInfo));
       console.log("새 페이지 로딩");
     } else {

@@ -5,8 +5,7 @@ import Portal from "../elements/Portal";
 
 // style
 import styled from "styled-components";
-import { BsPlusLg, BsChatLeft, BsPerson, BsStar, BsFilm } from "react-icons/bs";
-import { BiHomeAlt } from "react-icons/bi";
+import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiFilm } from "react-icons/fi";
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
@@ -52,31 +51,31 @@ const NavCircle = (props) => {
 
         <MenuCircle>
           <Center onClick={() => setPlusOpen(!plusOpen)}>
-            <BsPlusLg />
+            <FiPlus />
           </Center>
 
           <Menu order={0} onClick={() => moveTo("/")}>
-            <BsChatLeft className={"icons"} />
+            <FiMessageSquare className={"icons"} />
             <h5> 채팅 </h5>
           </Menu>
 
           <Menu order={1} onClick={() => moveTo("/mypage")}>
-            <BsPerson className={"icons"} />
+            <FiUser className={"icons"} />
             <h5> 마이페이지 </h5>
           </Menu>
 
           <Menu order={2} onClick={() => moveTo("/")}>
-            <BiHomeAlt className={"icons"} />
+            <FiHome className={"icons"} />
             <h5> 홈 </h5>
           </Menu>
 
           <Menu order={3} onClick={() => moveTo("/post")}>
-            <BsStar className={"icons"} />
+            <FiStar className={"icons"} />
             <h5> 자랑하기 </h5>
           </Menu>
 
           <Menu order={4} onClick={() => moveTo("/")}>
-            <BsFilm className={"icons"} />
+            <FiFilm className={"icons"} />
             <h5> 릴스 </h5>
           </Menu>
         </MenuCircle>
@@ -183,8 +182,6 @@ const Menu = styled.div`
   }
 
   .icons {
-    stroke: #b2b2b2;
-    stroke-width: 0.05rem;
     font-size: 2.5rem;
   }
 `;
