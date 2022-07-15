@@ -36,11 +36,11 @@ const Signup = () => {
     if (isLogin) navigate('/');
   });
 
-  const handleCoutValue = num => {
-    setStep(prev => prev + num);
+  const handleCoutValue = (num) => {
+    setStep((prev) => prev + num);
   };
 
-  const handleSignup = async userData => {
+  const handleSignup = async (userData) => {
     try {
       console.log('회원정보');
       console.table(userData);
