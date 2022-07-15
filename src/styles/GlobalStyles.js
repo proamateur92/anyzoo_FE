@@ -11,7 +11,7 @@ const GlobalStyles = createGlobalStyle`
         color:inherit;
     }
     *{
-        box-sizing:boerder-box;
+        box-sizing:border-box;
     }
     body{
         // 폰트 스타일 적용

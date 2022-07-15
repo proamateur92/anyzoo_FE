@@ -6,7 +6,7 @@ import { FiFeather } from "react-icons/fi";
 const SubHeader = (props) => {
   return (
     <HeaderWrap>
-      <span> <FiFeather id='icon'/>{ props.title }</span>
+      <span> <FiFeather id='icon'/> { props.title }</span>
       { props.children }
     </HeaderWrap>
   );

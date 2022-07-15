@@ -1,20 +1,23 @@
 // redux-toolkit
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-// axios
 import instance from '../../shared/axios';
 
-// 예시
-export const loadCommentsDB = createAsyncThunk('loadComment', async (data) => {
-  const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}`).catch((err) => console.log(err));
-  return response.data.comments;
-});
 
-export const addCommentDB = createAsyncThunk('addComment', async (commentData) => {
-  const response = await instance.post('/api/comment/' + commentData.postId, { comment: commentData.content });
-  const newComment = { ...commentData, id: response.data };
-  return newComment;
-});
+export const loadCommentsDB = createAsyncThunk(
+  'loadComment', async ( data ) => {
+    const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
+    return response.data.comments
+  }
+);
+
+export const addCommentDB = createAsyncThunk(
+  'addComment',
+  async (commentData) => {
+    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.comment})
+    const newComment = {...commentData, id:response.data}
+    return newComment;
+  }
+);
 
 export const editCommentDB = createAsyncThunk('editComment', async (commentData) => {
   console.log(commentData);

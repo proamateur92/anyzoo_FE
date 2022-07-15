@@ -10,17 +10,20 @@ import { BsPlusLg } from "react-icons/bs";
 import NavCircle from "./NavCircle";
 
 //route
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const NavMenu = () => {
+const NavMenu = ( ) => {
   const navigate = useNavigate()
   const [circleOn, setCircleOn] = React.useState(false);
+  const dontShowIn = ['/login', '/signup']
+  const currentLocation = useLocation().pathname
 
-  return (
+  return dontShowIn.includes(currentLocation) ? null:
+  (
       <NavWrap>
         <Inner>
         <LeftBtn onClick={()=> navigate('/post')}> 자랑하기 </LeftBtn>
-        <RightBtn onClick={()=> navigate('/')} > 릴스 </RightBtn>
+        <RightBtn onClick={()=> navigate('/reels')} > 릴스 </RightBtn>
 
         <RoundOuter>
         <MidCover/>
