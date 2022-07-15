@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios'
 import instance from '../../shared/axios';
 
-// import instance from '../../shared/axios';
 
-// 예시
 export const loadCommentsDB = createAsyncThunk(
   'loadComment', async ( data ) => {
     const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
@@ -15,7 +12,7 @@ export const loadCommentsDB = createAsyncThunk(
 export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
-    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.content})
+    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.comment})
     const newComment = {...commentData, id:response.data}
     return newComment;
   }
