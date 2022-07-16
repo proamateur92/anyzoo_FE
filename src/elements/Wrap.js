@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
-const Wrap = props => {
+const Wrap = (props) => {
   return <Container>{props.children}</Container>;
 };
 
 const Container = styled.div`
+  width: 100%;
+  height: 100%;
   max-width: 599px;
-  height: 100vh;
-  font-size: inherit;
+  margin: 0 auto 12.2vh;
+  position: relative;
 `;
 
 export default Wrap;

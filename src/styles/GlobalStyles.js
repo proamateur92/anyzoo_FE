@@ -3,12 +3,15 @@ import reset from 'styled-reset';
 
 const GlobalStyles = createGlobalStyle`
     ${reset};
+    html {
+        font-size: 10px;
+    }
     a{
         text-decoration:none;
         color:inherit;
     }
     *{
-        box-sizing:boerder-box;
+        box-sizing:border-box;
     }
     html {
         font-size: 10px;
