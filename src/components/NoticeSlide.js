@@ -39,8 +39,8 @@ const NoticeSlide = () => {
         currentSlide={currentSlide}
         onMouseDown={(e) => setStartX(e.clientX)}
         onMouseUp={(e) => moveSlide(e.clientX)}
-        onTouchStart={(e) => setStartX(e.clientX)}
-        onTouchEnd={(e) => moveSlide(e.clientX)}
+        onTouchStart={(e) => setStartX(e.touches[0].clientX)}
+        onTouchEnd={(e) => moveSlide(e.changedTouches[0].clientX)}
       >
         {notices.map((v) => (
           <Banner key={v.id} img={v.img} />
@@ -59,15 +59,13 @@ const NoticeSlide = () => {
 export default NoticeSlide;
 
 const NoticeWrap = styled.div`
-  height: 40vw;
-  max-height: 24rem;
   width: 100%;
   overflow: hidden;
   position: relative;
+  margin-bottom: 0.3rem;
 `;
 
 const Slider = styled.div`
-  height: 100%;
   width: 100%;
   display: flex;
   transition: all 0.5s ease-in-out;
@@ -76,7 +74,7 @@ const Slider = styled.div`
 `;
 
 const Banner = styled.div`
-  height: 100%;
+  padding-top: 40%;
   min-width: 100%;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat center;
   background-size: cover;
