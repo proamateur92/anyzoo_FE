@@ -79,15 +79,15 @@ const Login = () => {
             <button onClick={() => navigate('/signup')}>회원가입</button>
           </Buttons>
           <FindInfo>
-            <div>이메일 계정 찾기</div>
-            <div className='findPwd' onClick={() => navigate('/findinfo')}>
-              비밀번호 재설정
+            <div className='findInfo'>이메일 찾기</div>
+            <div className='findInfo'>|</div>
+            <div className='findInfo' onClick={() => navigate('/findinfo')}>
+              비밀번호 찾기
             </div>
           </FindInfo>
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
-              <div className='naver'>네이버</div>
               <div className='google'>구글</div>
               <div className='kakao'>카카오</div>
             </SocialButtons>
@@ -100,16 +100,15 @@ const Login = () => {
 
 const Container = styled.div`
   text-align: center;
-  background-color: blue;
   height: 100vh;
 `;
 
 const Logo = styled.span`
   display: inline-block;
-  font-size: 4.4rem;
+  font-size: 30px;
   font-weight: 800;
   color: ${(props) => props.theme.color.main};
-  padding: 12.4% 0 6.2% 0;
+  padding: 25% 0 15% 0;
 `;
 
 const LoginForm = styled.form`
@@ -117,41 +116,64 @@ const LoginForm = styled.form`
   flex-direction: column;
   align-items: center;
   padding: 0 16.5%;
+  height: 100%;
   input {
     width: 100%;
-    /* height: 6.2%; */
-    font-size: 3.8rem;
+    font-size: 16px;
+    font-weight: 800;
     border-radius: 10px;
+    height: 6%;
     border: none;
     outline: none;
   }
   input:first-of-type {
-    margin-bottom: 1.2%;
+    margin-bottom: 3%;
   }
   input {
-    background-color: #ccc;
+    background-color: ${(props) => props.theme.color.grey};
   }
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+`;
 
-  .findPwd {
-    margin-bottom: 91px;
+const FindInfo = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10%;
+  margin-bottom: 5%;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.3);
+  .finInfo {
+    flex: 1;
   }
 `;
 
 const Buttons = styled.div`
   display: flex;
   width: 100%;
+  height: 15%;
   flex-direction: column;
-  margin: 15px 0 20px 0;
+  margin: 7% 0 5% 0;
   button {
-    height: 6.2%;
-    font-size: 3.8rem;
+    height: 40%;
+    font-size: 16px;
+    font-weight: 800;
     border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
   }
   button:first-of-type {
-    margin-bottom: 1.2%;
+    margin-bottom: 3%;
+    background-color: ${(props) => props.theme.color.main};
+  }
+  button:nth-of-type(2) {
+    background-color: ${(props) => props.theme.color.lightgrey};
+    color: rgba(0, 0, 0, 0.5);
   }
 `;
 
@@ -161,19 +183,16 @@ const SimpleLogin = styled.div`
   align-items: center;
   width: 255px;
   padding: 20px 0 15px 0;
-  border-top: 1px solid #ccc;
   span {
     font-size: 14px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.4);
   }
-`;
-
-const FindInfo = styled.div`
-  display: flex;
-  font-size: 2.3rem;
 `;
 
 const SocialButtons = styled.div`
   display: flex;
+  margin-top: 8%;
   div {
     width: 50px;
     height: 50px;
@@ -182,7 +201,7 @@ const SocialButtons = styled.div`
     border-radius: 50%;
     font-size: 12px;
     cursor: pointer;
-    background-color: #ccc;
+    background-color: ${(props) => props.theme.color.grey};
   }
   .google {
     margin: 0 12px;
