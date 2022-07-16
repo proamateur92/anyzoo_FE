@@ -118,10 +118,11 @@ const LoginForm = styled.form`
   padding: 0 16.5%;
   height: 100%;
   input {
+    box-sizing: border-box;
     width: 100%;
     font-size: 16px;
-    font-weight: 800;
     border-radius: 10px;
+    padding: 15px;
     height: 6%;
     border: none;
     outline: none;
