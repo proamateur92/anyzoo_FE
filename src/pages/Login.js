@@ -85,9 +85,11 @@ const Login = () => {
             <button onClick={() => navigate('/signup')}>회원가입</button>
           </Buttons>
           <FindInfo>
-            <div className='findInfo'>이메일 찾기</div>
+            <div className='findInfo' onClick={() => navigate('/user/findId')}>
+              이메일 찾기
+            </div>
             <div className='findInfo'>|</div>
-            <div className='findInfo' onClick={() => navigate('/findinfo')}>
+            <div className='findInfo' onClick={() => navigate('/user/findPassword')}>
               비밀번호 찾기
             </div>
           </FindInfo>
@@ -153,9 +155,15 @@ const FindInfo = styled.div`
   padding-bottom: 10%;
   margin-bottom: 5%;
   font-size: 16px;
+  font-weight: 800;
   color: rgba(0, 0, 0, 0.3);
   .finInfo {
     flex: 1;
+  }
+  .findInfo:not(:nth-of-type(2)):hover {
+    color: ${(props) => props.theme.color.main};
+    font-weight: 800;
+    cursor: pointer;
   }
 `;
 
