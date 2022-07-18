@@ -9,11 +9,13 @@ import PostCard from '../components/PostCard';
 import NoticeSlide from '../components/NoticeSlide';
 import RealTimeRank from '../components/RealtimeRank';
 import WeeklyRank from '../components/WeeklyRank';
-import FindMateCard from '../components/FindMateCard';
+import FindMateSlide from '../components/FindMateSlide';
 
 // style
 import styled from 'styled-components';
-import { GrNext } from 'react-icons/gr';
+
+// icons
+import { FiAward, FiFeather, FiChevronRight } from 'react-icons/fi';
 
 // redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,7 +23,11 @@ import { useSelector, useDispatch } from 'react-redux';
 // postSlice
 import { loadPostsDB } from '../redux/modules/postSlice';
 
+// router
+import { useNavigate } from 'react-router-dom';
+
 const Home = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.post.list);
   const isLastPg = useSelector((state) => state.post.last);
@@ -48,10 +54,10 @@ const Home = () => {
   }, [loadinghandler]);
 
   React.useEffect(() => {
-    if ( page >= 0 && !isLastPg) {
-      const pageInfo = { page: page, sorting: 'all' }
+    if (page >= 0 && !isLastPg) {
+      const pageInfo = { page: page, sorting: 'all' };
       dispatch(loadPostsDB(pageInfo));
-      console.log("새 페이지 로딩");
+      console.log('새 페이지 로딩');
     } else {
       console.log('마지막 페이지');
     }
@@ -60,29 +66,25 @@ const Home = () => {
   return (
     <Wrap>
       <Logo> ANYZOO </Logo>
-      {/* <Comment postId={0}/> */}
 
       <NoticeSlide />
 
+      <SubTitle> <FiAward className="icon"/> <h3>오늘의 인기상</h3> </SubTitle>
       <RealTimeRank />
 
-      <SubTitle>
-        <h3>주간</h3>
-        <GrNext />
-      </SubTitle>
-
+      <SubTitle> <FiAward className="icon"/> <h3>주간 랭킹</h3> </SubTitle>
       <WeeklyRank />
 
       <SubTitle>
-        <h3>산책 메이트 모집 글</h3>
-        <GrNext />
+        <h3> <FiFeather className="icon"/> 산책 메이트 모집 글</h3>
+        <FiChevronRight className="moveto"/>
       </SubTitle>
 
-      <FindMateCard />
+      <FindMateSlide />
 
       <SubTitle>
-        <h3>자랑하기</h3>
-        <GrNext />
+        <h3> <FiFeather className="icon"/> 자랑하기</h3>
+        <FiChevronRight className="moveto" onClick={()=> navigate('/post')}/>
       </SubTitle>
 
       {posts.map((post) => (
@@ -104,18 +106,34 @@ const Logo = styled.div`
   justify-content: center;
   align-items: center;
 
-  color:#fff;
+  color: #fff;
   font-weight: bolder;
   font-size: 3.5rem;
 `;
 
 const SubTitle = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 20px 30px;
-  border: 1px solid #efefef;
+  align-items: center;
+  padding: 2.6rem 10% 1rem 10%;
 
-  h3 {
-    font-weight: bold;
-  }
+h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.icon {
+  font-size: 2.4rem;
+  color: #29d5ca;
+  margin-right: 0.5rem;
+}
+
+.moveto {
+  font-size: 2.4rem;
+  margin-left: 0.5rem;
+  color: #c2c2c2;
+  cursor:pointer;
+}
+
 `;

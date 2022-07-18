@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 // element
 import Portal from "../elements/Portal";
 
 // style
 import styled from "styled-components";
-import { BsPlusLg, BsChatLeft, BsPerson, BsStar, BsFilm } from "react-icons/bs";
-import { BiHomeAlt } from "react-icons/bi";
+import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiFilm } from "react-icons/fi";
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
@@ -16,21 +15,20 @@ const NavCircle = (props) => {
   const location = useLocation();
   const setCircleOn = props.setCircleOn;
   const backDropRef = React.useRef();
-
   const [plusOpen, setPlusOpen] = React.useState(false);
-
-  console.log(location.pathname);
+  const [writeOpt, setWriteOpt] = React.useState(null);
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
   }, []);
 
-  const moveTo = (url) => {
+  const moveTo = useCallback((url) => {
     navigate(url);
     document.body.style.overflow = "unset";
     setCircleOn(false);
-  };
+  },[navigate, setCircleOn]);
 
+  
   const closePlus = (e) => {
     if (e.target === backDropRef.current) {
       document.body.style.overflow = "unset";
@@ -38,45 +36,66 @@ const NavCircle = (props) => {
     }
   };
 
+  React.useEffect(() => {
+    switch (location.pathname) {
+      case '/reels' :
+        setWriteOpt (
+        <> 
+          <div onClick={() => moveTo("/")}> 릴스 작성 </div> 
+        </>)
+        break
+      case '/community' :
+        setWriteOpt(          
+        <>
+          <div onClick={() => moveTo("/")}> 커뮤니티 글 작성 </div>
+          <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
+        </>)
+        break
+      default :
+      setWriteOpt(          
+        <>
+          <div onClick={() => moveTo("/post/write")}> 자랑글 작성 </div>
+        </>)
+        break
+    }
+  }, [location.pathname, moveTo])
+
   return (
     <Portal>
       <BackDrop ref={backDropRef} onClick={(e) => closePlus(e)}>
         {plusOpen ? (
           <WriteMenu>
-            <div onClick={() => moveTo("/post/write")}> 자랑글 작성 </div>
-            <div onClick={() => moveTo("/")}> 산책글 작성 </div>
-            <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
-            <div onClick={() => moveTo("/")}> 릴스 작성 </div>
+            {writeOpt}
           </WriteMenu>
         ) : null}
 
         <MenuCircle>
           <Center onClick={() => setPlusOpen(!plusOpen)}>
-            <BsPlusLg />
+            <FiPlus />
           </Center>
 
           <Menu order={0} onClick={() => moveTo("/")}>
-            <BsChatLeft className={"icons"} />
+            <FiMessageSquare className={"icons"} />
             <h5> 채팅 </h5>
           </Menu>
 
           <Menu order={1} onClick={() => moveTo("/mypage")}>
-            <BsPerson className={"icons"} />
+            <FiUser className={"icons"} />
             <h5> 마이페이지 </h5>
           </Menu>
 
           <Menu order={2} onClick={() => moveTo("/")}>
-            <BiHomeAlt className={"icons"} />
+            <FiHome className={"icons"} />
             <h5> 홈 </h5>
           </Menu>
 
-          <Menu order={3} onClick={() => moveTo("/post")}>
-            <BsStar className={"icons"} />
-            <h5> 자랑하기 </h5>
+          <Menu order={3} onClick={() => moveTo("/community")}>
+            <FiStar className={"icons"} />
+            <h5> 커뮤니티 </h5>
           </Menu>
 
-          <Menu order={4} onClick={() => moveTo("/")}>
-            <BsFilm className={"icons"} />
+          <Menu order={4} onClick={() => moveTo("/reels")}>
+            <FiFilm className={"icons"} />
             <h5> 릴스 </h5>
           </Menu>
         </MenuCircle>
@@ -116,8 +135,7 @@ const WriteMenu = styled.div`
 
   div {
     box-sizing: border-box;
-    height: 11vh;
-    max-height: 80px;
+    height: 8.75vh;
     width: 100%;
     border-radius: 11vh;
     background: #fff;
@@ -156,6 +174,8 @@ const Center = styled.div`
   align-items: center;
   cursor: pointer;
 
+  font-size: 2.4rem;
+
   box-shadow: inset 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   color: #fff;
 `;
@@ -183,8 +203,6 @@ const Menu = styled.div`
   }
 
   .icons {
-    stroke: #b2b2b2;
-    stroke-width: 0.05rem;
     font-size: 2.5rem;
   }
 `;

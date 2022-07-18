@@ -49,8 +49,6 @@ const Post = () => {
   React.useEffect(() => {
     if (page >= 0 && !isLastPg) {
       const pageInfo = { page: page, sorting: category + sort };
-      console.log(pageInfo);
-
       dispatch(loadPostsDB(pageInfo));
       console.log("새 페이지 로딩");
     } else {
@@ -138,6 +136,7 @@ const Sorting = styled.div`
   width: 80%;
   margin: 1.6rem auto;
   font-size: 1.6rem;
+  pointer: cursor;
 
   span {
    margin-right: 1rem; 

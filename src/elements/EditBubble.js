@@ -2,7 +2,7 @@
 import styled from 'styled-components';
 
 // router
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // react
 import React from 'react';
@@ -15,30 +15,29 @@ import { removeDataDB } from '../redux/modules/postSlice';
 
 const EditBubble = (props) => {
   const navigate = useNavigate();
-  // const contentsId = props.contentsId;
+  const contentsId = props.contentsId;
   const setBubbleOn = props.setBubbleOn;
   const bubbleRef = React.useRef();
-  const params = useParams();
   const dispatch = useDispatch();
 
   const backDropClose = () => {
     setBubbleOn(false);
   };
 
-  // const moveToEdit = () => {
-  //   navigate('/post/update/' + contentsId);
-  // };
+  const moveToEdit = () => {
+    navigate('/post/update/' + contentsId);
+  };
 
   const deleteAction = (e) => {
     e.preventDefault();
-    dispatch(removeDataDB(params.id)); //removeDateDB에 id 전달해줌.
+    dispatch(removeDataDB(contentsId)); //removeDateDB에 id 전달해줌.
     window.confirm('정말 삭제하시겠어요?');
   };
 
   return (
     <>
       <Bubble ref={bubbleRef}>
-        <p onClick={() => navigate('/post/update/' + params.id)}>수정하기</p>
+        <p onClick={() => moveToEdit()}>수정하기</p>
         <p onClick={(e) => deleteAction(e)} style={{ color: 'red' }}>
           삭제하기
         </p>

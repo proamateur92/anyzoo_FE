@@ -16,7 +16,14 @@ import instance, { setAccessToken } from '../shared/axios';
 // cookie
 import { getCookie, setCookie } from '../shared/cookie';
 
+// userSlice
+import { setUserDB } from '../redux/modules/userSlice';
+
+// redux
+import { useDispatch } from 'react-redux';
+
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const isLogin = getCookie('accessToken') ? true : false;
@@ -28,7 +35,7 @@ const Login = () => {
   const eamilValue = useRef('');
   const pwdValue = useRef('');
 
-  const login = async userInfo => {
+  const login = async (userInfo) => {
     try {
       const response = await instance.post('/user/login', userInfo);
       setCookie('accessToken', response.data.data.token.accessToken);
@@ -36,14 +43,14 @@ const Login = () => {
       alert(response.data.msg);
       setAccessToken();
       navigate('/');
-      // dispatch(setUserDB());
+      dispatch(setUserDB());
     } catch (error) {
       window.alert(error.response.data.errorMessage);
       navigate('/login');
     }
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const email = eamilValue.current;
     const password = pwdValue.current;
@@ -69,7 +76,7 @@ const Login = () => {
   return (
     <Wrap>
       <Container>
-        <Logo>로고</Logo>
+        <Logo>ANYZOO</Logo>
         <LoginForm onSubmit={handleSubmit}>
           <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
           <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
@@ -77,13 +84,16 @@ const Login = () => {
             <button onClick={() => handleSubmit}>로그인</button>
             <button onClick={() => navigate('/signup')}>회원가입</button>
           </Buttons>
-          <div className='findPwd' onClick={() => navigate('/findinfo')}>
-            비밀번호 찾기
-          </div>
+          <FindInfo>
+            <div className='findInfo'>이메일 찾기</div>
+            <div className='findInfo'>|</div>
+            <div className='findInfo' onClick={() => navigate('/findinfo')}>
+              비밀번호 찾기
+            </div>
+          </FindInfo>
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
-              <div className='naver'>네이버</div>
               <div className='google'>구글</div>
               <div className='kakao'>카카오</div>
             </SocialButtons>
@@ -95,49 +105,83 @@ const Login = () => {
 };
 
 const Container = styled.div`
-  height: 100%;
-  padding-top: 78px;
+  text-align: center;
+  height: 100vh;
+`;
+
+const Logo = styled.span`
+  display: inline-block;
+  font-size: 30px;
+  font-weight: 800;
+  color: ${(props) => props.theme.color.main};
+  padding: 25% 0 15% 0;
 `;
 
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  input,
-  button {
-    width: 226px;
-    height: 50px;
+  padding: 0 16.5%;
+  height: 100%;
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
     border-radius: 10px;
+    padding: 15px;
+    height: 6%;
     border: none;
     outline: none;
-    font-size: inherit;
   }
-  button {
-    cursor: pointer;
-  }
-  input:first-of-type,
-  button:first-of-type {
-    margin-bottom: 5px;
+  input:first-of-type {
+    margin-bottom: 3%;
   }
   input {
-    background-color: #ccc;
+    background-color: ${(props) => props.theme.color.grey};
   }
-
-  .findPwd {
-    margin-bottom: 91px;
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
 `;
 
-const Logo = styled.div`
-  width: 86px;
-  height: 36px;
-  margin-bottom: 73px;
+const FindInfo = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10%;
+  margin-bottom: 5%;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.3);
+  .finInfo {
+    flex: 1;
+  }
 `;
 
 const Buttons = styled.div`
   display: flex;
+  width: 100%;
+  height: 15%;
   flex-direction: column;
-  margin: 15px 0 20px 0;
+  margin: 7% 0 5% 0;
+  button {
+    height: 40%;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+  button:first-of-type {
+    margin-bottom: 3%;
+    background-color: ${(props) => props.theme.color.main};
+  }
+  button:nth-of-type(2) {
+    background-color: ${(props) => props.theme.color.lightgrey};
+    color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
 const SimpleLogin = styled.div`
@@ -146,14 +190,16 @@ const SimpleLogin = styled.div`
   align-items: center;
   width: 255px;
   padding: 20px 0 15px 0;
-  border-top: 1px solid #ccc;
   span {
     font-size: 14px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.4);
   }
 `;
+
 const SocialButtons = styled.div`
   display: flex;
-  margin-top: 15px;
+  margin-top: 8%;
   div {
     width: 50px;
     height: 50px;
@@ -162,10 +208,11 @@ const SocialButtons = styled.div`
     border-radius: 50%;
     font-size: 12px;
     cursor: pointer;
-    background-color: #ccc;
+    background-color: ${(props) => props.theme.color.grey};
   }
   .google {
     margin: 0 12px;
   }
 `;
+
 export default Login;

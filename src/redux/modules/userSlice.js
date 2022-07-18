@@ -8,6 +8,8 @@ export const setUserDB = createAsyncThunk('setUser', async () => {
   try {
     const response = await instance.get('/api/user/userInfo');
     const userInfo = response.data;
+    console.log(userInfo);
+    console.log('로그인 회원 정보 가져오기');
     return { userInfo };
   } catch (error) {
     console.log(error);

@@ -31,7 +31,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   });
 
   // 유효성 검사 함수
-  const checkValidation = value => {
+  const checkValidation = (value) => {
     let regExp = '';
 
     switch (curData) {
@@ -109,7 +109,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   };
 
   // 입력 값 유저 정보 state에 넣기
-  const handleEnteredInfo = async event => {
+  const handleEnteredInfo = async (event) => {
     // 이미지 업로드할 때
     if (curData === 'userImage') {
       const uploadFile = event.target.files[0];
@@ -150,7 +150,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   };
 
   // 비밀번호 확인 값 업데이트
-  const handleEnteredPwdCheck = event => {
+  const handleEnteredPwdCheck = (event) => {
     setPasswordCheckValue(event.target.value);
   };
 
@@ -164,7 +164,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   }, [validation.password, userInfo.password, passwordCheckValue]);
 
   // 이전 단계, 다음 단계 이동
-  const handleStepMove = moveStep => {
+  const handleStepMove = (moveStep) => {
     if (step === 1 && moveStep === -1) {
       setAgreeArr({ all: false, first: false, second: false });
       setIsAllAgree(false);
@@ -216,7 +216,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [agreeArr, setAgreeArr] = useState({ all: false, first: false, second: false });
   const [isAllAgree, setIsAllAgree] = useState(false);
 
-  const handleAgreeCheck = index => {
+  const handleAgreeCheck = (index) => {
     if (index === 'all') {
       const result = agreeArr['all'] ? true : false;
       setIsAllAgree(!result);
@@ -246,10 +246,10 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 0) {
     content = (
       <StepBox>
-        <span style={{ fontSize: '30px', fontWeight: 'bold' }}>약관동의</span>
+        <Title>약관동의</Title>
         <Guide>
           <GuideBox>
-            <div>회원가입 전, 애니쥬 약관을 확인해주세요.</div>
+            <div>회원가입 전, ANYZOO 약관을 확인해주세요.</div>
           </GuideBox>
           <GuideList onClick={() => handleAgreeCheck('all')}>
             <span>약관 전체동의</span>
@@ -283,7 +283,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
         {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
           <Validation>*이미 등록된 별명이에요.</Validation>
         )}
-        <input value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='홍길동' />
+        <SingleInput value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='홍길동' />
       </StepBox>
     );
   }
@@ -304,7 +304,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
         {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
           <Validation>*이미 등록된 이메일이에요.</Validation>
         )}
-        <input
+        <SingleInput
           value={userInfo.username}
           onChange={handleEnteredInfo}
           type='text'
@@ -383,7 +383,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [authNumber, setAuthNumber] = useState('');
 
   // 인증번호 입력 값
-  const handleEnteredAuthNumber = event => {
+  const handleEnteredAuthNumber = (event) => {
     setAuthNumber(event.target.value);
   };
 
@@ -444,7 +444,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             value={userInfo.phoneNumber}
             onChange={handleEnteredInfo}
             type='text'
-            placeholder="'-'없이 입력해 주세요."
+            placeholder="'-' 없이 입력해 주세요."
             maxLength={11}
           />
           <AuthBtn onClick={confirmCode}>코드 받기</AuthBtn>
@@ -496,11 +496,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
     try {
       const response = await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
       Swal.fire({
-        title: '인증번호 발송했어요!',
+        title: '인증번호를 발송했어요!',
         icon: 'success',
         confirmButtonText: '확인',
         confirmButtonColor: '#44DCD3',
       });
+      console.log(response.data);
       setIsSendCode(true);
       setAuthMessage(false);
     } catch (error) {
@@ -616,11 +617,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 95%;
   height: 100%;
   .desc {
     display: block;
-    font-size: 2.3rem;
-    margin-bottom: 2.3rem;
+    font-size: 20px;
+    margin: 10vw 0 5vw 0;
   }
   .strong {
     font-weight: bold;
@@ -629,63 +631,75 @@ const Container = styled.div`
     display: block;
     margin-bottom: 5px;
   }
-  input {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 3.25% 10px;
-    font-size: 20px;
-    border-bottom: 3px solid #000000;
-  }
-  input:last-of-type {
-    margin-bottom: 20px;
-  }
-  input::placeholder {
-    font-size: 2.3rem;
-    font-weight: 800;
-    color: rgba(0, 0, 0, 0.1);
-  }
   input[type='file'] {
     display: none;
   }
 `;
 
+const SingleInput = styled.input`
+  box-sizing: border-box;
+  width: 100%;
+  padding: 3.25% 10px;
+  font-size: 20px;
+  margin-top: 10vw;
+  border-bottom: 3px solid #000000;
+  &:last-of-type {
+    margin-bottom: 5vw;
+  }
+  &::placeholder {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.3);
+  }
+  &[type='file'] {
+    display: none;
+  }
+`;
+
+const Title = styled.span`
+  display: block;
+  padding-top: 10%;
+  font-size: 30px;
+  font-weight: bold;
+  color: ${(props) => props.theme.color.grey};
+`;
+
 const Profile = styled.div`
   text-align: center;
-  margin: 10% 0 15% 0;
+  margin: 10vw 0;
   .defaultImg {
     cursor: pointer;
     border-radius: 50%;
-    width: 10rem;
-    height: 10rem;
+    width: 180px;
+    height: 180px;
   }
 `;
 
 const StepBox = styled.div``;
 const InputBox = styled.div`
   position: relative;
+  width: 100%;
   border-bottom: 3px solid #000000;
-  input {
-    box-sizing: border-box;
-    padding: 3.25% 10px;
-    font-size: 2.3rem;
-    border: none;
-  }
-  input:last-of-type {
-    margin-bottom: 0;
-  }
-  input::placeholder {
-    font-size: 2.3rem;
-    font-weight: 800;
-    color: #ccc;
+  padding: 5% 0;
+  &:first-of-type {
+    margin-top: 10vw;
   }
   &:nth-of-type(2) {
-    margin-bottom: 10%;
+    margin: 2vw 0 5vw 0;
+  }
+  input {
+    font-size: 20px;
+  }
+  input::placeholder {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.3);
   }
 `;
 
 const Icon = styled.div`
   position: absolute;
-  font-size: 20px;
+  font-size: 25px;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
@@ -696,25 +710,31 @@ const Guide = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-weight: 800;
   width: 100%;
-  margin: 27px 0;
+  margin: 10% 0 5% 0;
 `;
 
 const GuideBox = styled.div`
-  width: 95%;
+  width: 85%;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 27px;
-  box-shadow: 5px 5px 3px 3px #ccc;
+  border-radius: 30px;
+  background-color: ${(props) => props.theme.color.lightGrey};
+  div {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.6);
+  }
 `;
 
 const GuideList = styled.div`
-  width: 95%;
+  width: 85%;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   cursor: pointer;
   .box {
     display: flex;
@@ -731,44 +751,65 @@ const GuideList = styled.div`
   .box.checked {
     &::after {
       content: '✔';
-      background-color: ${props => props.theme.color.activeBtn};
+      background-color: ${(props) => props.theme.color.activeBtn};
       color: #ffffff;
       font-size: 20px;
       width: 100%;
       height: 100%;
     }
   }
+  span {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+  }
 `;
 
 const AuthCode = styled.input`
-  padding: 3.25% 0;
+  width: 100%;
+  border-bottom: 3px solid #000000;
+  padding: 5% 0;
+  margin-bottom: 5vw;
+  font-size: 20px;
+  &::placeholder {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const Input = styled.input`
-  width: 50%;
-  padding: 3.25% 0;
+  width: 65%;
   border: none;
+  border-bottom: 3px solid #000000;
+  padding: 5% 0;
+  font-size: 20px;
+  &::placeholder {
+    font-size: 20px;
+    font-weight: 800;
+    color: rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const AuthBtn = styled.button`
   position: absolute;
   right: 0;
-  width: 32%;
-  height: 70%;
+  width: 30%;
+  height: 100%;
   font-size: 14px;
-  background-color: ${props => props.theme.color.activeBtn};
+  font-weight: 800;
+  background-color: ${(props) => props.theme.color.activeBtn};
   border-radius: 10px;
 `;
 
 const Authorize = styled.div`
   position: relative;
-  width: 100%;
+  margin: 15vw 0 5vw 0;
 `;
 
 const Validation = styled.span`
   display: block;
   color: red;
-  font-size: 1.6rem;
+  font-size: 14px;
   margin-bottom: 2%;
   &:last-of-type {
     margin-bottom: 8.3%;
@@ -779,27 +820,27 @@ const PrevBtn = styled.button``;
 const NextBtn = styled.button``;
 const ButtonBox = styled.div`
   display: flex;
-  height: 5.9%;
+  height: 15vw;
   justify-content: space-between;
   button {
-    font-size: 1.9rem;
+    font-size: 16px;
     width: 47%;
-    height: 100%;
     background-color: #ccc;
     border-radius: 10px;
+    font-weight: 800;
+    color: #333333;
   }
   ${PrevBtn} {
     transition: 0.5s;
-    color: rgba(0, 0, 0, 0.6);
     background-color: #f2f2f2;
   }
   ${PrevBtn}:hover {
-    background-color: ${props => props.theme.color.activeBtn};
+    background-color: ${(props) => props.theme.color.activeBtn};
   }
   ${NextBtn} {
-    width: ${props => props.width};
-    background-color: ${props => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
-    cursor: ${props => props.validation && 'pointer'};
+    width: ${(props) => props.width};
+    background-color: ${(props) => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
+    cursor: ${(props) => props.validation && 'pointer'};
     transition: 0.5s;
   }
 `;
