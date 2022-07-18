@@ -1,23 +1,23 @@
 // react
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from "react";
 
 // elements
-import Wrap from '../elements/Wrap';
+import Wrap from "../elements/Wrap";
 
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 // postSlice
-import { modifyDataDB } from '../redux/modules/postSlice';
+import { modifyDataDB } from "../redux/modules/postSlice";
 
 // axios
-import instance from '../shared/axios';
+import instance from "../shared/axios";
 
 //router
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
 const PostUpdate = () => {
   const contentRef = useRef();
@@ -37,9 +37,8 @@ const PostUpdate = () => {
 
   //수정할때 데이터 value 값으로 불러오기
   useEffect(() => {
-    instance.get('/api/post/' + params.id).then((response) => {
+    instance.get("/api/post/" + params.id).then((response) => {
       setData(response.data);
-      console.log(response.data);
     });
   }, [params.id]);
 
@@ -53,10 +52,10 @@ const PostUpdate = () => {
     const formData = new FormData();
 
     for (let i = 0; i < img.length; i++) {
-      formData.append('file', img[i]);
+      formData.append("file", img[i]);
     }
 
-    const response = await instance.post('/api/post/image', formData);
+    const response = await instance.post("/api/post/image", formData);
     console.log(response.data);
     const Data = {
       categoryName: select,
@@ -110,11 +109,15 @@ const PostUpdate = () => {
       </TitleBox>
       <InputBox>
         <p>카테고리</p>
-        <select key={data?.postCategory} defaultValue={data?.postCategory} onChange={category}>
-          <option value='PRETTY'>이쁨</option>
-          <option value='COOL'>멋짐</option>
-          <option value='CUTE'>귀여움</option>
-          <option value='COMIC'>웃김</option>
+        <select
+          key={data?.postCategory}
+          defaultValue={data?.postCategory}
+          onChange={category}
+        >
+          <option value="PRETTY">이쁨</option>
+          <option value="COOL">멋짐</option>
+          <option value="CUTE">귀여움</option>
+          <option value="COMIC">웃김</option>
         </select>
         <p>사진 첨부 (최대 5장)</p>
         <Preview>
@@ -129,7 +132,13 @@ const PostUpdate = () => {
             })}
           {showImages.length === 5 ? null : (
             <label onChange={handelAddImg}>
-              <input type='file' id='input-file' multiple style={{ display: 'none' }} />
+              <input
+                type="file"
+                id="input-file"
+                multiple
+                // defaultValue={data?.img.url}
+                style={{ display: "none" }}
+              />
 
               <PlusImgBox>
                 <PlusImg>
@@ -143,7 +152,7 @@ const PostUpdate = () => {
         <p>게시글 내용</p>
         <Content ref={contentRef} defaultValue={data?.contents} />
         <ButtonBox>
-          <CancelBtn onClick={() => navigate('/post')}>취소</CancelBtn>
+          <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={updatePost}>수정하기</AddBtn>
         </ButtonBox>
       </InputBox>

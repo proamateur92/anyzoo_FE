@@ -1,25 +1,25 @@
 // react
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 // components
-import Comment from '../components/Comment';
+import Comment from "../components/Comment";
 
 // elements
-import Wrap from '../elements/Wrap';
-import EditBubble from '../elements/EditBubble';
+import Wrap from "../elements/Wrap";
+import EditBubble from "../elements/EditBubble";
 
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // router
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from "react-router-dom";
 
 // icon
-import { IoMdMore } from 'react-icons/io';
-import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from 'react-icons/io5';
+import { IoMdMore } from "react-icons/io";
+import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
 
 // axios
-import instance from '../shared/axios';
+import instance from "../shared/axios";
 
 const PostDetail = () => {
   const params = useParams();
@@ -34,27 +34,27 @@ const PostDetail = () => {
 
   // axios에서 데이터를 받아오기
   useEffect(() => {
-    instance.get('/api/post/' + params.id).then((response) => {
+    instance.get("/api/post/" + params.id).then((response) => {
       setData(response.data); //useState의 data에 넣어준다.
       // console.log(response.data)
     });
   }, [params.id, like]);
 
   useEffect(() => {
-    instance.get('/api/post/category/all?page=0').then((response) => {
+    instance.get("/api/post/category/all?page=0").then((response) => {
       // console.log(response.data)
     });
   }, []);
 
   const clickHeart = () => {
-    instance.post('/api/heart/' + params.id).then((res) => {
+    instance.post("/api/heart/" + params.id).then((res) => {
       console.log(res);
       setLike(!like);
     });
   };
 
   useEffect(() => {
-    instance.get('/api/heart/' + params.id).then((res) => {
+    instance.get("/api/heart/" + params.id).then((res) => {
       // console.log(res)
       setLike(res.data);
     });
@@ -65,22 +65,27 @@ const PostDetail = () => {
       <div>
         <Back
           onClick={() => {
-            navigate('/post');
+            navigate("/post");
           }}
-          src={require('../assets/images/back.png.png')}
-          alt=''
+          src={require("../assets/images/back.png.png")}
+          alt=""
         />
       </div>
       <All>
         <UserInfo>
           <User>
-            <UserImg src={data?.userProfileImg} alt='' />
+            <UserImg src={data?.userProfileImg} alt="" />
             <UserName>{data?.nickname}</UserName>
           </User>
           <Jum>
             <JumMom>
-              <IoMdMore id='optionMenu' onClick={menuOpen} />
-              {bubbleOn ? <EditBubble contentsId={data?.postId} setBubbleOn={setBubbleOn} /> : null}
+              <IoMdMore id="optionMenu" onClick={menuOpen} />
+              {bubbleOn ? (
+                <EditBubble
+                  contentsId={data?.boardMainId}
+                  setBubbleOn={setBubbleOn}
+                />
+              ) : null}
             </JumMom>
           </Jum>
         </UserInfo>
@@ -96,11 +101,15 @@ const PostDetail = () => {
         <Content>{data?.contents}</Content>
         <Reactions>
           <span>
-            {like === true ? <IoHeartOutline onClick={clickHeart} /> : <IoHeart onClick={clickHeart} />}
-            <span>{data?.likeCnt}</span>{' '}
+            {like === true ? (
+              <IoHeartOutline onClick={clickHeart} />
+            ) : (
+              <IoHeart onClick={clickHeart} />
+            )}
+            <span>{data?.likeCnt}</span>{" "}
           </span>
           <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{' '}
+            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
           </span>
         </Reactions>
       </All>
