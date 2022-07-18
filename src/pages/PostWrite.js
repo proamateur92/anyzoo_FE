@@ -1,23 +1,23 @@
 //react
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 
 // elements
-import Wrap from '../elements/Wrap';
+import Wrap from "../elements/Wrap";
 
 //style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 //redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 // postSlice
-import { addDataDB } from '../redux/modules/postSlice';
+import { addDataDB } from "../redux/modules/postSlice";
 
 // router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // axios
-import instance from '../shared/axios';
+import instance from "../shared/axios";
 
 const PostWrite = () => {
   const contentRef = useRef();
@@ -43,7 +43,7 @@ const PostWrite = () => {
 
     for (let i = 0; i < img.length; i++) {
       //  console.log(img[i])
-      formData.append('file', img[i]);
+      formData.append("file", img[i]);
       // files.push(img[i])
     }
     // console.log(img[i], "뭐냐")
@@ -51,7 +51,7 @@ const PostWrite = () => {
 
     // formData.append("file", img)
 
-    const response = await instance.post('/api/post/image', formData);
+    const response = await instance.post("/api/post/image", formData);
     console.log(response.data);
 
     const data = {
@@ -96,15 +96,15 @@ const PostWrite = () => {
   return (
     <Wrap>
       <TitleBox>
-        <h1 style={{ fontSize: '20px' }}>자랑하개</h1>
+        <h1 style={{ fontSize: "20px" }}>자랑하개</h1>
       </TitleBox>
       <InputBox>
         <p>카테고리</p>
         <select onChange={category}>
-          <option value='pretty'>이쁨</option>
-          <option value='cool'>멋짐</option>
-          <option value='cute'>귀여움</option>
-          <option value='comic'>웃김</option>
+          <option value="pretty">이쁨</option>
+          <option value="cool">멋짐</option>
+          <option value="cute">귀여움</option>
+          <option value="comic">웃김</option>
         </select>
         <p>사진 첨부 (최대 5장)</p>
         <Preview>
@@ -119,7 +119,12 @@ const PostWrite = () => {
             })}
           {showImages.length === 5 ? null : (
             <label onChange={handelAddImg}>
-              <input type='file' id='input-file' multiple style={{ display: 'none' }} />
+              <input
+                type="file"
+                id="input-file"
+                multiple
+                style={{ display: "none" }}
+              />
 
               <PlusImgBox>
                 <PlusImg>
@@ -133,7 +138,7 @@ const PostWrite = () => {
         <p>게시글 내용</p>
         <Content ref={contentRef} />
         <ButtonBox>
-          <CancelBtn onClick={() => navigate('/post')}>취소</CancelBtn>
+          <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={addPost}>작성하기</AddBtn>
         </ButtonBox>
       </InputBox>
@@ -212,19 +217,19 @@ const PlusImgBox = styled.div`
 const PlusImg = styled.div`
   border: 2px solid #000;
   opacity: 0.3;
-  width: 20px;
-  height: 20px;
-  margin: auto;
+  width: 25px;
+  height: 25px;
   margin-top: 20px;
   border-radius: 20px;
   padding: 2px;
+  text-align: center;
 
   p {
     color: black;
     font-weight: bold;
     font-size: 25px;
-    margin-top: -5px;
-    margin-left: 1px;
+    margin: auto;
+    margin-top: -7px;
   }
 `;
 
