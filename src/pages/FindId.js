@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 // elements
 import Wrap from '../elements/Wrap';
+import UserTop from '../elements/UserTop';
 
 // axios
 import instance from '../shared/axios';
@@ -47,17 +48,18 @@ const FindId = () => {
   return (
     <Wrap>
       <FindForm>
-        <Top>
+        <UserTop title='이메일 찾기'>
           <IoIosArrowBack
             style={{ position: 'absolute', cursor: 'pointer', left: '2%', fontSize: '25px' }}
             onClick={() => navigate('/login')}
           />
           <span>이메일 찾기</span>
-        </Top>
+        </UserTop>
         <Container>
           <Text>
             <span>이메일 계정을 잊으셨나요?</span>
-            <span>ANYZOO 가입 시 입력한 휴대폰 번호를 입력해주세요.</span>
+            <span>ANYZOO 가입 시 입력한</span>
+            <span>휴대폰 번호를 입력해주세요.</span>
           </Text>
           <InputBox>
             <span>휴대폰 번호</span>
@@ -82,7 +84,6 @@ const FindId = () => {
 };
 
 const FindForm = styled.form`
-  margin-top: 5%;
   input,
   button {
     width: 100%;
@@ -98,15 +99,6 @@ const FindForm = styled.form`
   }
 `;
 
-const Top = styled.div`
-  position: relative;
-  align-items: center;
-  font-size: 20px;
-  font-weight: 800;
-  text-align: center;
-  height: 20vw;
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -119,13 +111,19 @@ const Text = styled.div`
   flex-direction: column;
   span:first-of-type {
     display: block;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
-    margin-bottom: 2%;
+    margin-bottom: 5%;
+  }
+  span:nth-of-type(2),
+  span:nth-of-type(3) {
+    font-size: 12px;
   }
   span:nth-of-type(2) {
-    font-size: 12px;
-    margin-bottom: 10%;
+    margin-bottom: 1%;
+  }
+  span:nth-of-type(3) {
+    margin-bottom: 20%;
   }
 `;
 
@@ -133,7 +131,8 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   span:first-of-type {
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: 800;
     color: rgba(0, 0, 0, 0.6);
     margin-bottom: 2vw;
   }
