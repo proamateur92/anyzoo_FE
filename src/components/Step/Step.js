@@ -3,8 +3,8 @@
 // react
 import { useEffect, useState } from 'react';
 
-// icon
-import { AiFillEyeInvisible, AiFillEye, AiOutlineCheckCircle } from 'react-icons/ai';
+// components
+import StepPassword from './StepPassword';
 
 // style
 import styled from 'styled-components';
@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 
 // axios
 import instance from '../../shared/axios';
+import StepPhone from './StepPhone';
 
 const Step = ({ step, onCountChange, onSignup }) => {
   // 패스워드 일치 여부
@@ -147,11 +148,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     // img 외의 값 유효성 검사
     checkValidation(event.target.value);
     setUserInfo({ ...userInfo, [curData]: event.target.value });
-  };
-
-  // 비밀번호 확인 값 업데이트
-  const handleEnteredPwdCheck = (event) => {
-    setPasswordCheckValue(event.target.value);
   };
 
   // 비밀번호 일치 확인
@@ -314,76 +310,43 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
+  // 비밀번호 확인 값
+  const handleEnteredPwdCheck = (event) => {
+    setPasswordCheckValue(event.target.value);
+  };
+
+  const handleSetIsShowPassword = (value) => {
+    console.log(value);
+    setIsShowPassword(value);
+  };
+
   // 비밀번호 페이지
   if (step === 3) {
     content = (
       <StepBox>
-        <span className='desc'>
-          <p>
-            <span className='strong'>비밀번호</span>를
-          </p>
-          <p>입력해주세요.</p>
-        </span>
-        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-          <Validation>
-            *대문자, 특수문자를 포함해주세요.
-            <br />
-            (8~16자 이하)
-          </Validation>
-        )}
-        {passwordCheckValue.trim().length !== 0 && !passwordMatch && (
-          <Validation>*비밀번호가 일치하지 않아요.</Validation>
-        )}
-        <InputBox>
-          <input
-            value={userInfo.password}
-            onChange={handleEnteredInfo}
-            className='pwd'
-            type={!isShowPassword ? 'password' : 'text'}
-            placeholder='비밀번호를 입력하세요.'
-          />
-          <Icon>
-            {!isShowPassword && <AiFillEyeInvisible onClick={() => setIsShowPassword(true)} />}
-            {isShowPassword && <AiFillEye onClick={() => setIsShowPassword(false)} />}
-          </Icon>
-        </InputBox>
-        <InputBox>
-          <input
-            value={passwordCheckValue}
-            onChange={handleEnteredPwdCheck}
-            className='pwd-check'
-            type='password'
-            placeholder='다시 입력하세요.'
-          />
-          <Icon>
-            {passwordCheckValue.trim().length === 0 && <AiOutlineCheckCircle />}
-            {passwordCheckValue.trim().length !== 0 && (
-              <AiOutlineCheckCircle style={{ color: passwordMatch ? 'green' : 'red' }} />
-            )}
-          </Icon>
-        </InputBox>
+        <StepPassword
+          text='비밀번호를입력해주세요.'
+          userPassword={userInfo[curData]}
+          setEnteredPassword={handleEnteredInfo}
+          validation={validation[curData]}
+          isShowPassword={isShowPassword}
+          passwordMatch={passwordMatch}
+          passwordCheckValue={passwordCheckValue}
+          setEnteredPasswordCheckValue={handleEnteredPwdCheck}
+          setIsShowPassword={handleSetIsShowPassword}
+        />
       </StepBox>
     );
   }
 
+  console.log(userInfo);
+
   useEffect(() => {}, [isDuplicated.phoneNumber]);
-
-  // 휴대폰 중복확인 후 인증 코드 날리기
-  const confirmCode = () => {
-    if (userInfo.phoneNumber.length < 11) {
-      setPhoneMessage(true);
-      return;
-    }
-
-    setPhoneMessage(false);
-    handleInputDuplicated();
-  };
 
   // 인증코드 입력
   const [authNumber, setAuthNumber] = useState('');
 
-  // 인증번호 입력 값
-  const handleEnteredAuthNumber = (event) => {
+  const handleSetAuthNumber = (event) => {
     setAuthNumber(event.target.value);
   };
 
@@ -423,37 +386,25 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [authMessage, setAuthMessage] = useState(false);
   const [isSendCode, setIsSendCode] = useState(false);
 
+  const handleSetPhoneMessage = (value) => {
+    setPhoneMessage(value);
+  };
+
   // 휴대폰 인증 페이지
   if (step === 4) {
     content = (
       <StepBox>
-        <span className='desc'>
-          <p>본인 확인을 위해</p>
-          <p>
-            <span className='strong'>휴대폰 인증</span>이 필요합니다.
-          </p>
-        </span>
-        {phoneMessage && <Validation>*휴대폰 번호를 입력해주세요.</Validation>}
-        {userInfo[curData].trim().length !== 0 && !validation[curData] && (
-          <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>
-        )}
-        {validation[curData] && isDuplicated[curData] && <Validation>*이미 등록된 번호에요.</Validation>}
-        {authMessage && <Validation>*휴대폰 인증을 진행해주세요.</Validation>}
-        <Authorize>
-          <Input
-            value={userInfo.phoneNumber}
-            onChange={handleEnteredInfo}
-            type='text'
-            placeholder="'-' 없이 입력해 주세요."
-            maxLength={11}
-          />
-          <AuthBtn onClick={confirmCode}>코드 받기</AuthBtn>
-        </Authorize>
-        <AuthCode
-          value={authNumber}
-          onChange={handleEnteredAuthNumber}
-          type='text'
-          placeholder='인증 코드를 입력해주세요.'
+        <StepPhone
+          userPhoneNumber={userInfo[curData]}
+          validation={validation[curData]}
+          isDuplicated={isDuplicated[curData]}
+          authMessage={authMessage}
+          phoneMessage={phoneMessage}
+          setPhoneMessage={handleSetPhoneMessage}
+          handleInputDuplicated={handleInputDuplicated}
+          setEnteredPhoneNumber={handleEnteredInfo}
+          setAuthNumber={handleSetAuthNumber}
+          authNumber={authNumber}
         />
       </StepBox>
     );
@@ -564,7 +515,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 0) {
     buttons = (
       <ButtonBox step={step} width='100%' validation={isAllAgree}>
-        <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn>
+        {/* <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn> */}
+        <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
   }
@@ -574,6 +526,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
       <ButtonBox step={step} validation={validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
         <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn>
+        {/* <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn> */}
       </ButtonBox>
     );
   }
@@ -582,7 +535,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
     buttons = (
       <ButtonBox step={step} validation={step === 3 ? passwordMatch : validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
-        <NextBtn onClick={() => validation[curData] && handleStepMove(1)}>다음 단계</NextBtn>
+        {/* <NextBtn onClick={() => validation[curData] && handleStepMove(1)}>다음 단계</NextBtn> */}
+        <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn>
       </ButtonBox>
     );
   }
@@ -676,35 +630,6 @@ const Profile = styled.div`
 `;
 
 const StepBox = styled.div``;
-const InputBox = styled.div`
-  position: relative;
-  width: 100%;
-  border-bottom: 3px solid #000000;
-  padding: 5% 0;
-  &:first-of-type {
-    margin-top: 10vw;
-  }
-  &:nth-of-type(2) {
-    margin: 2vw 0 5vw 0;
-  }
-  input {
-    font-size: 20px;
-  }
-  input::placeholder {
-    font-size: 20px;
-    font-weight: 800;
-    color: rgba(0, 0, 0, 0.3);
-  }
-`;
-
-const Icon = styled.div`
-  position: absolute;
-  font-size: 25px;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-`;
 
 const Guide = styled.div`
   display: flex;
@@ -762,48 +687,6 @@ const GuideList = styled.div`
     font-size: 14px;
     color: rgba(0, 0, 0, 0.6);
   }
-`;
-
-const AuthCode = styled.input`
-  width: 100%;
-  border-bottom: 3px solid #000000;
-  padding: 5% 0;
-  margin-bottom: 5vw;
-  font-size: 20px;
-  &::placeholder {
-    font-size: 20px;
-    font-weight: 800;
-    color: rgba(0, 0, 0, 0.3);
-  }
-`;
-
-const Input = styled.input`
-  width: 65%;
-  border: none;
-  border-bottom: 3px solid #000000;
-  padding: 5% 0;
-  font-size: 20px;
-  &::placeholder {
-    font-size: 20px;
-    font-weight: 800;
-    color: rgba(0, 0, 0, 0.3);
-  }
-`;
-
-const AuthBtn = styled.button`
-  position: absolute;
-  right: 0;
-  width: 30%;
-  height: 100%;
-  font-size: 14px;
-  font-weight: 800;
-  background-color: ${(props) => props.theme.color.activeBtn};
-  border-radius: 10px;
-`;
-
-const Authorize = styled.div`
-  position: relative;
-  margin: 15vw 0 5vw 0;
 `;
 
 const Validation = styled.span`

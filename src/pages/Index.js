@@ -1,4 +1,5 @@
-import FindPwd from './FindPwd';
+import FindId from './FindId';
+import FindPassword from './FindPassword';
 import Home from './Home';
 import Login from './Login';
 import Mypage from './Mypage';
@@ -14,4 +15,21 @@ import UserEdit from './UserEdit';
 import Reels from './Reels';
 import CommunityList from './CommunityList';
 
-export { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup, Reels, CommunityList };
+export {
+  FindId,
+  FindPassword,
+  Home,
+  Login,
+  Mypage,
+  UserEdit,
+  NotFound,
+  Notice,
+  NoticeDetail,
+  Post,
+  PostDetail,
+  PostWrite,
+  PostUpdate,
+  Signup,
+  Reels,
+  CommunityList,
+};

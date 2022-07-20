@@ -78,7 +78,7 @@ const SignupForm = styled.div`
 
 const Top = styled.div`
   display: flex;
-  font-size: 2.4rem;
+  font-size: 20px;
   height: 20vw;
   justify-content: space-between;
 `;
