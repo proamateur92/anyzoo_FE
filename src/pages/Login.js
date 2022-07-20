@@ -22,6 +22,9 @@ import { setUserDB } from '../redux/modules/userSlice';
 // redux
 import { useDispatch } from 'react-redux';
 
+// google
+import GoogleButton from '../components/Social/GoogleButton';
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,18 +89,19 @@ const Login = () => {
           </Buttons>
           <FindInfo>
             <div className='findInfo' onClick={() => navigate('/user/findId')}>
-              이메일 찾기
+              <span>이메일 찾기</span>
             </div>
             <div className='findInfo'>|</div>
             <div className='findInfo' onClick={() => navigate('/user/findPassword')}>
-              비밀번호 찾기
+              <span>비밀번호 찾기</span>
             </div>
           </FindInfo>
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
-              <div className='google'>구글</div>
-              <div className='kakao'>카카오</div>
+              <GoogleButton />
+              <button className='google'>구글 로그인</button>
+              <button className='kakao'>카카오 로그인</button>
             </SocialButtons>
           </SimpleLogin>
         </LoginForm>
@@ -108,7 +112,7 @@ const Login = () => {
 
 const Container = styled.div`
   text-align: center;
-  height: 100vh;
+  height: 100%;
 `;
 
 const Logo = styled.span`
@@ -116,7 +120,7 @@ const Logo = styled.span`
   font-size: 30px;
   font-weight: 800;
   color: ${(props) => props.theme.color.main};
-  padding: 25% 0 15% 0;
+  padding: 15% 0;
 `;
 
 const LoginForm = styled.form`
@@ -130,8 +134,7 @@ const LoginForm = styled.form`
     width: 100%;
     font-size: 16px;
     border-radius: 10px;
-    padding: 15px;
-    height: 6%;
+    padding: 7%;
     border: none;
     outline: none;
   }
@@ -145,6 +148,15 @@ const LoginForm = styled.form`
     color: rgba(0, 0, 0, 0.3);
     text-align: center;
   }
+  button {
+    padding: 7%;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
 `;
 
 const FindInfo = styled.div`
@@ -153,13 +165,14 @@ const FindInfo = styled.div`
   justify-content: space-around;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10%;
-  margin-bottom: 5%;
+  margin: 5% 0;
   font-size: 16px;
   font-weight: 800;
   color: rgba(0, 0, 0, 0.3);
-  .finInfo {
-    flex: 1;
+  .findInfo:nth-of-type(2) {
+    font-size: 14px;
   }
+
   .findInfo:not(:nth-of-type(2)):hover {
     color: ${(props) => props.theme.color.main};
     font-weight: 800;
@@ -173,15 +186,6 @@ const Buttons = styled.div`
   height: 15%;
   flex-direction: column;
   margin: 7% 0 5% 0;
-  button {
-    height: 40%;
-    font-size: 16px;
-    font-weight: 800;
-    border-radius: 10px;
-    border: none;
-    outline: none;
-    cursor: pointer;
-  }
   button:first-of-type {
     margin-bottom: 3%;
     background-color: ${(props) => props.theme.color.main};
@@ -196,30 +200,22 @@ const SimpleLogin = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 255px;
   padding: 20px 0 15px 0;
+  width: 100%;
   span {
     font-size: 14px;
     font-weight: 800;
+    margin: 2% 0;
     color: rgba(0, 0, 0, 0.4);
   }
 `;
 
 const SocialButtons = styled.div`
   display: flex;
-  margin-top: 8%;
-  div {
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    text-align: center;
-    border-radius: 50%;
-    font-size: 12px;
-    cursor: pointer;
-    background-color: ${(props) => props.theme.color.grey};
-  }
-  .google {
-    margin: 0 12px;
+  flex-direction: column;
+  width: 100%;
+  button:first-of-type {
+    margin: 3% 0;
   }
 `;
 
