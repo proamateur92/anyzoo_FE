@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getCookie, setCookie } from './cookie';
 
 const instance = axios.create({
-  baseURL: 'http://43.200.52.184:8080',
+  baseURL: 'https://43.200.52.184/',
 });
 
 export const setAccessToken = () => {
@@ -15,10 +15,10 @@ export const setAccessToken = () => {
 
 // response interceptor
 instance.interceptors.response.use(
-  response => {
+  (response) => {
     return response;
   },
-  async error => {
+  async (error) => {
     const {
       config,
       response: { status },
