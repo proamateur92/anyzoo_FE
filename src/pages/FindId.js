@@ -82,7 +82,7 @@ const FindId = () => {
 };
 
 const FindForm = styled.form`
-  margin: 5% 5% 0 5%;
+  margin-top: 5%;
   input,
   button {
     width: 100%;
@@ -111,6 +111,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 20vw;
+  padding: 0 16.5%;
 `;
 
 const Text = styled.div`
