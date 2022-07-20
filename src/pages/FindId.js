@@ -19,24 +19,29 @@ import { useNavigate } from 'react-router-dom';
 const FindId = () => {
   const navigate = useNavigate();
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState('');
+  const [username, setUsername] = useState({ isShow: false, result: '' });
 
+  // 핸드폰 번호 사용자 입력
   const handleSetPhoneNumber = (event) => {
+    setUsername({ isShow: false, result: '' });
     setEnteredPhoneNumber(event.target.value);
   };
 
+  // 계정 정보 받아오기
   const handleFindId = async (event) => {
     console.log('이메일 계정 찾기');
     event.preventDefault();
+
     const phoneNumber = enteredPhoneNumber;
     console.log(phoneNumber);
 
     try {
       const response = await instance.get(`/user/find/lostEmail/${phoneNumber}`);
       console.log(response.data);
+      setUsername({ isShow: true, result: response.data });
     } catch (error) {
       console.log(error);
     }
-    setEnteredPhoneNumber('');
   };
 
   return (
@@ -63,6 +68,12 @@ const FindId = () => {
               placeholder="'-'없이 입력해주세요."
             />
           </InputBox>
+          {username.isShow && (
+            <InputBox>
+              <span>이메일 계정 확인</span>
+              <span>{username.result}</span>
+            </InputBox>
+          )}
           <button onClick={handleFindId}>계정 정보 확인</button>
         </Container>
       </FindForm>
@@ -71,25 +82,35 @@ const FindId = () => {
 };
 
 const FindForm = styled.form`
-  height: 80vh;
-  background-color: blue;
+  margin: 5% 5% 0 5%;
+  input,
+  button {
+    width: 100%;
+    padding: 15px;
+    background-color: ${(props) => props.theme.color.grey};
+    border-radius: 10px;
+    margin-bottom: 5vw;
+    font-size: 16px;
+  }
+  button {
+    font-weight: 800;
+    background-color: ${(props) => props.theme.color.main};
+  }
 `;
 
 const Top = styled.div`
   position: relative;
   align-items: center;
-  padding: 4.5% 0 11.6% 0;
   font-size: 20px;
   font-weight: 800;
   text-align: center;
+  height: 20vw;
 `;
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 70%;
-  padding: 0 17.9%;
-  background-color: red;
+  height: 20vw;
 `;
 
 const Text = styled.div`
@@ -110,12 +131,17 @@ const Text = styled.div`
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
-  span {
-    font-size: 12px;
+  span:first-of-type {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+    margin-bottom: 2vw;
   }
-  input {
-    height: 17.9%;
+  span:nth-of-type(2) {
+    font-size: 16px;
+    font-weight: 800;
+    margin-left: 3%;
+    margin-bottom: 10vw;
   }
 `;
+
 export default FindId;
