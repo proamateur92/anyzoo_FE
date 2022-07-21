@@ -2,6 +2,8 @@
 import styled from 'styled-components';
 
 const StepPhone = ({
+  step,
+  text,
   userPhoneNumber,
   validation,
   isDuplicated,
@@ -23,14 +25,32 @@ const StepPhone = ({
     handleInputDuplicated();
   };
 
-  return (
-    <>
+  let guide = '';
+
+  if (step === 0) {
+    guide = (
       <span className='desc'>
-        <p>본인 확인을 위해</p>
+        <p></p>
         <p>
-          <span className='strong'>휴대폰 인증</span>이 필요합니다.
+          <span className='strong'>{text.substring(0, 4)}</span>
+          {text.substring(5)}
         </p>
       </span>
+    );
+  } else if (step === 4) {
+    guide = (
+      <span className='desc'>
+        <p>{text.substring(0, 10)}</p>
+        <p>
+          <span className='strong'>{text.substring(16, 10)}</span>
+          {text.substring(17)}
+        </p>
+      </span>
+    );
+  }
+  return (
+    <>
+      {guide}
       {phoneMessage && <Validation>*휴대폰 번호를 입력해주세요.</Validation>}
       {userPhoneNumber.trim().length !== 0 && !validation && <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>}
       {validation && isDuplicated && <Validation>*이미 등록된 번호에요.</Validation>}
@@ -57,7 +77,7 @@ const AuthNumber = styled.input`
   margin-bottom: 5vw;
   font-size: 20px;
   &::placeholder {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
@@ -70,7 +90,7 @@ const Input = styled.input`
   padding: 5% 0;
   font-size: 20px;
   &::placeholder {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }

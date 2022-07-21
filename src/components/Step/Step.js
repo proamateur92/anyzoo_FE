@@ -205,6 +205,52 @@ const Step = ({ step, onCountChange, onSignup }) => {
     setIsSubmit(true);
   };
 
+  // 사용자 입력 중복체크
+  const handleInputDuplicated = async () => {
+    if (curData === 'nickname') {
+      console.log('별명 중복체크');
+      try {
+        const response = await instance.get(`/user/checkNickname/${userInfo.nickname}`);
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        handleStepMove(1);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (curData === 'username') {
+      console.log('이메일 중복체크');
+      try {
+        const response = await instance.get(`/user/checkUsername/${userInfo.username}`);
+
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        handleStepMove(1);
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (curData === 'phoneNumber') {
+      console.log('번호 중복 체크');
+      try {
+        const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
+        console.log(response.data);
+        if (response.data) {
+          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+          return;
+        }
+        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        setIsSendCode(true);
+        sendCode();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   // step별 화면 보여주기
   let content = '';
 
@@ -339,8 +385,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     );
   }
 
-  console.log(userInfo);
-
   useEffect(() => {}, [isDuplicated.phoneNumber]);
 
   // 인증코드 입력
@@ -395,6 +439,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
     content = (
       <StepBox>
         <StepPhone
+          step={step}
+          text='본인 확인을 위해 휴대폰 인증 이 필요합니다.'
           userPhoneNumber={userInfo[curData]}
           validation={validation[curData]}
           isDuplicated={isDuplicated[curData]}
@@ -460,56 +506,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
   };
 
-  // 사용자 입력 중복체크
-  const handleInputDuplicated = async () => {
-    if (curData === 'nickname') {
-      console.log('별명 중복체크');
-      try {
-        const response = await instance.get(`/user/checkNickname/${userInfo.nickname}`);
-        if (response.data) {
-          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
-          return;
-        }
-        handleStepMove(1);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (curData === 'username') {
-      console.log('이메일 중복체크');
-      try {
-        const response = await instance.get(`/user/checkUsername/${userInfo.username}`);
-
-        if (response.data) {
-          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
-          return;
-        }
-        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
-        handleStepMove(1);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    if (curData === 'phoneNumber') {
-      console.log('번호 중복 체크');
-      try {
-        const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
-        console.log(response.data);
-        if (response.data) {
-          setIsDuplicated({ ...isDuplicated, [curData]: response.data });
-          return;
-        }
-        setIsDuplicated({ ...isDuplicated, [curData]: response.data });
-        setIsSendCode(true);
-        sendCode();
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   let buttons = '';
 
   if (step === 0) {
@@ -519,14 +515,18 @@ const Step = ({ step, onCountChange, onSignup }) => {
         <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
+    <ButtonBox step={step} width='100%' validation={isAllAgree}>
+      {/* <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn> */}
+      <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
+    </ButtonBox>;
   }
 
   if (step === 1 || step === 2) {
     buttons = (
       <ButtonBox step={step} validation={validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
-        <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn>
-        {/* <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn> */}
+        {/* <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn> */}
+        <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn>
       </ButtonBox>
     );
   }
@@ -573,6 +573,7 @@ const Container = styled.div`
   flex-direction: column;
   width: 95%;
   height: 100%;
+  margin: auto;
   .desc {
     display: block;
     font-size: 20px;
@@ -593,7 +594,7 @@ const Container = styled.div`
 const SingleInput = styled.input`
   box-sizing: border-box;
   width: 100%;
-  padding: 3.25% 10px;
+  padding: 5% 10px;
   font-size: 20px;
   margin-top: 10vw;
   border-bottom: 3px solid #000000;
@@ -641,10 +642,9 @@ const Guide = styled.div`
 `;
 
 const GuideBox = styled.div`
-  width: 85%;
   border-radius: 10px;
   padding: 20px;
-  margin-bottom: 27px;
+  margin-bottom: 15%;
   border-radius: 30px;
   background-color: ${(props) => props.theme.color.lightGrey};
   div {
@@ -659,7 +659,7 @@ const GuideList = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 5%;
   cursor: pointer;
   .box {
     display: flex;
@@ -679,8 +679,6 @@ const GuideList = styled.div`
       background-color: ${(props) => props.theme.color.activeBtn};
       color: #ffffff;
       font-size: 20px;
-      width: 100%;
-      height: 100%;
     }
   }
   span {
@@ -703,11 +701,11 @@ const PrevBtn = styled.button``;
 const NextBtn = styled.button``;
 const ButtonBox = styled.div`
   display: flex;
-  height: 15vw;
   justify-content: space-between;
   button {
     font-size: 16px;
     width: 47%;
+    padding: 15px;
     background-color: #ccc;
     border-radius: 10px;
     font-weight: 800;

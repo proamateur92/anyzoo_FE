@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 
 // google
 import GoogleButton from '../components/Social/GoogleButton';
+import KakaoButton from '../components/Social/KakaoButton';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ const Login = () => {
     email.value = '';
     password.value = '';
   };
-
+  
   return (
     <Wrap>
       <Container>
@@ -100,8 +101,7 @@ const Login = () => {
             <span>간편 로그인</span>
             <SocialButtons>
               <GoogleButton />
-              <button className='google'>구글 로그인</button>
-              <button className='kakao'>카카오 로그인</button>
+              {/* <KakaoButton /> */}
             </SocialButtons>
           </SimpleLogin>
         </LoginForm>

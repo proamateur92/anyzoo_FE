@@ -1,37 +1,38 @@
 // google
 import GoogleLogin from 'react-google-login';
-import { gapi } from 'gapi-script';
-
-// react
+// import {gapi} from 'gapi-script';
 import { useEffect } from 'react';
 
-const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const GoogleButton = () => {
+  // useEffect(()=>{
+  //   function start() {
+  //     gapi.client.init({
+  //       clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  //       scope: 'email',
+  //     });
+  //   }
 
-const GoogleButton = (props) => {
-  // Google 로그인
+  //   gapi.load('client:auth2', start);
+  // },[])
 
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId,
-        scope: 'email',
-      });
-    }
-
-    gapi.load('client:auth2', start);
-  }, []);
-
-  const onSuceess = (response) => {
-    console.log(response);
-  };
+  const onSuccess = (res) => {
+    const profile = res.getBasicProfile();
+    const userdata = {
+      email: profile.getEmail(),
+      image: profile.getImageUrl(),
+      name: profile.getName(),
+    }; 
+    // 로그인 성공 후 실행하기 원하는 코드 작성.
+    console.log(userdata);
+  }
 
   const onFailure = (response) => {
-    console.log(response);
+    console.log('FAILED', response);
   };
 
   return (
     <div>
-      <GoogleLogin clientId={clientId} buttonText='구글 로그인' onSuceess={onSuceess} onFailure={onFailure} />
+      <GoogleLogin clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID} buttonText='구글 로그인' onSuceess={onSuccess} onFailure={onFailure} cookiePolicy={"single_host_origin"} />
     </div>
   );
 };
