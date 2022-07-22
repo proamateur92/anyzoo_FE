@@ -24,36 +24,20 @@ const StepPhone = ({
     setPhoneMessage(false);
     handleInputDuplicated();
   };
-
-  let guide = '';
-
-  if (step === 0) {
-    guide = (
-      <span className='desc'>
-        <p></p>
-        <p>
-          <span className='strong'>{text.substring(0, 4)}</span>
-          {text.substring(5)}
-        </p>
-      </span>
-    );
-  } else if (step === 4) {
-    guide = (
-      <span className='desc'>
-        <p>{text.substring(0, 10)}</p>
-        <p>
-          <span className='strong'>{text.substring(16, 10)}</span>
-          {text.substring(17)}
-        </p>
-      </span>
-    );
-  }
   return (
     <>
-      {guide}
+      <span className='desc'>
+        <p>본인 확인을 위해</p>
+        <p>
+          <span className='strong'>휴대폰 인증</span>
+          이 필요합니다.
+        </p>
+      </span>
+    
       {phoneMessage && <Validation>*휴대폰 번호를 입력해주세요.</Validation>}
       {userPhoneNumber.trim().length !== 0 && !validation && <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>}
-      {validation && isDuplicated && <Validation>*이미 등록된 번호에요.</Validation>}
+      {step === 0 && validation && isDuplicated && <Validation>*등록되지 않은 번호에요.</Validation>}
+      {step === 4 && validation && isDuplicated && <Validation>*이미 등록된 번호에요.</Validation>}
       {authMessage && <Validation>*휴대폰 인증을 진행해주세요.</Validation>}
       <Authorize>
         <Input

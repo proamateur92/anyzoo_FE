@@ -100,7 +100,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
     try {
       // 서버 이미지 업로드 api 필요
       const response = await instance.post('/user/image', formData);
-      console.log(response.data.id);
       // 유저 정보에 서버 이미지 url 저장
       setUserInfo({ ...userInfo, [curData]: response.data.id });
     } catch (error) {
@@ -208,7 +207,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 사용자 입력 중복체크
   const handleInputDuplicated = async () => {
     if (curData === 'nickname') {
-      console.log('별명 중복체크');
       try {
         const response = await instance.get(`/user/checkNickname/${userInfo.nickname}`);
         if (response.data) {
@@ -220,7 +218,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
         console.log(error);
       }
     } else if (curData === 'username') {
-      console.log('이메일 중복체크');
       try {
         const response = await instance.get(`/user/checkUsername/${userInfo.username}`);
 
@@ -234,10 +231,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
         console.log(error);
       }
     } else if (curData === 'phoneNumber') {
-      console.log('번호 중복 체크');
       try {
         const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
-        console.log(response.data);
         if (response.data) {
           setIsDuplicated({ ...isDuplicated, [curData]: response.data });
           return;
@@ -362,7 +357,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
   };
 
   const handleSetIsShowPassword = (value) => {
-    console.log(value);
     setIsShowPassword(value);
   };
 
@@ -397,18 +391,12 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 인증번호 일치 여부 확인
   const checkedAuthNumber = async () => {
     // true면 등록된 번호, false면 미등록 번호
-    console.log('인증번호 비교');
-    console.log(isDuplicated.phoneNumber);
-
     if (isDuplicated.phoneNumber || !isSendCode) {
       setAuthMessage(true);
       return;
     }
 
     setAuthMessage(false);
-
-    console.log('핸드폰 번호: ', userInfo.phoneNumber);
-    console.log('인증 번호: ', authNumber);
 
     try {
       const response = await instance.post('/user/confirm/phoneVerification', {
@@ -417,8 +405,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
       });
 
       // 인증코드가 일치하면 true, 다르면 false
-      console.log('코드 일치 여부');
-      console.log(response.data);
       setIsAuthorized(response.data);
       response.data && handleStepMove(1);
     } catch (error) {
@@ -440,7 +426,6 @@ const Step = ({ step, onCountChange, onSignup }) => {
       <StepBox>
         <StepPhone
           step={step}
-          text='본인 확인을 위해 휴대폰 인증 이 필요합니다.'
           userPhoneNumber={userInfo[curData]}
           validation={validation[curData]}
           isDuplicated={isDuplicated[curData]}
@@ -489,16 +474,14 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 핸드폰으로 코드 받기
   const sendCode = async () => {
-    console.log('코드 발급 함수 실행');
     try {
-      const response = await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
+      await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
       Swal.fire({
         title: '인증번호를 발송했어요!',
         icon: 'success',
         confirmButtonText: '확인',
         confirmButtonColor: '#44DCD3',
       });
-      console.log(response.data);
       setIsSendCode(true);
       setAuthMessage(false);
     } catch (error) {
@@ -511,36 +494,29 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 0) {
     buttons = (
       <ButtonBox step={step} width='100%' validation={isAllAgree}>
-        {/* <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn> */}
-        <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
+        <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
-    <ButtonBox step={step} width='100%' validation={isAllAgree}>
-      {/* <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn> */}
-      <NextBtn onClick={() => handleStepMove(1)}>다음</NextBtn>
-    </ButtonBox>;
   }
 
   if (step === 1 || step === 2) {
     buttons = (
       <ButtonBox step={step} validation={validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
-        {/* <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn> */}
-        <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn>
+        <NextBtn onClick={() => validation[curData] && handleInputDuplicated()}>다음 단계</NextBtn>
       </ButtonBox>
     );
   }
-
+  
   if (step === 3) {
     buttons = (
       <ButtonBox step={step} validation={step === 3 ? passwordMatch : validation[curData]}>
         <PrevBtn onClick={() => handleStepMove(-1)}>이전 단계</PrevBtn>
-        {/* <NextBtn onClick={() => validation[curData] && handleStepMove(1)}>다음 단계</NextBtn> */}
-        <NextBtn onClick={() => handleStepMove(1)}>다음 단계</NextBtn>
+        <NextBtn onClick={() => passwordMatch && handleStepMove(1)}>다음 단계</NextBtn>
       </ButtonBox>
     );
   }
-
+  
   if (step === 4) {
     buttons = (
       <ButtonBox step={step} validation={!isDuplicated[curData]}>

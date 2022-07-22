@@ -1,5 +1,6 @@
 // element
 import Wrap from '../elements/Wrap';
+// import UserTop from '../elements/UserTop';
 
 // icon
 import { IoIosArrowBack } from 'react-icons/io';
@@ -61,6 +62,7 @@ const Signup = () => {
   return (
     <Wrap>
       <SignupForm>
+        {/* <UserTop title='회원가입' type='signup' /> */}
         <Top>
           <IoIosArrowBack style={{ cursor: 'pointer' }} onClick={() => navigate('/')} />
           <span>{`${step + 1}/6`}</span>
