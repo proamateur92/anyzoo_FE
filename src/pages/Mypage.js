@@ -20,20 +20,9 @@ import instance from '../shared/axios';
 
 const Mypage = () => {
   const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
   const isLogin = getCookie('accessToken') ? true : false;
-
-  useEffect(()=>{
-    try {
-      const respnse = instance.get('/api/mypage/post');
-      console.log(respnse.data);
-    } catch(error) {
-      console.log(error);
-    }
-  })
-  useEffect(() => {
-    if (!isLogin) navigate('/login');
-  });
 
   // 회원정보 확인
   const userInfo = useSelector((state) => state.user.info);
@@ -42,6 +31,35 @@ const Mypage = () => {
     clearCookie('refreshToken');
     navigate('/');
   };
+
+  useEffect(()=>{
+    if(userInfo.length) {
+      try {
+        const response = instance.get(`/api/following/${userInfo.nickname}`);
+        console.log(response.data);
+      } catch(error) {
+        console.log(error);
+      } 
+  
+      try {
+        const response = instance.get(`/api/follower/${userInfo.nickname}`);
+        console.log(response.data);
+      } catch(error) {
+        console.log(error);
+      } 
+    
+      try {
+        const respnse = instance.get('/api/mypage/post');
+        console.log(respnse.data);
+      } catch(error) {
+        console.log(error);
+      }
+    }
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (!isLogin) navigate('/login');
+  });
 
 //   <Logout type='button' onClick={logout}>
 //   로그아웃
