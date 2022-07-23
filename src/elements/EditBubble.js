@@ -1,89 +1,63 @@
-// style
-import styled from 'styled-components';
-
 // router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // react
-import React from 'react';
+import React from "react";
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
+
+//element
+import Bubble from "./Bubble";
 
 // postSlice
-import { removeDataDB } from '../redux/modules/postSlice';
+import { removeDataDB } from "../redux/modules/postSlice";
 
 const EditBubble = (props) => {
+  const user = useSelector((state) => state.user.info);
+  const [isWriter, setIsWriter] = React.useState(false);
   const navigate = useNavigate();
-  const contentsId = props.contentsId;
+  const data = props.data
+  const contentsId = props.data?.boardMainId;
   const setBubbleOn = props.setBubbleOn;
-  const bubbleRef = React.useRef();
   const dispatch = useDispatch();
 
-  const backDropClose = () => {
-    setBubbleOn(false);
-  };
+  console.log(data)
+
+  React.useEffect(()=>{
+    if (user?.nickname === data?.nickname) {
+      setIsWriter(true)
+    }
+  }, [user, data?.nickname])
+
 
   const moveToEdit = () => {
-    navigate('/post/update/' + contentsId);
+    navigate("/post/update/" + contentsId);
   };
 
   const deleteAction = (e) => {
     e.preventDefault();
     dispatch(removeDataDB(contentsId)); //removeDateDB에 id 전달해줌.
-    window.confirm('정말 삭제하시겠어요?');
+    window.confirm("정말 삭제하시겠어요?");
   };
 
+  const followAction = () => {
+
+  }
+
   return (
-    <>
-      <Bubble ref={bubbleRef}>
-        <p onClick={() => moveToEdit()}>수정하기</p>
-        <p onClick={(e) => deleteAction(e)} style={{ color: 'red' }}>
-          삭제하기
-        </p>
-      </Bubble>
-      <BackDrop onClick={backDropClose} />
-    </>
+    <Bubble setBubbleOn={setBubbleOn}>
+      {isWriter ? (
+        <>
+          <p onClick={(e) => moveToEdit()}>수정하기</p>
+          <p onClick={(e) => deleteAction(e)} style={{ color: "red" }}> 삭제하기
+          </p>
+        </>
+      ) : (
+        <p onClick={() => followAction}>팔로우</p>
+      )}
+    </Bubble>
   );
 };
 
 export default EditBubble;
-
-const BackDrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-`;
-
-const Bubble = styled.div`
-  width: 100px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 30px 0px 30px 30px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
-  font-size: 16px;
-  text-align: center;
-
-  background: #fff;
-
-  position: absolute;
-  top: 55%;
-  right: 3%;
-  z-index: 10;
-
-  p {
-    margin: 20px 0px;
-    cursor: pointer;
-
-    :hover {
-      font-weight: bold;
-    }
-
-    :active {
-      font-weight: bold;
-    }
-  }
-`;
