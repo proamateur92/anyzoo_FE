@@ -5,23 +5,25 @@ import styled from "styled-components";
 
 import { FiUser } from "react-icons/fi";
 
-const FindMateCard = () => {
+const TogetherCard = (props) => {
+  const data = props.data
+
   return (
     <CardOuter>
       <FindMate>
         <CardImg />
         <CardContent>
           <Title>
-            <h5 id="title"> 산책모집 방 제목 ff</h5>
-            <span id="time">3분 전</span>
+            <h5 id="title"> {data?.title}</h5>
+            <span id="time">{data?.createdAt}</span>
           </Title>
-          <p> 모집글 내용이 들어갑니다. 모집글 내용이 들어갑니다. 모집글 내용이 들어갑니다. </p>
+          <p>{data?.content}</p>
           <AdditionalInfo>
             <div>
-              <span className="address">#머머구</span>
-              <span className="address">#머머동</span>
+              <span className="address">#{data?.location}</span>
+              <span className="address">#{data?.location}</span>
             </div>
-            <span> <FiUser className="icon" /> 7/10 </span>
+            <span> <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}</span>
           </AdditionalInfo>
         </CardContent>
       </FindMate>
@@ -29,7 +31,7 @@ const FindMateCard = () => {
   );
 };
 
-export default FindMateCard;
+export default TogetherCard;
 
 const CardOuter = styled.div`
   width: 100%;
@@ -42,12 +44,13 @@ const CardOuter = styled.div`
   position: relative;
   flex-shrink: 0;
   cursor:pointer;
+  overflow: hidden;
 `;
 
 const FindMate = styled.div`
   position: absolute;
-  top: 18.75%;
-  left: 5.81%;
+  top: 15%;
+  left: 5%;
   display: flex;
 `;
 
@@ -61,11 +64,13 @@ const CardImg = styled.div`
 `;
 
 const CardContent = styled.div`
-  width: 62%;
+  width: 63%;
   margin-left: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-grow:0;
+  
 
   p {
     overflow: hidden;
@@ -101,6 +106,7 @@ const Title = styled.div`
   span {
     font-size: 1.2rem;
     color: #b4b4b4;
+    white-space: nowrap;
   }
 `;
 
@@ -127,6 +133,8 @@ const AdditionalInfo = styled.div`
     border: 1px solid #d1d1d6;
     padding: 0.5rem 0.7rem;
     border-radius: 30rem;
+    white-space: nowrap;
+    max-width: 50%;
   }
 
   .icon {
