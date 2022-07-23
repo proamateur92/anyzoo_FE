@@ -12,6 +12,7 @@ import PostUpdate from './PostUpdate';
 import Signup from './Signup';
 import UserEdit from './UserEdit';
 import Reels from './Reels';
+import ReelsWrite from './ReelsWrite';
 import CommunityList from './CommunityList';
 
-export { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup, Reels, CommunityList };
+export { FindPwd, Home, Login, Mypage, UserEdit, NotFound, Notice, NoticeDetail, Post, PostDetail, PostWrite, PostUpdate, Signup, Reels, ReelsWrite, CommunityList };
