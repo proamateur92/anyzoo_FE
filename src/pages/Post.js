@@ -7,13 +7,18 @@ import Wrap from "../elements/Wrap";
 import PostCard from "../components/PostCard";
 import SubHeader from "../elements/SubHeader";
 
+// element
+import Bubble from "../elements/Bubble";
+
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { loadPostsDB } from "../redux/modules/postSlice";
 
 //style
 import styled from "styled-components";
-import { FiChevronDown } from "react-icons/fi";
+
+// icons
+import { FiChevronDown, FiSettings } from "react-icons/fi";
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -23,6 +28,7 @@ const Post = () => {
   const [page, setPage] = React.useState(-1);
   const [category, setCategory] = React.useState("all");
   const [sort, setSort] = React.useState("");
+  const [bubbleOn, setBubbleOn] = React.useState(false);
 
   // 페이지인덱스넘버 바꾸기
   const loadinghandler = useCallback(
@@ -59,16 +65,17 @@ const Post = () => {
   // 카테고리 변경
   const changeCategory = (e) => {
     const pageInfo = { page: 0, sorting: e.target.value + sort };
-    dispatch(loadPostsDB(pageInfo))
+    dispatch(loadPostsDB(pageInfo));
     setCategory(e.target.value);
     setPage(0);
   };
 
   const changeSorting = (sortingOpt) => {
     const pageInfo = { page: 0, sorting: category + sortingOpt };
-    dispatch(loadPostsDB(pageInfo))
+    dispatch(loadPostsDB(pageInfo));
     setSort(sortingOpt);
     setPage(0);
+    setBubbleOn(!bubbleOn)
   };
 
   return (
@@ -85,13 +92,17 @@ const Post = () => {
           <span id="selectArrow">
             <FiChevronDown />
           </span>
+
+          <FiSettings id="settings" onClick={() => setBubbleOn(!bubbleOn)} />
+
+          {bubbleOn ? (
+            <Bubble setBubbleOn={setBubbleOn}>
+              <p onClick={() => changeSorting("")}>최신순</p>
+              <p onClick={() => changeSorting("like")}>추천순</p>
+            </Bubble>
+          ) : null}
         </SelectCategory>
       </SubHeader>
-
-      <Sorting>
-      <span onClick={() => changeSorting('')}>최신순</span>
-      <span onClick={() => changeSorting('like')}>추천순</span>
-      </Sorting>
 
       {posts.map((post) => (
         <PostCard key={post.boardMainId} data={post} />
@@ -106,17 +117,20 @@ export default Post;
 const SelectCategory = styled.div`
   margin-right: 1.5%;
   height: 49%;
-  width: 30%;
+  width: 48%;
   min-width: 11rem;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   select {
     height: 100%;
-    width: 100%;
+    width: 78%;
     border-radius: 1rem;
     outline: none;
     border: solid 1px rgba(0, 0, 0, 0.3);
-    padding: 0.6rem 1.3rem;
+    padding: 0 1.3rem;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -125,21 +139,12 @@ const SelectCategory = styled.div`
   }
 
   #selectArrow {
-    position: absolute;
-    top: 25%;
-    right: 4.8%;
+    margin-left: -28%;
     color: #bcbcbc;
   }
-`;
 
-const Sorting = styled.div`
-  width: 80%;
-  margin: 1.6rem auto;
-  font-size: 1.6rem;
-  pointer: cursor;
-
-  span {
-   margin-right: 1rem; 
+  #settings {
+    cursor: pointer;
+    font-size: 2.2rem;
   }
-  
-`
+`;
