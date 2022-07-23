@@ -18,6 +18,7 @@ import {
   PostUpdate,
   Signup,
   Reels, 
+  ReelsWrite,
   CommunityList
 } from './pages/Index';
 
@@ -73,6 +74,7 @@ function App() {
           <Route path='/notice' element={<Notice />} />
           <Route path='/notice/detail/:id' element={<NoticeDetail />} />
           <Route path='/reels' element={<Reels />}/>
+          <Route path='/reels/write' element={<ReelsWrite />}/>
           <Route path='/community' element={<CommunityList />}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
