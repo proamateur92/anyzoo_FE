@@ -4,7 +4,7 @@ import reset from 'styled-reset';
 const GlobalStyles = createGlobalStyle`
     ${reset};
     html {
-        font-size: 10px;
+        font-size: min(2.67vw, 14px);
     }
     a{
         text-decoration:none;
@@ -12,9 +12,6 @@ const GlobalStyles = createGlobalStyle`
     }
     *{
         box-sizing:border-box;
-    }
-    html {
-        font-size: 10px;
     }
     body{
         // 폰트 스타일 적용
