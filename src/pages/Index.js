@@ -14,6 +14,7 @@ import Signup from './Signup';
 import UserEdit from './UserEdit';
 import Reels from './Reels';
 import CommunityList from './CommunityList';
+import Oauth from './Oauth';
 
 export {
   FindId,
@@ -32,4 +33,5 @@ export {
   Signup,
   Reels,
   CommunityList,
+  Oauth
 };

@@ -3,26 +3,30 @@ import styled from 'styled-components';
 
 // icon
 import { IoIosArrowBack } from 'react-icons/io';
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 // router
 import { useNavigate } from 'react-router-dom';
 
-const UserTop = ({ title }) => {
+const UserTop = ({ title, type }) => {
   const navigate = useNavigate();
+  let progress = '';
+  if(type === 'signup') {
+    progress = (
+      <div style={{widht: '50px', height: '50px', backgroundColor: 'red'}}>a</div>
+    )
+  } 
+
   return (
     <Top>
-      <IoIosArrowBack
-        style={{
-          position: 'absolute',
-          cursor: 'pointer',
-          left: '2%',
-          margin: 'auto',
-          fontSize: '35px',
-          height: '100%',
-        }}
-        onClick={() => navigate('/login')}
-      />
+      <Icon onClick={() => navigate('/login')}>
+        <IoIosArrowBack />
+      </Icon>
       <span>{title}</span>
+      {progress}
+      <Icon>
+        {type==='mypage' && <GiHamburgerMenu />}
+      </Icon>
     </Top>
   );
 };
@@ -34,8 +38,22 @@ const Top = styled.div`
   position: relative;
   font-size: 18px;
   text-align: center;
-  height: 20vw;
-  margin-bottom: 10%;
+  height: 18vw;
+  span {
+    font-weight: 800;
+  }
+`;
+
+const Icon = styled.div`
+  position: absolute;
+  &:first-of-type {
+    left: 0;
+  }
+  &:nth-of-type(2) {
+    right: 2%;
+  }
+  cursor: pointer;
+  font-size: 35px;
 `;
 
 export default UserTop;
