@@ -97,6 +97,7 @@ const OneComment = (props) => {
             <span> {data.comment} </span>
           </TextBubble>
           <Time> {createdAtDisplay} </Time>
+          <Replies> 답글 99+</Replies>
         </Content>
       )}
 
@@ -187,6 +188,13 @@ const Time = styled.span`
   font-size: 1.2rem;
   color: #b3b3b3;
 `;
+
+const Replies = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3cd9d0;
+  cursor: pointer;
+`
 
 const EditOption = styled.div`
   margin-top: 0.5rem;

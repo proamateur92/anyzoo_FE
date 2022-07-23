@@ -14,11 +14,11 @@ export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
     const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.comment})
-    const newComment = {...commentData, id:response.data}
+    const newComment = {...commentData, id:response.data, createdAt:'작성방금 전'}
     return newComment;
   }
 );
-
+ 
 export const editCommentDB = createAsyncThunk('editComment', async (commentData) => {
   console.log(commentData);
   await instance.patch('/api/comment/edit/' + commentData.commentId, { comment: commentData.comment });
