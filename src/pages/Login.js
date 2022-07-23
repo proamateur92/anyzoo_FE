@@ -23,8 +23,8 @@ import { setUserDB } from '../redux/modules/userSlice';
 import { useDispatch } from 'react-redux';
 
 // google
-import GoogleButton from '../components/Social/GoogleButton';
-import KakaoButton from '../components/Social/KakaoButton';
+import Google from '../components/Social/Google';
+import Kakao from '../components/Social/Kakao';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -100,8 +100,8 @@ const Login = () => {
           <SimpleLogin>
             <span>간편 로그인</span>
             <SocialButtons>
-              <GoogleButton />
-              {/* <KakaoButton /> */}
+              <Google />
+              <Kakao />
             </SocialButtons>
           </SimpleLogin>
         </LoginForm>
