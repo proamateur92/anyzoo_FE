@@ -39,28 +39,17 @@ const PostUpdate = () => {
   useEffect(() => {
     instance.get("/api/post/" + params.id).then((response) => {
       setData(response.data);
+      console.log(response.data, "222");
     });
   }, [params.id]);
 
   //data 수정해 reducer로 보내기(수정하기)
   const updatePost = async (e) => {
-    window.URL.revokeObjectURL(showImages);
     e.preventDefault();
-    console.log(getImages);
-    let img = getImages;
 
-    const formData = new FormData();
-
-    for (let i = 0; i < img.length; i++) {
-      formData.append("file", img[i]);
-    }
-
-    const response = await instance.post("/api/post/image", formData);
-    console.log(response.data);
     const Data = {
       categoryName: select,
       content: contentRef.current.value,
-      postImages: response.data,
     };
 
     const newData = {
@@ -114,39 +103,21 @@ const PostUpdate = () => {
           defaultValue={data?.postCategory}
           onChange={category}
         >
+          <option disabled>== 카테고리 ==</option>
           <option value="PRETTY">이쁨</option>
           <option value="COOL">멋짐</option>
           <option value="CUTE">귀여움</option>
           <option value="COMIC">웃김</option>
         </select>
-        <p>사진 첨부 (최대 5장)</p>
+        <p>첨부 사진 보기</p>
         <Preview>
-          {showImages &&
-            showImages.map((image, id) => {
-              return (
-                <div key={id}>
-                  <PreviewImg src={image} />
-                  <DeleteImg onClick={() => handleDeleteImage(id)}>x</DeleteImg>
-                </div>
-              );
-            })}
-          {showImages.length === 5 ? null : (
-            <label onChange={handelAddImg}>
-              <input
-                type="file"
-                id="input-file"
-                multiple
-                // defaultValue={data?.img.url}
-                style={{ display: "none" }}
-              />
-
-              <PlusImgBox>
-                <PlusImg>
-                  <p>+</p>
-                </PlusImg>
-              </PlusImgBox>
-            </label>
-          )}
+          {data?.img.map((v) => {
+            return (
+              <div key={v.id}>
+                <PreviewImg src={v.url} />
+              </div>
+            );
+          })}
         </Preview>
 
         <p>게시글 내용</p>
@@ -167,7 +138,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: 20px;
+    font-size: clamp(10px, 5.67vw, 20px);
     font-weight: bold;
     margin-top: 10%;
   }
@@ -175,15 +146,24 @@ const TitleBox = styled.div`
 
 const InputBox = styled.div`
   width: 80%;
-  height: 650px;
-  overflow: auto;
+  height: 70vh;
   margin: 0 10% 0 10%;
 
   p {
     color: #000;
-    font-size: 16px;
+    font-size: clamp(8px, 2.67vw, 16px);
     opacity: 0.5;
     margin: 15px 0;
+  }
+
+  input {
+    font-size: 16px;
+    opacity: 20%;
+    padding: 3px;
+    width: 100%;
+    height: 4%;
+    border-radius: 10px;
+    border: 1px solid black;
   }
 
   select {
@@ -201,13 +181,16 @@ const Preview = styled.div`
   justify-content: center;
   display: flex;
   height: 11%;
+
+  div {
+    margin: 1%;
+  }
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
   height: 100%;
   border-radius: 5px;
-  margin-top: 1%;
 `;
 
 const PlusImgBox = styled.div`
@@ -222,19 +205,19 @@ const PlusImgBox = styled.div`
 const PlusImg = styled.div`
   border: 2px solid #000;
   opacity: 0.3;
-  width: 20px;
-  height: 20px;
-  margin: auto;
+  width: 25px;
+  height: 25px;
   margin-top: 20px;
   border-radius: 20px;
   padding: 2px;
+  text-align: center;
 
   p {
     color: black;
     font-weight: bold;
     font-size: 25px;
-    margin-top: -5px;
-    margin-left: 1px;
+    margin: auto;
+    margin-top: -7px;
   }
 `;
 
@@ -255,7 +238,7 @@ const Content = styled.textarea`
 
 const ButtonBox = styled.div`
   text-align: center;
-  padding: 5% 0 5% 0;
+  padding: 4% 0 4% 0;
   width: 100%;
   height: 30%;
   /* margin: 0 10% 0 10%; */

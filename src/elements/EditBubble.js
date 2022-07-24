@@ -1,44 +1,58 @@
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // react
-import React from 'react';
+import React from "react";
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
+
+import instance from "../shared/axios";
 
 // postSlice
-import { removeDataDB } from '../redux/modules/postSlice';
+import { removeDataDB as postRemove } from "../redux/modules/postSlice";
+import { removeDataDB as communityRemove } from "../redux/modules/communitySlice";
+import { removeDataDB as recruitRemove } from "../redux/modules/recruitSlice";
 
 const EditBubble = (props) => {
   const navigate = useNavigate();
-  const contentsId = props.contentsId;
+  const contentsId = data.boardMainId;
+  const page = props.page;
   const setBubbleOn = props.setBubbleOn;
   const bubbleRef = React.useRef();
   const dispatch = useDispatch();
+  const data = props.data;
 
   const backDropClose = () => {
     setBubbleOn(false);
   };
 
   const moveToEdit = () => {
-    navigate('/post/update/' + contentsId);
+    navigate("/" + page + "/update/" + contentsId);
   };
 
   const deleteAction = (e) => {
     e.preventDefault();
-    dispatch(removeDataDB(contentsId)); //removeDateDB에 id 전달해줌.
-    window.confirm('정말 삭제하시겠어요?');
+    if (data?.boardKind === "POST") {
+      dispatch(postRemove(contentsId)); //removeDateDB에 id 전달해줌.
+      window.confirm("정말 삭제하시겠어요?");
+    } else if (data?.boardKind === "COMMUNITY") {
+      dispatch(communityRemove(contentsId));
+      window.confirm("정말 삭제하시겠어요?");
+    } else if (data?.boardKind === "TOGETHER") {
+      dispatch(recruitRemove(contentsId));
+      window.confirm("정말 삭제하시겠어요?");
+    }
   };
 
   return (
     <>
       <Bubble ref={bubbleRef}>
         <p onClick={() => moveToEdit()}>수정하기</p>
-        <p onClick={(e) => deleteAction(e)} style={{ color: 'red' }}>
+        <p onClick={(e) => deleteAction(e)} style={{ color: "red" }}>
           삭제하기
         </p>
       </Bubble>

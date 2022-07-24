@@ -2,34 +2,37 @@ import React from "react";
 import styled from "styled-components";
 
 const PhotoSlide = (props) => {
-  const photos = props.photos
-  const clickAction = props.clickAction
+  const photos = props.photos;
+  const clickAction = props.clickAction;
 
   const [currentSlide, setCurrentSlide] = React.useState(0);
   const totalSlide = photos?.length - 1;
 
   const showNext = () => {
-    currentSlide < totalSlide ? setCurrentSlide(() => currentSlide + 1) : setCurrentSlide(() => 0);
+    currentSlide < totalSlide
+      ? setCurrentSlide(() => currentSlide + 1)
+      : setCurrentSlide(() => 0);
   };
 
   const showPrev = () => {
-    currentSlide > 0 ? setCurrentSlide(() => currentSlide - 1) : setCurrentSlide(() => photos?.length - 1);
+    currentSlide > 0
+      ? setCurrentSlide(() => currentSlide - 1)
+      : setCurrentSlide(() => photos?.length - 1);
   };
 
   const moveSlide = (endX) => {
-    const distance = Math.abs(startX - endX)
+    const distance = Math.abs(startX - endX);
 
     if (distance > 10 && startX !== 0 && endX !== 0) {
       startX - endX > 0 ? showNext() : showPrev();
     } else if (distance < 20 && startX !== 0 && endX !== 0) {
-      clickAction()
+      clickAction();
     }
   };
 
   const [startX, setStartX] = React.useState(0);
 
-  return (
-    photos ?
+  return photos ? (
     <SliderWrap>
       <Slider
         currentSlide={currentSlide}
@@ -40,13 +43,14 @@ const PhotoSlide = (props) => {
       >
         {photos.map((v, i) => (
           <Photo key={v.id} img={v.url}>
-            <span id="imgcount">{i+1}/{totalSlide+1}</span>
+            <span id="imgcount">
+              {i + 1}/{totalSlide + 1}
+            </span>
           </Photo>
         ))}
       </Slider>
-    </SliderWrap> 
-    : null
-  );
+    </SliderWrap>
+  ) : null;
 };
 
 export default PhotoSlide;
@@ -70,7 +74,8 @@ const Photo = styled.div`
   height: 100%;
   width: 100%;
   min-width: 100%;
-  background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat center;
+  background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")} no-repeat
+    center;
   background-size: cover;
   background-position: center;
   display: flex;

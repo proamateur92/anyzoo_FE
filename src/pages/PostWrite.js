@@ -30,7 +30,6 @@ const PostWrite = () => {
   // 카테고리 값 select으로 넣기
   const category = (e) => {
     setSelect(e.target.value);
-    // console.log(e.target.value)
   };
 
   //data 설정해 reducer로 보내기(더하기)
@@ -100,7 +99,10 @@ const PostWrite = () => {
       </TitleBox>
       <InputBox>
         <p>카테고리</p>
-        <select onChange={category}>
+        <select onChange={category} defaultValue="none">
+          <option disabled value="none">
+            == 카테고리 ==
+          </option>
           <option value="pretty">이쁨</option>
           <option value="cool">멋짐</option>
           <option value="cute">귀여움</option>
@@ -153,7 +155,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: 20px;
+    font-size: clamp(10px, 5.67vw, 20px);
     font-weight: bold;
     margin-top: 10%;
   }
@@ -161,12 +163,12 @@ const TitleBox = styled.div`
 
 const InputBox = styled.div`
   width: 80%;
-  height: 70%;
+  height: 70vh;
   margin: 0 10% 0 10%;
 
   p {
     color: #000;
-    font-size: 16px;
+    font-size: clamp(8px, 2.67vw, 16px);
     opacity: 0.5;
     margin: 15px 0;
   }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // components
 import Comment from "../components/Comment";
+import PhotoSlide from "../components/PhotoSlide";
 
 // elements
 import Wrap from "../elements/Wrap";
@@ -23,10 +24,14 @@ import instance from "../shared/axios";
 
 const PostDetail = () => {
   const params = useParams();
-  const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
   const navigate = useNavigate();
+  const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
   const [bubbleOn, setBubbleOn] = React.useState(false);
   const [like, setLike] = useState();
+  const [test, setTest] = useState([
+    "http://img.khan.co.kr/news/2019/11/29/l_2019112901003607500286631.jpg",
+    "https://petnolza.com/wp-content/uploads/2021/11/dog-america-name.jpg",
+  ]);
 
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
@@ -42,7 +47,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     instance.get("/api/post/category/all?page=0").then((response) => {
-      // console.log(response.data)
+      console.log(response.data);
     });
   }, []);
 
@@ -62,41 +67,41 @@ const PostDetail = () => {
 
   return (
     <Wrap>
-      <div>
-        <Back
-          onClick={() => {
-            navigate("/post");
-          }}
-          src={require("../assets/images/back.png.png")}
-          alt=""
-        />
-      </div>
+      <Header>
+        <HeadBtn>
+          <Back
+            onClick={() => {
+              navigate("/post");
+            }}
+            src={require("../assets/images/back.png.png")}
+          />
+          <HeadTitle>
+            <p>자랑하개</p>
+            <span>{data?.postCategory}</span>
+          </HeadTitle>
+          <JumMom>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+            {bubbleOn ? (
+              <EditBubble
+                data={data}
+                contentsId={data?.boardMainId}
+                setBubbleOn={setBubbleOn}
+                page={"post"}
+              />
+            ) : null}
+          </JumMom>
+        </HeadBtn>
+      </Header>
+
       <All>
         <UserInfo>
           <User>
             <UserImg src={data?.userProfileImg} alt="" />
             <UserName>{data?.nickname}</UserName>
           </User>
-          <Jum>
-            <JumMom>
-              <IoMdMore id="optionMenu" onClick={menuOpen} />
-              {bubbleOn ? (
-                <EditBubble
-                  contentsId={data?.boardMainId}
-                  setBubbleOn={setBubbleOn}
-                />
-              ) : null}
-            </JumMom>
-          </Jum>
         </UserInfo>
         <ImgBox>
-          {data?.img.map((v, i) => {
-            return (
-              <ImgCard key={v.id}>
-                <MainImg src={v.url} />
-              </ImgCard>
-            );
-          })}
+          <PhotoSlide photos={data?.img} />
         </ImgBox>
         <Content>{data?.contents}</Content>
         <Reactions>
@@ -119,77 +124,108 @@ const PostDetail = () => {
   );
 };
 
+const Header = styled.div`
+  display: flex;
+  width: 83%;
+  height: 70px;
+  margin: 7% 5% 0 5%;
+`;
+
+const HeadBtn = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 const Back = styled.img`
-  height: 30px;
-  padding: 20px;
+  height: 30%;
+  margin-left: 6%;
+  margin-top: 1%;
+`;
+
+const HeadTitle = styled.div`
+  text-align: center;
+  width: 40%;
+
+  /* margin-top: -50px; */
+
+  p {
+    margin: 1.5%;
+    font-size: clamp(10px, 5.67vw, 20px);
+    font-weight: bold;
+  }
+
+  span {
+    font-size: clamp(8px, 2.67vw, 16px);
+    opacity: 0.6;
+  }
 `;
 
 const All = styled.div`
-  padding: 20px;
+  margin: 0 10% 0 10%;
+  height: 40vh;
+  width: 80%;
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  height: 30px;
 `;
 
 const User = styled.div`
   display: flex;
+  width: 50%;
 `;
 
 const UserImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 100px;
   border: solid 1px black;
 `;
 
 const UserName = styled.span`
-  font-size: 30px;
-  margin-top: 10px;
-  margin: 10px;
+  font-size: clamp(8px, 3.67vw, 16px);
+  width: 70%;
+  margin: 4%;
 `;
-
-const Jum = styled.div``;
 
 const JumMom = styled.div`
   position: relative;
-  font-size: 30px;
-  margin-top: 10px;
+  font-size: 25px;
+  opacity: 0.6;
+  z-index: 10;
 `;
 
 const ImgBox = styled.div`
   display: flex;
-  overflow: auto;
+  overflow-x: auto;
+  /* overflow-x: hidden; */
   scroll-snap-type: x mandatory;
-  width: 80%;
-  height: 60%;
-  margin: 0 10%;
-`;
-
-const ImgCard = styled.div`
-  flex: none;
-  scroll-snap-align: start;
   width: 100%;
-  height: 98%;
-`;
+  height: 22vh;
+  margin-left: -1%;
+  margin-top: 3%;
+  border-radius: 20px;
 
-const MainImg = styled.img`
-  padding: 10px;
-  width: 90%;
-  display: block;
-  height: 90%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Content = styled.p`
-  padding: 20px;
-  margin-left: 10px;
+  width: 90%;
+  margin-left: 4%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  line-height: 1.8;
+  font-size: clamp(8px, 3.6vw, 20px);
 `;
 
 const Reactions = styled.div`
   padding-top: 15px;
-  border-top: 1px solid #eee;
-
+  font-size: clamp(8px, 3.2vw, 15px);
   span {
     margin-right: 10px;
   }
