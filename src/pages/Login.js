@@ -1,11 +1,14 @@
+// react
+import { useEffect, useRef } from 'react';
+
 // element
 import Wrap from '../elements/Wrap';
 
 // style
 import styled from 'styled-components';
 
-// react
-import { useEffect, useRef } from 'react';
+// sweetalert
+import Swal from 'sweetalert2';
 
 // router
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +34,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const isLogin = getCookie('accessToken') ? true : false;
+  console.log(isLogin);
 
   useEffect(() => {
     if (isLogin) navigate('/');
@@ -44,12 +48,16 @@ const Login = () => {
       const response = await instance.post('/user/login', userInfo);
       setCookie('accessToken', response.data.data.token.accessToken);
       setCookie('refreshToken', response.data.data.token.refreshToken);
-      alert(response.data.msg);
       setAccessToken();
       navigate('/');
       dispatch(setUserDB());
     } catch (error) {
-      window.alert(error.response.data.errorMessage);
+      Swal.fire({
+        title: `${error.response.data.errorMessage}`,
+        icon: 'warning',
+        confirmButtonText: '확인',
+        confirmButtonColor: '#44DCD3',
+      });
       navigate('/login');
     }
   };
@@ -76,7 +84,7 @@ const Login = () => {
     email.value = '';
     password.value = '';
   };
-  
+
   return (
     <Wrap>
       <Container>
@@ -98,7 +106,7 @@ const Login = () => {
             </div>
           </FindInfo>
           <SimpleLogin>
-            <span>간편 로그인</span>
+            <span className='simple'>간편 로그인</span>
             <SocialButtons>
               <Google />
               <Kakao />
@@ -135,7 +143,6 @@ const LoginForm = styled.form`
     font-size: 16px;
     border-radius: 10px;
     padding: 7%;
-    border: none;
     outline: none;
   }
   input:first-of-type {
@@ -152,7 +159,7 @@ const LoginForm = styled.form`
     padding: 7%;
     font-size: 16px;
     font-weight: 800;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -172,7 +179,6 @@ const FindInfo = styled.div`
   .findInfo:nth-of-type(2) {
     font-size: 14px;
   }
-
   .findInfo:not(:nth-of-type(2)):hover {
     color: ${(props) => props.theme.color.main};
     font-weight: 800;
@@ -202,7 +208,7 @@ const SimpleLogin = styled.div`
   align-items: center;
   padding: 20px 0 15px 0;
   width: 100%;
-  span {
+  .simple {
     font-size: 14px;
     font-weight: 800;
     margin: 2% 0;
@@ -214,8 +220,18 @@ const SocialButtons = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  button:first-of-type {
+  a {
+    width: 100%;
+    padding: 7%;
+    box-shadow: 2px 1px 10px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+  }
+  a:first-of-type {
     margin: 3% 0;
+    background-color: #ffffff;
+  }
+  a:nth-of-type(2) {
+    background-color: #fee500;
   }
 `;
 
