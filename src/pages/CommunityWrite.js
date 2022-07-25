@@ -20,6 +20,7 @@ const CommunityWrite = () => {
   const [select, setSelect] = useState();
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([]);
+  const [saveImage, setSaveImage] = useState();
 
   //data 설정해 reducer로 보내기(더하기)
   const addPost = async (e) => {
@@ -27,26 +28,39 @@ const CommunityWrite = () => {
     e.preventDefault();
     console.log(getImages);
     let img = getImages;
-    const formData = new FormData();
 
-    for (let i = 0; i < img.length; i++) {
-      //  console.log(img[i])
-      formData.append("file", img[i]);
-      // files.push(img[i])
+    if (img.length > 0) {
+      const formData = new FormData();
+
+      for (let i = 0; i < img.length; i++) {
+        //  console.log(img[i])
+        formData.append("file", img[i]);
+        // files.push(img[i])
+      }
+      // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
+
+      const response = await instance.post("/api/community/image", formData);
+      console.log(response.data);
+      setSaveImage(response.data);
+
+      const data = {
+        // title: titleRef.current.value,
+        content: contentRef.current.value,
+        communityImages: response.data,
+      };
+
+      console.log(data);
+      dispatch(addDataDB(data));
+    } else {
+      const data = {
+        // title: titleRef.current.value,
+        content: contentRef.current.value,
+        communityImages: null,
+      };
+
+      console.log(data);
+      dispatch(addDataDB(data));
     }
-    // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
-
-    const response = await instance.post("/api/community/image", formData);
-    console.log(response.data);
-
-    const data = {
-      // title: titleRef.current.value,
-      content: contentRef.current.value,
-      communityImages: response.data,
-    };
-
-    console.log(data);
-    dispatch(addDataDB(data));
   };
 
   const handelAddImg = (e) => {

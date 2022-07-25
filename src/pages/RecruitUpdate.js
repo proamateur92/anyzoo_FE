@@ -35,11 +35,11 @@ const RecruitUpdate = () => {
   const [province, setProvince] = useState();
 
   //수정할때 데이터 value 값으로 불러오기
-  // useEffect(() => {
-  //   instance.get("/api/post/" + params.id).then((response) => {
-  //     setData(response.data);
-  //   });
-  // }, [params.id]);
+  useEffect(() => {
+    instance.get("/api/community/" + params.id).then((response) => {
+      setData(response.data);
+    });
+  }, [params.id]);
 
   useEffect(() => {
     instance.get("/api/together/city/").then((response) => {
@@ -110,7 +110,7 @@ const RecruitUpdate = () => {
       </TitleBox>
       <InputBox>
         <p>지역 설정</p>
-        <Location onChange={gu} onClick={dongMyun} defaultValue="none">
+        <Location onChange={gu} onClick={dongMyun} defaultValue={data?.cityId}>
           <option value="none" disabled>
             시/군/구
           </option>
@@ -122,7 +122,7 @@ const RecruitUpdate = () => {
             );
           })}
         </Location>
-        <Location defaultValue="none">
+        <Location onChange={dong} defaultValue={data?.provinceId}>
           <option disabled value="none">
             동/읍/면
           </option>
@@ -135,9 +135,13 @@ const RecruitUpdate = () => {
           })}
         </Location>
         <p>게시물 제목</p>
-        <input type="text" />
+        <input type="text" defaultValue={data?.title} />
         <p>인원 설정</p>
-        <People onClick={numbers} onChange={count} defaultValue="none">
+        <People
+          onClick={numbers}
+          onChange={count}
+          defaultValue={data?.limitPeople}
+        >
           <option disabled value="none">
             인원수
           </option>
@@ -150,6 +154,8 @@ const RecruitUpdate = () => {
             );
           })}
         </People>
+        <p>날짜 설정</p>
+        <DatePut onChange={dates} type="date"></DatePut>
         <p>사진 첨부 (최대 5장)</p>
         <Preview>
           {data?.img.map((v, id) => {
@@ -187,48 +193,106 @@ const TitleBox = styled.div`
 const InputBox = styled.div`
   width: 80%;
   height: 70vh;
-  margin: 8% 10% 0 10%;
-
+  margin: 0 10% 0 10%;
   p {
     color: #000;
     font-size: clamp(8px, 3.67vw, 16px);
     opacity: 0.5;
-    margin: 4% 0;
+    margin: 15px 0;
   }
-
   input {
-    font-size: 16px;
+    font-size: clamp(8px, 3.67vw, 16px);
     opacity: 20%;
     padding: 3px;
     width: 100%;
-    height: 4%;
+    height: 6%;
     border-radius: 10px;
     border: 1px solid black;
   }
+`;
+const People = styled.select`
+  font-size: clamp(8px, 3.67vw, 16px);
+  opacity: 20%;
+  padding: 3px;
+  width: 100%;
+  height: 6%;
+  border-radius: 10px;
+  margin: 0 3% 0 0;
+`;
 
-  select {
-    font-size: 16px;
-    opacity: 20%;
-    padding: 3px;
-    width: 300px;
-    height: 5%;
-    border-radius: 10px;
-    width: 30%;
-    margin: 0 3% 0 0;
-  }
+const Location = styled.select`
+  font-size: clamp(8px, 3.67vw, 16px);
+  opacity: 20%;
+  padding: 3px;
+  width: 47%;
+  height: 6%;
+  border-radius: 10px;
+  margin: 0 3% 0 0;
+`;
+
+const DatePut = styled.input`
+  font-size: clamp(8px, 3.67vw, 16px);
+  opacity: 20%;
+  padding: 3px;
+  width: 300px;
+  height: 6%;
+  border-radius: 10px;
+  width: 30%;
+  margin: 0 3% 0 0;
+`;
+
+const ImgBox = styled.div`
+  width: 100%;
+  height: 16%;
 `;
 
 const Preview = styled.div`
   justify-content: center;
   display: flex;
-  height: 11%;
+  width: 100%;
+  height: 90px;
+
+  overflow: auto;
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
-  height: 100%;
+  height: 68%;
   border-radius: 5px;
-  margin-top: 1%;
+  margin-top: 5px;
+`;
+
+const PlusImgBox = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 68px;
+  margin-top: 11px;
+  /* background-color: aqua; */
+`;
+
+const PlusImg = styled.div`
+  border: 2px solid #000;
+  opacity: 0.3;
+  width: 25px;
+  height: 25px;
+  margin-top: 20px;
+  border-radius: 20px;
+  padding: 2px;
+  text-align: center;
+
+  p {
+    color: black;
+    font-weight: bold;
+    font-size: 25px;
+    margin: auto;
+    margin-top: -7px;
+  }
+`;
+
+const DeleteImg = styled.button`
+  background-color: transparent;
+  color: gray;
+  left: 2px;
 `;
 
 const Content = styled.textarea`
@@ -263,26 +327,6 @@ const AddBtn = styled.button`
   margin-left: 7%;
   border-radius: 10px;
   background-color: #44dcd3;
-`;
-
-const Location = styled.select`
-  font-size: clamp(8px, 3.67vw, 16px);
-  opacity: 20%;
-  padding: 3px;
-  width: 47%;
-  height: 5%;
-  border-radius: 10px;
-  margin: 0 3% 0 0;
-`;
-
-const People = styled.select`
-  font-size: clamp(8px, 3.67vw, 16px);
-  opacity: 20%;
-  padding: 3px;
-  width: 100%;
-  height: 5%;
-  border-radius: 10px;
-  margin: 0 3% 0 0;
 `;
 
 export default RecruitUpdate;

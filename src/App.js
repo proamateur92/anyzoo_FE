@@ -22,7 +22,7 @@ import {
   CommunityDetail,
   CommunityWrite,
   CommunityUpdate,
-  // RecruitDetail,
+  RecruitDetail,
   RecruitUpdate,
   RecruitWrite,
 } from "./pages/Index.js";
@@ -80,7 +80,7 @@ function App() {
           <Route path="/community/detail/:id" element={<CommunityDetail />} />
           <Route path="/recruit/write" element={<RecruitWrite />} />
           <Route path="/recruit/update/:id" element={<RecruitUpdate />} />
-          {/* <Route path="/recruit/detail/:id" element={<RecruitDetail />} /> */}
+          <Route path="/recruit/detail/:id" element={<RecruitDetail />} />
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/detail/:id" element={<NoticeDetail />} />
           <Route path="*" element={<NotFound />} />

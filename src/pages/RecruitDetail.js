@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 // components
-import Comment from "../components/Comment";
+import PhotoSlide from "../components/PhotoSlide.js";
 
 // elements
 import Wrap from "../elements/Wrap";
@@ -21,12 +21,16 @@ import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
 // axios
 import instance from "../shared/axios";
 
-const PostDetail = () => {
+import { FiChevronDown, FiChevronUp } from "react-icons/fi";
+
+const RecruitDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
   const [bubbleOn, setBubbleOn] = React.useState(false);
   const [like, setLike] = useState();
+  const [box, setBox] = useState(true);
+  const [lastDay, setLastDay] = useState();
 
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
@@ -34,14 +38,39 @@ const PostDetail = () => {
 
   // axios에서 데이터를 받아오기
   useEffect(() => {
-    instance.get("/api/together/" + params.id).then((response) => {
+    instance.get("/api/together/detail/" + params.id).then((response) => {
       setData(response.data); //useState의 data에 넣어준다.
-      // console.log(response.data)
+
+      // console.log(response.data.dday);
+
+      setInterval(() => {
+        const masTime = new Date(response.data.dday);
+        const todayTime = new Date();
+        const diff = masTime - todayTime;
+
+        const diffHour = Math.floor(diff / (1000 * 60 * 60));
+        const diffMin = Math.floor((diff / (1000 * 60)) % 60);
+        const diffSec = Math.floor((diff / 1000) % 60);
+
+        if (diffHour < 10) {
+          const Dday = `0${diffHour}:${diffMin}:${diffSec}`;
+          setLastDay(Dday);
+        } else if (diffMin < 10) {
+          const Dday = `${diffHour}:0${diffMin}:${diffSec}`;
+          setLastDay(Dday);
+        } else if (diffSec < 10) {
+          const Dday = `${diffHour}:${diffMin}:0${diffSec}`;
+          setLastDay(Dday);
+        } else {
+          const Dday = `${diffHour}:${diffMin}:${diffSec}`;
+          setLastDay(Dday);
+        }
+      }, 1000);
     });
   }, [params.id, like]);
 
   useEffect(() => {
-    instance.get("/api/withpost/category/all?page=0").then((response) => {
+    instance.get("/api/together?page=0").then((response) => {
       console.log(response.data);
     });
   }, []);
@@ -60,46 +89,48 @@ const PostDetail = () => {
     });
   }, [params.id]);
 
+  const changeBox = () => {
+    setBox(!box);
+  };
+
   return (
     <Wrap>
-      <div>
-        <Back
-          onClick={() => {
-            navigate("/recuit");
-          }}
-          src={require("../assets/images/back.png.png")}
-          alt=""
-        />
-      </div>
+      <Header>
+        <HeadBtn>
+          <Back
+            onClick={() => {
+              navigate("/post");
+            }}
+            src={require("../assets/images/back.png.png")}
+          />
+          <HeadTitle>
+            <p>커뮤니티</p>
+            <span>{data?.postCategory}</span>
+          </HeadTitle>
+          <JumMom>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+            {bubbleOn ? (
+              <EditBubble
+                data={data}
+                page={"community"}
+                setBubbleOn={setBubbleOn}
+              />
+            ) : null}
+          </JumMom>
+        </HeadBtn>
+      </Header>
       <All>
         <UserInfo>
           <User>
             <UserImg src={data?.userProfileImg} alt="" />
             <UserName>{data?.nickname}</UserName>
           </User>
-          <Jum>
-            <JumMom>
-              <IoMdMore id="optionMenu" onClick={menuOpen} />
-              {bubbleOn ? (
-                <EditBubble
-                  data={data}
-                  contentsId={data?.boardMainId}
-                  setBubbleOn={setBubbleOn}
-                  page={"recruit"}
-                />
-              ) : null}
-            </JumMom>
-          </Jum>
         </UserInfo>
-        <ImgBox>
-          {data?.img.map((v) => {
-            return (
-              <ImgCard key={v.id}>
-                <MainImg src={v.url} />
-              </ImgCard>
-            );
-          })}
-        </ImgBox>
+        {data?.img.length === 0 ? null : (
+          <ImgBox>
+            <PhotoSlide photos={data?.img} />
+          </ImgBox>
+        )}
         <Content>{data?.contents}</Content>
         <Reactions>
           <span>
@@ -119,7 +150,9 @@ const PostDetail = () => {
         <ChatBox>
           <BtnBox>
             <ChatBtn onClick={changeBox}>
-              <span>^</span>
+              <span>
+                <FiChevronUp />
+              </span>
             </ChatBtn>
           </BtnBox>
 
@@ -131,10 +164,10 @@ const PostDetail = () => {
               </InfoUser>
               <Location>
                 <Gu>
-                  <span>#중랑구</span>
+                  <span>{data?.cityName}</span>
                 </Gu>
                 <Gu>
-                  <span>#망우동</span>
+                  <span>{data?.provinceName}</span>
                 </Gu>
               </Location>
             </Info>
@@ -143,7 +176,9 @@ const PostDetail = () => {
       ) : (
         <JengBo>
           <ChatB onClick={changeBox}>
-            <span>˅</span>
+            <span>
+              <FiChevronDown />
+            </span>
           </ChatB>
           <JengBoUser>
             <div>
@@ -153,10 +188,10 @@ const PostDetail = () => {
           </JengBoUser>
           <JengBoLocation>
             <Dong>
-              <span>#중랑구</span>
+              <span>{data?.cityName}</span>
             </Dong>
             <Gu>
-              <span>#망우동</span>
+              <span>{data?.provinceName}</span>
             </Gu>
           </JengBoLocation>
           <Chatting>
@@ -164,10 +199,13 @@ const PostDetail = () => {
           </Chatting>
           <Recruitment>
             <div>
-              <p>모집 마감 00:00:00</p>
+              <p>모집 마감 {lastDay}</p>
             </div>
             <div>
-              <img src={require("../assets/images/캡처.PNG")} /> <p>7/10</p>
+              <img src={require("../assets/images/캡처.PNG")} />{" "}
+              <p>
+                {data?.peopleCnt}/{data?.limitPeople}
+              </p>
             </div>
           </Recruitment>
         </JengBo>
@@ -176,78 +214,108 @@ const PostDetail = () => {
   );
 };
 
+const Header = styled.div`
+  display: flex;
+  width: 83%;
+  height: 70px;
+  margin: 7% 5% 0 5%;
+`;
+
+const HeadBtn = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+`;
+
 const Back = styled.img`
-  height: 30px;
-  padding: 20px;
+  height: 30%;
+  margin-left: 6%;
+  margin-top: 1%;
+`;
+
+const HeadTitle = styled.div`
+  text-align: center;
+  width: 40%;
+
+  /* margin-top: -50px; */
+
+  p {
+    margin: 1.5%;
+    font-size: clamp(10px, 5.67vw, 20px);
+    font-weight: bold;
+  }
+
+  span {
+    font-size: clamp(8px, 2.67vw, 16px);
+    opacity: 0.6;
+  }
 `;
 
 const All = styled.div`
-  padding: 20px;
+  margin: 0 10% 0 10%;
+  height: 40vh;
+  width: 80%;
 `;
 
 const UserInfo = styled.div`
   display: flex;
-  justify-content: space-between;
+  width: 100%;
+  height: 30px;
 `;
 
 const User = styled.div`
   display: flex;
+  width: 50%;
 `;
 
 const UserImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 100px;
   border: solid 1px black;
 `;
 
 const UserName = styled.span`
-  font-size: 30px;
-  margin-top: 10px;
-  margin: 10px;
+  font-size: clamp(8px, 3.67vw, 16px);
+  width: 70%;
+  margin: 4%;
 `;
-
-const Jum = styled.div``;
 
 const JumMom = styled.div`
   position: relative;
-  font-size: 30px;
-  margin-top: 10px;
+  font-size: 25px;
+  opacity: 0.6;
+  z-index: 10;
 `;
 
 const ImgBox = styled.div`
   display: flex;
-  overflow: auto;
+  overflow-x: auto;
+  /* overflow-x: hidden; */
   scroll-snap-type: x mandatory;
-  width: 80%;
-  height: 60%;
-  margin: 0 10%;
-  border-radius: 10px;
-`;
-
-const ImgCard = styled.div`
-  flex: none;
-  scroll-snap-align: start;
   width: 100%;
-  height: 98%;
-`;
+  height: 22vh;
+  margin-left: -1%;
+  margin-top: 3%;
+  border-radius: 20px;
 
-const MainImg = styled.img`
-  padding: 10px;
-  width: 90%;
-  display: block;
-  height: 90%;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Content = styled.p`
-  padding: 20px;
-  margin-left: 10px;
+  width: 90%;
+  margin-left: 4%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  line-height: 1.8;
+  font-size: clamp(8px, 3.6vw, 20px);
 `;
 
 const Reactions = styled.div`
   padding-top: 15px;
-  border-top: 1px solid #eee;
-
+  font-size: clamp(8px, 3.2vw, 15px);
   span {
     margin-right: 10px;
   }
@@ -460,4 +528,4 @@ const Recruitment = styled.div`
   }
 `;
 
-export default PostDetail;
+export default RecruitDetail;

@@ -18,6 +18,7 @@ import CommunityUpdate from "./CommunityUpdate";
 import RecruitWrite from "./RecruitWrite";
 import RecruitUpdate from "./RecruitUpdate";
 import CommunityDetail from "./CommunityDetail";
+import RecruitDetail from "./RecruitDetail";
 
 export {
   FindPwd,
@@ -40,4 +41,5 @@ export {
   RecruitWrite,
   RecruitUpdate,
   CommunityDetail,
+  RecruitDetail,
 };

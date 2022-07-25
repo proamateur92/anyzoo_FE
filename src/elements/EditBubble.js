@@ -19,7 +19,7 @@ import { removeDataDB as recruitRemove } from "../redux/modules/recruitSlice";
 
 const EditBubble = (props) => {
   const navigate = useNavigate();
-  const contentsId = data.boardMainId;
+
   const page = props.page;
   const setBubbleOn = props.setBubbleOn;
   const bubbleRef = React.useRef();
@@ -31,19 +31,19 @@ const EditBubble = (props) => {
   };
 
   const moveToEdit = () => {
-    navigate("/" + page + "/update/" + contentsId);
+    navigate("/" + page + "/update/" + data?.boardMainId);
   };
 
   const deleteAction = (e) => {
     e.preventDefault();
     if (data?.boardKind === "POST") {
-      dispatch(postRemove(contentsId)); //removeDateDB에 id 전달해줌.
+      dispatch(postRemove(data?.boardMainId)); //removeDateDB에 id 전달해줌.
       window.confirm("정말 삭제하시겠어요?");
     } else if (data?.boardKind === "COMMUNITY") {
-      dispatch(communityRemove(contentsId));
+      dispatch(communityRemove(data?.boardMainId));
       window.confirm("정말 삭제하시겠어요?");
-    } else if (data?.boardKind === "TOGETHER") {
-      dispatch(recruitRemove(contentsId));
+    } else if (data?.boardKind === "Together") {
+      dispatch(recruitRemove(data?.boardMainId));
       window.confirm("정말 삭제하시겠어요?");
     }
   };

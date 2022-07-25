@@ -7,9 +7,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 //redux
 import { useDispatch } from "react-redux/es/exports";
-import { addDataDB, removeDataDB } from "../redux/modules/recruitSlice";
+import { addDataDB } from "../redux/modules/recruitSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import instance from "../shared/axios";
 
 const RecruitWrite = () => {
@@ -29,7 +28,6 @@ const RecruitWrite = () => {
   useEffect(() => {
     instance.get("/api/together/city/").then((response) => {
       setSiGunGu(response.data); //useState의 data에 넣어준다.
-      console.log(response.data, "시군구");
     });
   }, []);
 
@@ -69,6 +67,7 @@ const RecruitWrite = () => {
   };
 
   const dong = (e) => {
+    console.log(e.target.value);
     setProvince(e.target.value);
   };
 
@@ -78,29 +77,43 @@ const RecruitWrite = () => {
     e.preventDefault();
     console.log(getImages);
     let img = getImages;
-    const formData = new FormData();
+    if (img.length > 0) {
+      const formData = new FormData();
 
-    for (let i = 0; i < img.length; i++) {
-      //  console.log(img[i])
-      formData.append("file", img[i]);
-      // files.push(img[i])
+      for (let i = 0; i < img.length; i++) {
+        //  console.log(img[i])
+        formData.append("file", img[i]);
+        // files.push(img[i])
+      }
+      // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
+
+      const response = await instance.post("/api/together/image", formData);
+      console.log(response.data);
+
+      const data = {
+        title: titleRef.current.value,
+        content: contentRef.current.value,
+        limitPeople: select,
+        dday: date,
+        provinceId: province,
+        togetherImages: response.data,
+      };
+
+      console.log(data);
+      dispatch(addDataDB(data));
+    } else {
+      const data = {
+        title: titleRef.current.value,
+        dday: date,
+        content: contentRef.current.value,
+        togetherImages: null,
+        limitPeople: select,
+        provinceId: province,
+      };
+
+      console.log(data);
+      dispatch(addDataDB(data));
     }
-    // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
-
-    const response = await instance.post("/api/post/image", formData);
-    console.log(response.data);
-
-    const data = {
-      title: titleRef.current.value,
-      date: date,
-      content: contentRef.current.value,
-      img: response.data,
-      limitPeople: select,
-      provinceId: province,
-    };
-
-    console.log(data);
-    dispatch(addDataDB(data));
   };
 
   const handelAddImg = (e) => {
@@ -136,7 +149,7 @@ const RecruitWrite = () => {
   return (
     <Wrap>
       <TitleBox>
-        <h1>같이하개</h1>
+        <h1>함께하개</h1>
       </TitleBox>
       <InputBox>
         <p>지역 설정</p>
@@ -152,7 +165,7 @@ const RecruitWrite = () => {
             );
           })}
         </Location>
-        <Location defaultValue="none">
+        <Location onChange={dong} defaultValue="none">
           <option disabled value="none">
             동/읍/면
           </option>
@@ -181,7 +194,7 @@ const RecruitWrite = () => {
           })}
         </People>
         <p>날짜 설정</p>
-        <DatePut onChange={dates} type="date"></DatePut>
+        <DatePut onChange={dates} type="datetime-local"></DatePut>
         <p>사진 첨부 (최대 5장)</p>
         <ImgBox>
           <Preview>
@@ -256,7 +269,7 @@ const InputBox = styled.div`
     opacity: 20%;
     padding: 3px;
     width: 100%;
-    height: 5%;
+    height: 6%;
     border-radius: 10px;
     border: 1px solid black;
   }
@@ -266,7 +279,7 @@ const People = styled.select`
   opacity: 20%;
   padding: 3px;
   width: 100%;
-  height: 5%;
+  height: 6%;
   border-radius: 10px;
   margin: 0 3% 0 0;
 `;
@@ -276,7 +289,7 @@ const Location = styled.select`
   opacity: 20%;
   padding: 3px;
   width: 47%;
-  height: 5%;
+  height: 6%;
   border-radius: 10px;
   margin: 0 3% 0 0;
 `;
@@ -286,7 +299,7 @@ const DatePut = styled.input`
   opacity: 20%;
   padding: 3px;
   width: 300px;
-  height: 5%;
+  height: 6%;
   border-radius: 10px;
   width: 30%;
   margin: 0 3% 0 0;
@@ -300,13 +313,17 @@ const ImgBox = styled.div`
 const Preview = styled.div`
   justify-content: center;
   display: flex;
+  width: 100%;
+  height: 90px;
+
+  overflow: auto;
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
-  height: 95%;
+  height: 68%;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const PlusImgBox = styled.div`
