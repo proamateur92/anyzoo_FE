@@ -151,16 +151,16 @@ const Mypage = () => {
           </div>
         </Follow>
         <Tap>
-          <div>
+          <div onClick={() => setTap('post')}>
             <span>자랑하기</span>
           </div>
-          <div>
+          <div onClick={() => setTap('community')}>
             <span>커뮤니티</span>
           </div>
           {/* <div>
             <span>모집글</span>
           </div> */}
-          <div>
+          <div onClick={() => setTap('reels')}>
             <span>릴스</span>
           </div>
         </Tap>
@@ -190,18 +190,39 @@ const Mypage = () => {
           <span>{userInfo.nickname}</span>
         </Profile>
         {content}
-        {/* tap은 자랑하기고 자랑하기가 없을 땐 메시지 */}
-        {/* 자랑하기가 있으면 보여주기 */}
         <ContentContainer>
-          {tap === 'post' &&
-            (contents.post.length !== 0 ? (
+          {step === 0 &&
+            tap === 'post' &&
+            (contents.post?.length ? (
               contents.post.map((p) => (
-                <Content onClick={() => navigate(`/post/detail/${p.boardMainId}`)}>
-                  <img src={p.img[0].url} />
+                <Content key={p.boardMainId}>
+                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
                 </Content>
               ))
             ) : (
               <span>작성한 글이 없어요.</span>
+            ))}
+          {step === 0 &&
+            tap === 'community' &&
+            (contents.community?.length ? (
+              contents.community.map((p) => (
+                <Content>
+                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
+                </Content>
+              ))
+            ) : (
+              <span>작성한 커뮤니티 글이 없어요.</span>
+            ))}
+          {step === 0 &&
+            tap === 'reels' &&
+            (contents.reels?.length ? (
+              contents.reels.map((p) => (
+                <Content>
+                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
+                </Content>
+              ))
+            ) : (
+              <span>작성한 릴스가 없어요.</span>
             ))}
         </ContentContainer>
       </Wrap>
