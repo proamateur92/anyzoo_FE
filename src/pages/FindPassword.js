@@ -26,7 +26,6 @@ const FindPassword = () => {
   const [step, setStep] = useState(0);
   const [userInfo, setUserInfo] = useState({ phoneNumber: '', password: '' });
   const [validation, setValidation] = useState({ phoneNumber: false, password: false });
-  const [isAuthorized, setIsAuthorized] = useState(false);
   const [isDuplicated, setIsDuplicated] = useState({ phoneNumber: false });
   const [phoneMessage, setPhoneMessage] = useState(false);
   const [authMessage, setAuthMessage] = useState(false);
@@ -40,10 +39,8 @@ const FindPassword = () => {
 
   // 핸드폰으로 코드 받기
   const sendCode = async () => {
-    console.log('코드 발급 함수 실행');
     try {
       const response = await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
-      console.log(response.data);
       Swal.fire({
         title: '인증번호를 발송했어요!',
         icon: 'success',
@@ -60,10 +57,8 @@ const FindPassword = () => {
   // 사용자 입력 중복체크
   const handleInputDuplicated = async () => {
     if (curData === 'phoneNumber') {
-      console.log('번호 중복 체크');
       try {
         const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
-        console.log(response.data);
         // 존재하면 true
         // 존재하지 않으면 false
         if (!response.data) {
@@ -115,7 +110,6 @@ const FindPassword = () => {
       setIsDuplicated({ ...isDuplicated, [curData]: false });
       if (curData === 'phoneNumber') {
         setIsDuplicated({ ...isDuplicated, [curData]: false });
-        setIsAuthorized(false);
         setPhoneMessage(false);
         setAuthMessage(false);
         setIsSendCode(false);
@@ -135,37 +129,35 @@ const FindPassword = () => {
     setAuthNumber(event.target.value);
   };
 
-    // 인증번호 일치 여부 확인
-    const checkedAuthNumber = async () => {
-      // true면 등록된 번호, false면 미등록 번호
-      console.log('인증번호 비교');
-      console.log(isDuplicated.phoneNumber);
-      
-      if (isDuplicated.phoneNumber || !isSendCode) {
-        setAuthMessage(true);
-        return;
-      }
-  
-      setAuthMessage(false);
-  
-      console.log('핸드폰 번호: ', userInfo.phoneNumber);
-      console.log('인증 번호: ', authNumber);
-  
-      try {
-        const response = await instance.post('/user/confirm/phoneVerification', {
-          phoneNumber: userInfo.phoneNumber,
-          numStr: authNumber,
+  // 인증번호 일치 여부 확인
+  const checkedAuthNumber = async () => {
+    if (isDuplicated.phoneNumber || !isSendCode) {
+      setAuthMessage(true);
+      return;
+    }
+
+    setAuthMessage(false);
+
+    try {
+      const response = await instance.post('/user/confirm/phoneVerification', {
+        phoneNumber: userInfo.phoneNumber,
+        numStr: authNumber,
+      });
+
+      // 인증코드가 일치하면 true, 다르면 false
+      if (!response.data) {
+        Swal.fire({
+          title: '인증번호가 일치하지 않아요!',
+          icon: 'warning',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#44DCD3',
         });
-  
-        // 인증코드가 일치하면 true, 다르면 false
-        console.log('코드 일치 여부');
-        console.log(response.data);
-        setIsAuthorized(response.data);
-        response.data && setStep(prev => prev + 1);
-      } catch (error) {
-        console.log(error);
       }
-    };
+      response.data && setStep((prev) => prev + 1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   let content = '';
   let buttons = '';
@@ -174,7 +166,6 @@ const FindPassword = () => {
     content = (
       <StepPhone
         step={step}
-        text='비밀번호를 잊으셨나요? 걱정하지마세요.'
         userPhoneNumber={userInfo[curData]}
         validation={validation[curData]}
         isDuplicated={isDuplicated[curData]}
@@ -188,12 +179,12 @@ const FindPassword = () => {
       />
     );
     buttons = (
-      <ButtonBox step={step} width='100%' validation={isDuplicated[curData]}>
+      <ButtonBox step={step} width='100%' validation={validation[curData]}>
         <NextBtn onClick={() => checkedAuthNumber()}>다음</NextBtn>
       </ButtonBox>
     );
   }
-    
+
   // 비밀번호 보이기, 안보이기
   const [isShowPassword, setIsShowPassword] = useState(false);
 
@@ -208,11 +199,9 @@ const FindPassword = () => {
   };
 
   const handleSetIsShowPassword = (value) => {
-    console.log(value);
     setIsShowPassword(value);
   };
 
-  
   // 비밀번호 일치 확인
   useEffect(() => {
     if (validation.password && userInfo.password === passwordCheckValue) {
@@ -222,12 +211,13 @@ const FindPassword = () => {
     }
   }, [validation.password, userInfo.password, passwordCheckValue]);
 
-
   // 유저 비밀번호 변경
   const handleUserPasswordChange = async () => {
     try {
-      const response = await instance.post('/user/make/newPassword', {phoneNumber: userInfo.phoneNumber, newPassword: userInfo.password});
-      console.log(response.data);
+      const response = await instance.post('/user/make/newPassword', {
+        phoneNumber: userInfo.phoneNumber,
+        newPassword: userInfo.password,
+      });
       Swal.fire({
         title: '비밀번호를 변경했어요!',
         icon: 'success',
@@ -244,16 +234,16 @@ const FindPassword = () => {
   if (step === 1) {
     content = (
       <StepPassword
-          text='비밀번호를입력해주세요.'
-          userPassword={userInfo[curData]}
-          setEnteredPassword={handleEnteredInfo}
-          validation={validation[curData]}
-          isShowPassword={isShowPassword}
-          passwordMatch={passwordMatch}
-          passwordCheckValue={passwordCheckValue}
-          setEnteredPasswordCheckValue={handleEnteredPwdCheck}
-          setIsShowPassword={handleSetIsShowPassword}
-        />
+        mode='update'
+        userPassword={userInfo[curData]}
+        setEnteredPassword={handleEnteredInfo}
+        validation={validation[curData]}
+        isShowPassword={isShowPassword}
+        passwordMatch={passwordMatch}
+        passwordCheckValue={passwordCheckValue}
+        setEnteredPasswordCheckValue={handleEnteredPwdCheck}
+        setIsShowPassword={handleSetIsShowPassword}
+      />
     );
     buttons = (
       <ButtonBox step={step} width='100%' validation={passwordMatch}>
@@ -265,7 +255,7 @@ const FindPassword = () => {
   return (
     <Wrap>
       <FindForm>
-        <UserTop title='비밀번호 재설정' />
+        <UserTop title='비밀번호 재설정' type='find' />
         <Container>
           {content}
           {buttons}
@@ -284,8 +274,18 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 20vw;
-  /* padding: 0 16.5%; */
-  /* background-color: blue; */
+  padding: 10% 5% 0 5%;
+  font-size: 18px;
+  .desc {
+    margin-bottom: 3%;
+  }
+  p:first-of-type {
+    display: block;
+    margin-bottom: 2%;
+  }
+  .strong {
+    font-weight: bold;
+  }
 `;
 
 const PrevBtn = styled.button``;

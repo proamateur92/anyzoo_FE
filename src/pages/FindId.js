@@ -1,6 +1,9 @@
 // react
 import { useState } from 'react';
 
+// sweetalert
+import Swal from 'sweetalert2';
+
 // style
 import styled from 'styled-components';
 
@@ -21,24 +24,45 @@ const FindId = () => {
   const navigate = useNavigate();
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState('');
   const [username, setUsername] = useState({ isShow: false, result: '' });
+  const [validation, setValidation] = useState({ on: false, message: '' });
 
   // 핸드폰 번호 사용자 입력
   const handleSetPhoneNumber = (event) => {
+    if (isNaN(Number(event.target.value))) {
+      return;
+    }
+
     setUsername({ isShow: false, result: '' });
     setEnteredPhoneNumber(event.target.value);
+    setValidation({ on: false, message: '' });
   };
 
   // 계정 정보 받아오기
   const handleFindId = async (event) => {
-    console.log('이메일 계정 찾기');
     event.preventDefault();
+    if (enteredPhoneNumber.trim().length === 0) {
+      setValidation({ on: 'true', message: '*휴대폰 번호를 입력해주세요' });
+      return;
+    }
+
+    if (enteredPhoneNumber.trim().length !== 11) {
+      setValidation({ on: 'true', message: '*11자리의 휴대폰 번호를 입력해주세요' });
+      return;
+    }
 
     const phoneNumber = enteredPhoneNumber;
-    console.log(phoneNumber);
 
     try {
       const response = await instance.get(`/user/find/lostEmail/${phoneNumber}`);
-      console.log(response.data);
+      if (response.data.indexOf('@') === -1) {
+        Swal.fire({
+          title: `${response.data}`,
+          icon: 'warning',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#44DCD3',
+        });
+        return;
+      }
       setUsername({ isShow: true, result: response.data });
     } catch (error) {
       console.log(error);
@@ -48,7 +72,7 @@ const FindId = () => {
   return (
     <Wrap>
       <FindForm>
-        <UserTop title='이메일 찾기'>
+        <UserTop title='이메일 찾기' type='find'>
           <IoIosArrowBack
             style={{ position: 'absolute', cursor: 'pointer', left: '2%', fontSize: '25px' }}
             onClick={() => navigate('/login')}
@@ -62,7 +86,12 @@ const FindId = () => {
             <span>휴대폰 번호를 입력해주세요.</span>
           </Text>
           <InputBox>
-            <span>휴대폰 번호</span>
+            <span style={{ color: validation.on && 'red' }}>휴대폰 번호</span>
+            {validation.on && (
+              <span style={{ display: 'inline-block', fontSize: '14px', color: 'red', margin: '0 0 4% 0' }}>
+                {validation.message}
+              </span>
+            )}
             <input
               value={enteredPhoneNumber}
               onChange={handleSetPhoneNumber}
@@ -73,7 +102,7 @@ const FindId = () => {
           {username.isShow && (
             <InputBox>
               <span>이메일 계정 확인</span>
-              <span>{username.result}</span>
+              <span class='email_result'>{username.result}</span>
             </InputBox>
           )}
           <button onClick={handleFindId}>계정 정보 확인</button>
@@ -103,7 +132,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 20vw;
-  padding: 0 16.5%;
+  padding: 10% 5% 0 5%;
 `;
 
 const Text = styled.div`
@@ -131,12 +160,12 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   span:first-of-type {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 800;
     color: rgba(0, 0, 0, 0.6);
-    margin-bottom: 2vw;
+    margin-bottom: 3vw;
   }
-  span:nth-of-type(2) {
+  .email_result {
     font-size: 16px;
     font-weight: 800;
     margin-left: 3%;
