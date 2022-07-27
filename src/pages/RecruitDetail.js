@@ -141,9 +141,6 @@ const RecruitDetail = () => {
             )}
             <span>{data?.likeCnt}</span>{" "}
           </span>
-          <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
-          </span>
         </Reactions>
       </All>
       {box === true ? (
