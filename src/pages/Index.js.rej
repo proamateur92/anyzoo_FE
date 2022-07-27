@@ -1,0 +1,10 @@
+diff a/src/pages/Index.js b/src/pages/Index.js	(rejected hunks)
+@@ -19,8 +19,6 @@
+ import RecruitUpdate from "./RecruitUpdate";
+ import CommunityDetail from "./CommunityDetail";
+ import RecruitDetail from "./RecruitDetail";
+-import FindId from "./FindId";
+-import FindPassword from "./FindPassword";
+ 
+ export {
+   FindId,

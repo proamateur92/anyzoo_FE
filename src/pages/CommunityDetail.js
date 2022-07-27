@@ -78,10 +78,13 @@ const CommunityDetail = () => {
           />
           <HeadTitle>
             <p>커뮤니티</p>
-            <span>{data?.postCategory}</span>
           </HeadTitle>
           <JumMom>
-            <IoMdMore id="optionMenu" onClick={menuOpen} />
+            <IoMdMore
+              id="optionMenu"
+              onClick={menuOpen}
+              style={{ marginLeft: "80%" }}
+            />
             {bubbleOn ? (
               <EditBubble
                 data={data}
@@ -149,7 +152,8 @@ const Back = styled.img`
 const HeadTitle = styled.div`
   text-align: center;
   width: 40%;
-
+  margin-left: 29%;
+  margin-top: 1%;
   /* margin-top: -50px; */
 
   p {
@@ -199,6 +203,7 @@ const JumMom = styled.div`
   font-size: 25px;
   opacity: 0.6;
   z-index: 10;
+  width: 50%;
 `;
 
 const ImgBox = styled.div`
