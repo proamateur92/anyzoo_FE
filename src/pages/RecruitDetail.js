@@ -99,7 +99,7 @@ const RecruitDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/recruit");
+              navigate("/together");
             }}
             src={require("../assets/images/back.png.png")}
           />
