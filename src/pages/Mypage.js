@@ -1,6 +1,9 @@
 // react
 import { useState, useEffect, useCallback } from 'react';
 
+// components
+import Friends from '../components/Mypage/Friends';
+
 // element
 import Wrap from '../elements/Wrap';
 import UserTop from '../elements/UserTop';
@@ -8,14 +11,11 @@ import UserTop from '../elements/UserTop';
 // style
 import styled from 'styled-components';
 
-// sweetalert
-import Swal from 'sweetalert2';
-
 // redux
 import { useSelector } from 'react-redux';
 
 // cookie
-import { clearCookie, getCookie } from '../shared/cookie';
+import { getCookie } from '../shared/cookie';
 
 // router
 import { useNavigate, useParams } from 'react-router-dom';
@@ -30,68 +30,21 @@ const Mypage = () => {
   const userInfo = useSelector((state) => state.user.info);
   const isLogin = getCookie('accessToken') ? true : false;
   const navigate = useNavigate();
-  const [friendList, setFriendList] = useState({ following: [], follower: [], isShow: false });
 
   const [tap, setTap] = useState('post');
   const [contents, setContents] = useState({ post: [], community: [], reels: [] });
-  console.log(contents);
-  // console.log('유저정보 가져오기');
-  // console.table(userInfo);
-
-  const logout = () => {
-    Swal.fire({
-      title: '로그아웃 하시겠습니까?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: '로그아웃',
-      cancelButtonText: '취소',
-      confirmButtonColor: '#44DCD3',
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        clearCookie('accessToken');
-        clearCookie('refreshToken');
-        navigate('/login');
-      }
-    });
-  };
 
   useEffect(() => {
     if (Object.keys(userInfo)) {
+      userInfo.nickname !== nickname && setStep(0);
       setIsLoading(true);
     }
   }, [userInfo]);
 
-  const getFolllowing = useCallback(async () => {
-    try {
-      console.log('팔로잉테스트');
-      const response = await instance.get(`/api/following/${userInfo.nickname}`);
-      const followingList = response.data;
-      if (followingList !== 0) {
-        setFriendList({ ...friendList, following: followingList });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [userInfo.nickname]);
-
-  const getFollower = useCallback(async () => {
-    try {
-      console.log('팔로워 테스트');
-      const response = await instance.get(`/api/follower/${userInfo.nickname}`);
-      const followerList = response.data;
-      if (followerList !== 0) {
-        setFriendList({ ...friendList, follower: followerList });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [userInfo.nickname]);
-
   const getPost = useCallback(async () => {
     console.log('내가 쓴 자랑 글 테스트');
     try {
-      const response = await instance.get(`/api/mypage/post/${userInfo.nickname}?page=0`);
+      const response = await instance.get(`/api/mypage/post/${nickname}?page=0`);
       const postList = response.data.content;
       if (postList.length !== 0) {
         setContents({ ...content, post: postList });
@@ -107,16 +60,6 @@ const Mypage = () => {
   }, [userInfo.nickname, getPost]);
 
   useEffect(() => {
-    if (!userInfo.nickname) return;
-    getFolllowing();
-  }, [userInfo.nickname, getFolllowing]);
-
-  useEffect(() => {
-    if (!userInfo.nickname) return;
-    getFollower();
-  }, [userInfo.nickname, getFollower]);
-
-  useEffect(() => {
     if (!isLogin) navigate('/login');
   });
 
@@ -125,29 +68,27 @@ const Mypage = () => {
     setStep(stepNum);
   };
 
-  const handleShowFollowing = () => {
-    try {
-      const response = instance.get('');
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   let content = '';
 
   if (step === 0) {
     content = (
       <>
-        <Follow>
-          <div onClick={handleShowFollowing}>
+        <Profile>
+          <img src={userInfo.img} alt='프로필 이미지' />
+          <span>{userInfo.nickname}</span>
+        </Profile>
+        <Follow onClick={() => setStep(1)}>
+          {/* 닉네임으로 팔로잉 팔로워 수 가져오기 */}
+          <div>
             <span>팔로잉</span>
-            <span>{friendList.following.length}</span>
+            <span>10</span>
+            {/* <span>{friendList.following.length}</span> */}
           </div>
           <div>|</div>
           <div>
             <span>팔로우</span>
-            <span>{friendList.follower.length}</span>
+            <span>5</span>
+            {/* <span>{friendList.follower.length}</span> */}
           </div>
         </Follow>
         <Tap>
@@ -167,28 +108,28 @@ const Mypage = () => {
       </>
     );
   } else if (step === 1) {
-    content = (
-      <div style={{ width: '80%', margin: '85% auto 0 auto' }}>
-        <Logout type='button' onClick={logout}>
-          로그아웃
-        </Logout>
-      </div>
-    );
+    content = <Friends nickname={nickname} />;
   }
+  // else if (step === 2) {
+  //   content = (
+  //     <div style={{ width: '80%', margin: '85% auto 0 auto' }}>
+  //       <Logout type='button' onClick={logout}>
+  //         로그아웃
+  //       </Logout>
+  //     </div>
+  //   );
+  // }
+
   return (
     isLoading && (
       <Wrap>
         <UserTop
-          title='마이페이지'
+          title={nickname}
           type='mypage'
           step={step}
           moveStep={handleMoveStep}
           showLogout={nickname === userInfo.nickname}
         />
-        <Profile>
-          <img src={userInfo.img} alt='프로필 이미지' />
-          <span>{userInfo.nickname}</span>
-        </Profile>
         {content}
         <ContentContainer>
           {step === 0 &&
@@ -196,7 +137,11 @@ const Mypage = () => {
             (contents.post?.length ? (
               contents.post.map((p) => (
                 <Content key={p.boardMainId}>
-                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
+                  <img
+                    src={p.img[0].url}
+                    alt='자랑하기 글 이미지'
+                    onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
+                  />
                 </Content>
               ))
             ) : (
@@ -207,7 +152,11 @@ const Mypage = () => {
             (contents.community?.length ? (
               contents.community.map((p) => (
                 <Content>
-                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
+                  <img
+                    src={p.img[0].url}
+                    alt='커뮤니티 글 이미지'
+                    onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
+                  />
                 </Content>
               ))
             ) : (
@@ -218,7 +167,7 @@ const Mypage = () => {
             (contents.reels?.length ? (
               contents.reels.map((p) => (
                 <Content>
-                  <img src={p.img[0].url} onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
+                  <img src={p.img[0].url} alt='릴스 이미지' onClick={() => navigate(`/post/detail/${p.boardMainId}`)} />
                 </Content>
               ))
             ) : (
@@ -238,11 +187,10 @@ const ContentContainer = styled.div`
 
 const Content = styled.div`
   width: 33.3%;
-  padding-bottom: 33.3%;
-  transition: 0.3s all ease-in-out;
+  padding-bottom: 6.9%;
   img {
     width: 100%;
-    height: 130%;
+    height: 131%;
     cursor: pointer;
   }
 `;
@@ -255,8 +203,8 @@ const Profile = styled.div`
   font-size: 16px;
   margin-top: 3%;
   img {
-    width: 4em;
-    height: 4em;
+    width: 4.5em;
+    height: 4.5em;
     border-radius: 50%;
   }
   span {
