@@ -19,11 +19,7 @@ import {
   PostWrite,
   PostUpdate,
   Signup,
-<<<<<<< HEAD
   Reels,
-=======
-  Reels, 
->>>>>>> test/new
   ReelsWrite,
   CommunityList,
   CommunityDetail,
@@ -72,11 +68,11 @@ function App() {
         <ScrollRestore />
         <NavMenu />
         <Routes>
-          <Route path='/oauth' element={<Oauth />} />
+          <Route path="/oauth" element={<Oauth />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path='/mypage/:nickname' element={<Mypage />} />
+          <Route path="/mypage/:nickname" element={<Mypage />} />
           <Route path="/myedit" element={<UserEdit />} />
           <Route path="/user/findId" element={<FindId />} />
           <Route path="/user/findPassword" element={<FindPassword />} />
@@ -84,7 +80,7 @@ function App() {
           <Route path="/post/write" element={<PostWrite />} />
           <Route path="/post/update/:id" element={<PostUpdate />} />
           <Route path="/post/detail/:id" element={<PostDetail />} />
-          <Route path='/community' element={<CommunityList />} />
+          <Route path="/community" element={<CommunityList />} />
           <Route path="/community/write" element={<CommunityWrite />} />
           <Route path="/community/update/:id" element={<CommunityUpdate />} />
           <Route path="/community/detail/:id" element={<CommunityDetail />} />
