@@ -72,7 +72,7 @@ const CommunityDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/post");
+              navigate("/community");
             }}
             src={require("../assets/images/back.png.png")}
           />

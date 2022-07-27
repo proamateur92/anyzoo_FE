@@ -99,7 +99,7 @@ const RecruitDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/post");
+              navigate("/recruit");
             }}
             src={require("../assets/images/back.png.png")}
           />
@@ -141,7 +141,7 @@ const RecruitDetail = () => {
             {like === true ? (
               <IoHeartOutline onClick={clickHeart} />
             ) : (
-              <IoHeart onClick={clickHeart} />
+              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
             )}
             <span>{data?.likeCnt}</span>{" "}
           </span>
