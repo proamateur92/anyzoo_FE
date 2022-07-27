@@ -1,3 +1,4 @@
+import FindPwd from "./FindPwd";
 import Home from "./Home";
 import Login from "./Login";
 import Mypage from "./Mypage";
@@ -18,8 +19,6 @@ import RecruitWrite from "./RecruitWrite";
 import RecruitUpdate from "./RecruitUpdate";
 import CommunityDetail from "./CommunityDetail";
 import RecruitDetail from "./RecruitDetail";
-import FindId from "./FindId";
-import FindPassword from "./FindPassword";
 
 export {
   FindId,
