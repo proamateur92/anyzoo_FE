@@ -44,6 +44,8 @@ const OneComment = (props) => {
       ? createdAt?.split("T")[0].substr(5)
       : createdAt?.split("T")[1].substr(0, 5);
 
+
+  // 코멘트 수정/삭제 메뉴
   const [isEditOptOpen, setIsEditOptOpen] = React.useState(false);
   const openEditOpt = () => {
     if (data.userNickname === user.nickname) {

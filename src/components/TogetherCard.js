@@ -1,27 +1,45 @@
 import React from "react";
 
+
+// router
+import { useNavigate } from "react-router-dom";
+
 // style
 import styled from "styled-components";
 
+// icon
 import { FiUser } from "react-icons/fi";
 
 const TogetherCard = (props) => {
+  const navigate = useNavigate();
   const data = props.data
+
+  const today = new Date();
+  const month = today.getMonth() > 9 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
+  const todayString = today.getFullYear() + "-" + month + "-" + today.getDate();
+
+  const createdAt = props.commentData?.createdAt;
+  const createdAtDisplay =
+    todayString !== createdAt?.split("T")[0]
+      ? createdAt?.split("T")[0].substr(5)
+      : createdAt?.split("T")[1].substr(0, 5);
 
   return (
     <CardOuter>
-      <FindMate>
+      <FindMate onClick={()=>navigate("/recruit/detail/" + data.boardMainId)}>
         <CardImg />
+
         <CardContent>
           <Title>
             <h5 id="title"> {data?.title}</h5>
-            <span id="time">{data?.createdAt}</span>
+            <span id="time">{createdAtDisplay}</span>
           </Title>
-          <p>{data?.content}</p>
+          <p>{data?.contents} <br/><span id="dot">.</span></p>
+
           <AdditionalInfo>
             <div>
-              <span className="address">#{data?.location}</span>
-              <span className="address">#{data?.location}</span>
+              <span className="address">#{data?.cityName}</span>
+              <span className="address">#{data?.provinceName}</span>
             </div>
             <span> <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}</span>
           </AdditionalInfo>
@@ -48,14 +66,16 @@ const CardOuter = styled.div`
 `;
 
 const FindMate = styled.div`
+  width: 90%;
   position: absolute;
-  top: 15%;
+  top: 16%;
   left: 5%;
   display: flex;
 `;
 
 const CardImg = styled.div`
   width: 30%;
+  min-width: 20%;
   padding-top: 30%;
   background: url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png');
   background-size: cover;
@@ -64,7 +84,7 @@ const CardImg = styled.div`
 `;
 
 const CardContent = styled.div`
-  width: 63%;
+  width: 65%;
   margin-left: 1.5rem;
   display: flex;
   flex-direction: column;
@@ -84,6 +104,10 @@ const CardContent = styled.div`
     color: #666;
     font-size: 1.4rem;
     line-height: 1.5;
+  }
+
+  #dot {
+    color: #fff0;
   }
 `;
 

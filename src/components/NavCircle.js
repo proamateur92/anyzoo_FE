@@ -5,7 +5,7 @@ import Portal from "../elements/Portal";
 
 // style
 import styled from "styled-components";
-import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiFilm } from "react-icons/fi";
+import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiDribbble } from "react-icons/fi";
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
@@ -40,21 +40,30 @@ const NavCircle = (props) => {
     }
   };
 
+  const currentLocation = location.pathname.split('/')[1]
+
   React.useEffect(() => {
-    switch (location.pathname) {
-      case '/reels' :
+    switch (currentLocation) {
+      case 'reels' :
         setWriteOpt (
         <> 
           <div onClick={() => moveTo("/reels/write/new")}> 릴스 작성 </div> 
         </>)
         break
-      case '/community' :
+      case 'community' :
         setWriteOpt(          
         <>
-          <div onClick={() => moveTo("/")}> 커뮤니티 글 작성 </div>
-          <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
+          <div onClick={() => moveTo("/community/write")}> 커뮤니티 글 작성 </div>
+          <div onClick={() => moveTo("/recruit/write")}> 산책모집 작성 </div>
         </>)
         break
+      case 'together':
+        setWriteOpt(          
+          <>
+            <div onClick={() => moveTo("/community/write")}> 커뮤니티 글 작성 </div>
+            <div onClick={() => moveTo("/recruit/write")}> 산책모집 작성 </div>
+          </>)
+          break
       default :
       setWriteOpt(          
         <>
@@ -62,7 +71,7 @@ const NavCircle = (props) => {
         </>)
         break
     }
-  }, [location.pathname, moveTo])
+  }, [currentLocation, moveTo])
 
   return (
     <Portal>
@@ -98,9 +107,9 @@ const NavCircle = (props) => {
             <h5> 커뮤니티 </h5>
           </Menu>
 
-          <Menu order={4} onClick={() => moveTo("/reels")}>
-            <FiFilm className={"icons"} />
-            <h5> 릴스 </h5>
+          <Menu order={4} onClick={() => moveTo("/together")}>
+            <FiDribbble className={"icons"} />
+            <h5> 함께하개 </h5>
           </Menu>
         </MenuCircle>
       </BackDrop>
