@@ -35,8 +35,8 @@ const RealTimeRank = () => {
       </RealTimeTopRanker>
 
       <VoteBar data={rankers} total={rankers[0]?.likeCnt + rankers[1]?.likeCnt}>
-        <div> {rankers[0]?.likeCnt}표 </div>
-        <div> {rankers[1]?.likeCnt}표 </div>
+        <div> {rankers[0]?.likeCnt ? rankers[0]?.likeCnt.toLocaleString() : '-'}표 </div>
+        <div> {rankers[1]?.likeCnt ? rankers[1]?.likeCnt.toLocaleString() : '-'}표 </div>
       </VoteBar>
     </RealTimeRanking>
   );
@@ -92,13 +92,13 @@ const VoteBar = styled.div`
   & div:first-of-type {
     border-radius: 20px 0px 0px 20px;
     background: #44dcd3;
-    width: ${(props) => (props?.data[0]?.likeCnt / props?.total) * 100}%;
+    width: 100%;
   }
 
   & div:last-of-type {
     justify-content: flex-end;
     border-radius: 0px 20px 20px 0px;
     background: #ffcf23;
-    width: ${(props) => (props?.data[1]?.likeCnt / props?.total) * 100}%;
+    width: ${(props) => props?.data[1]?.likeCnt ? (props?.data[1]?.likeCnt / props?.total) * 100 : 50}%;
   }
 `;

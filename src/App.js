@@ -18,6 +18,12 @@ import {
   PostWrite,
   PostUpdate,
   Signup,
+<<<<<<< HEAD
+  Reels, 
+  ReelsWrite,
+  CommunityList
+} from './pages/Index';
+=======
   Reels,
   CommunityList,
   CommunityDetail,
@@ -27,6 +33,7 @@ import {
   RecruitUpdate,
   RecruitWrite,
 } from "./pages/Index.js";
+>>>>>>> 3dd8b9b302bf5ad19fa63e5ee9f02fde69dbce98
 
 // style
 import GlobalStyles from "./styles/GlobalStyles";
@@ -87,6 +94,7 @@ function App() {
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/detail/:id" element={<NoticeDetail />} />
           <Route path="/reels" element={<Reels />} />
+          <Route path='/reels/write/:id' element={<ReelsWrite />}/>
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
