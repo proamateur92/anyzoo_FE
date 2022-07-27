@@ -1,13 +1,14 @@
 // react
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 // route
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import {
   FindId,
   FindPassword,
   Home,
   Login,
+  Oauth,
   Mypage,
   UserEdit,
   NotFound,
@@ -18,29 +19,35 @@ import {
   PostWrite,
   PostUpdate,
   Signup,
-  Reels,
+  Reels, 
+  ReelsWrite,
   CommunityList,
-  Oauth,
-} from './pages/Index';
+  CommunityDetail,
+  CommunityWrite,
+  CommunityUpdate,
+  RecruitDetail,
+  RecruitUpdate,
+  RecruitWrite,
+} from "./pages/Index.js";
 
 // style
-import GlobalStyles from './styles/GlobalStyles';
-import { defaultTheme } from './styles/theme';
-import { ThemeProvider } from 'styled-components';
+import GlobalStyles from "./styles/GlobalStyles";
+import { defaultTheme } from "./styles/theme";
+import { ThemeProvider } from "styled-components";
 
 // store
-import { setAccessToken } from './shared/axios';
-import { getCookie } from './shared/cookie';
+import { setAccessToken } from "./shared/axios";
+import { getCookie } from "./shared/cookie";
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 // userSlice
-import { setUserDB } from './redux/modules/userSlice';
+import { setUserDB } from "./redux/modules/userSlice";
 
 //component
-import NavMenu from './components/NavMenu';
-import ScrollRestore from './elements/ScrollRestore';
+import NavMenu from "./components/NavMenu";
+import ScrollRestore from "./elements/ScrollRestore";
 
 function App() {
   const theme = defaultTheme;
@@ -49,7 +56,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (getCookie('accessToken')) {
+    if (getCookie("accessToken")) {
       dispatch(setUserDB());
     }
   }, [dispatch]);
@@ -61,24 +68,31 @@ function App() {
         <ScrollRestore />
         <NavMenu />
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />} />
           <Route path='/oauth' element={<Oauth />} />
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/mypage' element={<Mypage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path='/mypage/:nickname' element={<Mypage />} />
-          <Route path='/myedit' element={<UserEdit />} />
-          <Route path='/user/findId' element={<FindId />} />
-          <Route path='/user/findPassword' element={<FindPassword />} />
-          <Route path='/post' element={<Post />} />
-          <Route path='/post/write' element={<PostWrite />} />
-          <Route path='/post/update/:id' element={<PostUpdate />} />
-          <Route path='/post/detail/:id' element={<PostDetail />} />
-          <Route path='/notice' element={<Notice />} />
-          <Route path='/notice/detail/:id' element={<NoticeDetail />} />
-          <Route path='/reels' element={<Reels />} />
+          <Route path="/myedit" element={<UserEdit />} />
+          <Route path="/user/findId" element={<FindId />} />
+          <Route path="/user/findPassword" element={<FindPassword />} />
+          <Route path="/post" element={<Post />} />
+          <Route path="/post/write" element={<PostWrite />} />
+          <Route path="/post/update/:id" element={<PostUpdate />} />
+          <Route path="/post/detail/:id" element={<PostDetail />} />
           <Route path='/community' element={<CommunityList />} />
-          <Route path='*' element={<NotFound />} />
+          <Route path="/community/write" element={<CommunityWrite />} />
+          <Route path="/community/update/:id" element={<CommunityUpdate />} />
+          <Route path="/community/detail/:id" element={<CommunityDetail />} />
+          <Route path="/community" element={<CommunityList />} />
+          <Route path="/recruit/write" element={<RecruitWrite />} />
+          <Route path="/recruit/update/:id" element={<RecruitUpdate />} />
+          <Route path="/recruit/detail/:id" element={<RecruitDetail />} />
+          <Route path="/notice" element={<Notice />} />
+          <Route path="/notice/detail/:id" element={<NoticeDetail />} />
+          <Route path="/reels" element={<Reels />} />
+          <Route path='/reels/write/:id' element={<ReelsWrite />}/>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

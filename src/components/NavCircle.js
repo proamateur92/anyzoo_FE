@@ -45,7 +45,7 @@ const NavCircle = (props) => {
       case '/reels' :
         setWriteOpt (
         <> 
-          <div onClick={() => moveTo("/")}> 릴스 작성 </div> 
+          <div onClick={() => moveTo("/reels/write/new")}> 릴스 작성 </div> 
         </>)
         break
       case '/community' :

@@ -4,57 +4,43 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 //axios
 import instance from "../../shared/axios";
 
-// 자랑하기 글 불러오기
-export const loadPostsDB = createAsyncThunk(
-  "post/loadPost",
-  async (pageInfo) => {
-    const response = await instance
-      .get(`/api/post/category/${pageInfo.sorting}?page=${pageInfo.page}`)
-      .catch((err) => console.log(err));
-    // console.log(response)
-    // const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
-    return response.data;
-  }
-);
-
-// 자랑하기 글 작성
+// 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
-  console.log(data, "츄가");
   const response = await instance
-    .post("/api/post", data)
+    .post("/api/together", data)
     .then((res) => {
       window.alert("추가되었습니다");
-      window.location.replace("/post");
+      window.location.replace("/together");
     })
     .catch((err) => console.log(err));
   const newPoster = { ...data, boardmainId: response.data.boardMainId };
   return newPoster;
 });
 
-// 자랑하기 글 수정
+// 글 수정
 export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   console.log(newData.data, "data", newData.id, "id");
   await instance
-    .patch("/api/post/" + newData.id, newData.data)
+    .patch("/api/together/detail/" + newData.id, newData.data)
     .then((res) => {
       window.alert("수정되었습니다");
-      window.location.replace("/post");
+      window.location.replace("/recruit");
     })
     .catch((err) => console.log(err));
   return newData;
 });
 
-// 자랑하기 글 삭제
+// 글 삭제
 export const removeDataDB = createAsyncThunk("removeData", async (id) => {
-  await instance.delete("/api/post/" + id);
+  await instance.delete("/api/together/detail/" + id);
   window.alert("삭제되었습니다");
-  window.location.replace("/post");
+  window.location.replace("/recruit");
   return id;
 });
 
 //Reducer
 const postSlice = createSlice({
-  name: "post",
+  name: "together",
   initialState: {
     list: [],
     pageNumber: 0,
@@ -62,17 +48,6 @@ const postSlice = createSlice({
   },
 
   extraReducers: {
-    // 불러오기
-    [loadPostsDB.fulfilled]: (state, { payload }) => {
-      if (payload.pageable.pageNumber === 0) {
-        state.list = [...payload.content];
-      } else {
-        state.list = [...state.list, ...payload.content];
-      }
-      state.pageNumber = payload.pageable.pageNumber;
-      state.last = payload.last;
-    },
-
     //추가하기
     [addDataDB.fulfilled]: (state, { payload }) => {
       state.list.push(payload);
@@ -81,7 +56,7 @@ const postSlice = createSlice({
     //수정하기
     [modifyDataDB.fulfilled]: (state, { payload }) => {
       state.list.map((post) => {
-        console.log(payload, "무 ㅓ야야야");
+        console.log(payload, "무야야");
         if (post.id === payload.id) {
           return {
             ...post,

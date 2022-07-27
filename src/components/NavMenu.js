@@ -78,14 +78,15 @@ const LeftBtn = styled.div`
   justify-content: center;
   align-items: center;
   color: #333;
+  white-space: nowrap;
 
   border-radius: 0 3rem 0 0;
   cursor: pointer;
-`;
+`
 
 const RightBtn = styled.div`
-  background: #fff;
-  height: 100%;
+  background: #fff;    
+  height:100%;
   width: 45.3%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.25);
@@ -102,27 +103,23 @@ const RightBtn = styled.div`
 const RoundOuter = styled.div`
   position: absolute;
   background: #fff;
-  width: 16%;
-  min-width: 6rem;
-  max-width: 8rem;
-  height: 16vw;
-  min-height: 6rem;
-  max-height: 8rem;
+  width: 7rem;
+  height: 7rem;
   border-radius: 6rem;
   box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.25);
   top: 0;
   left: 50%;
   transform: translate(-50%, 0);
-`;
+`
 const MidCover = styled.div`
   background: #fff;
   position: absolute;
-  height: 130%;
-  width: 110%;
-  bottom: -50%;
-  left: -5%;
+  height: 300%;
+  width:110%;
+  bottom: -218%;
+  left:-5%;
   z-index: 100;
-`;
+`
 
 const RoundInner = styled.div`
   position: absolute;

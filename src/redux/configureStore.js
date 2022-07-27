@@ -3,7 +3,8 @@ import userReducer from './modules/userSlice';
 import postReducer from './modules/postSlice';
 import heartReducer from './modules/heartSlice';
 import commentReducer from './modules/commentSlice';
-import noticeReducer from './modules/noticeSlice'
+import noticeReducer from './modules/noticeSlice';
+import reelsReducer from './modules/reelsSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     post: postReducer,
     comment: commentReducer,
     heart: heartReducer,
-    notice: noticeReducer
+    notice: noticeReducer,
+    reels: reelsReducer
   },
 });
 

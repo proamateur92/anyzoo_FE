@@ -9,7 +9,7 @@ import PostCard from '../components/PostCard';
 import NoticeSlide from '../components/NoticeSlide';
 import RealTimeRank from '../components/RealtimeRank';
 import WeeklyRank from '../components/WeeklyRank';
-import FindMateSlide from '../components/FindMateSlide';
+import TogetherSlide from '../components/TogetherSlide';
 
 // style
 import styled from 'styled-components';
@@ -80,7 +80,7 @@ const Home = () => {
         <FiChevronRight className="moveto"/>
       </SubTitle>
 
-      <FindMateSlide />
+      <TogetherSlide />
 
       <SubTitle>
         <h3> <FiFeather className="icon"/> 자랑하기</h3>
@@ -108,19 +108,20 @@ const Logo = styled.div`
 
   color: #fff;
   font-weight: bolder;
-  font-size: 3.5rem;
+  font-size: 2.5rem;
 `;
 
 const SubTitle = styled.div`
   display: flex;
   align-items: center;
-  padding: 2.6rem 10% 1rem 10%;
+  padding: 3.5rem 10% 1rem 10%;
 
 h3 {
   display: flex;
   align-items: center;
   font-size: 1.8rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .icon {
