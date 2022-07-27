@@ -2,6 +2,8 @@
 import styled from 'styled-components';
 
 const StepPhone = ({
+  mode,
+  step,
   userPhoneNumber,
   validation,
   isDuplicated,
@@ -22,7 +24,6 @@ const StepPhone = ({
     setPhoneMessage(false);
     handleInputDuplicated();
   };
-
   return (
     <>
       <span className='desc'>
@@ -31,12 +32,17 @@ const StepPhone = ({
           <span className='strong'>휴대폰 인증</span>이 필요합니다.
         </p>
       </span>
+
       {phoneMessage && <Validation>*휴대폰 번호를 입력해주세요.</Validation>}
-      {userPhoneNumber.trim().length !== 0 && !validation && <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>}
-      {validation && isDuplicated && <Validation>*이미 등록된 번호에요.</Validation>}
+      {!phoneMessage && userPhoneNumber.trim().length !== 0 && !validation && (
+        <Validation>*휴대폰 번호가 유효하지 않아요.</Validation>
+      )}
+      {step === 0 && validation && isDuplicated && <Validation>*등록되지 않은 번호에요.</Validation>}
+      {step === 4 && validation && isDuplicated && <Validation>*이미 등록된 번호에요.</Validation>}
       {authMessage && <Validation>*휴대폰 인증을 진행해주세요.</Validation>}
       <Authorize>
         <Input
+          mode={mode}
           value={userPhoneNumber}
           onChange={setEnteredPhoneNumber}
           type='text'
@@ -45,7 +51,13 @@ const StepPhone = ({
         />
         <AuthBtn onClick={confirmCode}>코드 받기</AuthBtn>
       </Authorize>
-      <AuthNumber value={authNumber} onChange={setAuthNumber} type='text' placeholder='인증 코드를 입력해주세요.' />
+      <AuthNumber
+        mode={mode}
+        value={authNumber}
+        onChange={setAuthNumber}
+        type='text'
+        placeholder='인증 코드를 입력해주세요.'
+      />
     </>
   );
 };
@@ -57,7 +69,7 @@ const AuthNumber = styled.input`
   margin-bottom: 5vw;
   font-size: 20px;
   &::placeholder {
-    font-size: 20px;
+    font-size: ${(props) => (props.mode === 'signup' ? '20px' : '14px')};
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
@@ -70,7 +82,7 @@ const Input = styled.input`
   padding: 5% 0;
   font-size: 20px;
   &::placeholder {
-    font-size: 20px;
+    font-size: ${(props) => (props.mode === 'signup' ? '20px' : '14px')};
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }

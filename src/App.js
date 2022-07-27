@@ -8,6 +8,7 @@ import {
   FindPassword,
   Home,
   Login,
+  Oauth,
   Mypage,
   UserEdit,
   NotFound,
@@ -18,13 +19,8 @@ import {
   PostWrite,
   PostUpdate,
   Signup,
-<<<<<<< HEAD
   Reels, 
   ReelsWrite,
-  CommunityList
-} from './pages/Index';
-=======
-  Reels,
   CommunityList,
   CommunityDetail,
   CommunityWrite,
@@ -33,7 +29,6 @@ import {
   RecruitUpdate,
   RecruitWrite,
 } from "./pages/Index.js";
->>>>>>> 3dd8b9b302bf5ad19fa63e5ee9f02fde69dbce98
 
 // style
 import GlobalStyles from "./styles/GlobalStyles";
@@ -73,10 +68,11 @@ function App() {
         <ScrollRestore />
         <NavMenu />
         <Routes>
+          <Route path='/oauth' element={<Oauth />} />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/mypage" element={<Mypage />} />
+          <Route path='/mypage/:nickname' element={<Mypage />} />
           <Route path="/myedit" element={<UserEdit />} />
           <Route path="/user/findId" element={<FindId />} />
           <Route path="/user/findPassword" element={<FindPassword />} />
@@ -84,6 +80,7 @@ function App() {
           <Route path="/post/write" element={<PostWrite />} />
           <Route path="/post/update/:id" element={<PostUpdate />} />
           <Route path="/post/detail/:id" element={<PostDetail />} />
+          <Route path='/community' element={<CommunityList />} />
           <Route path="/community/write" element={<CommunityWrite />} />
           <Route path="/community/update/:id" element={<CommunityUpdate />} />
           <Route path="/community/detail/:id" element={<CommunityDetail />} />

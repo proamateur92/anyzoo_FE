@@ -2,6 +2,7 @@ import FindId from "./FindId";
 import FindPassword from "./FindPassword";
 import Home from "./Home";
 import Login from "./Login";
+import Oauth from './Oauth';
 import Mypage from "./Mypage";
 import NotFound from "./NotFound";
 import Notice from "./Notice";
@@ -21,12 +22,12 @@ import RecruitWrite from "./RecruitWrite";
 import RecruitUpdate from "./RecruitUpdate";
 import CommunityDetail from "./CommunityDetail";
 import RecruitDetail from "./RecruitDetail";
-
 export {
   FindId,
   FindPassword,
   Home,
   Login,
+  Oauth,
   Mypage,
   UserEdit,
   NotFound,
