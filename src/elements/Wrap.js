@@ -8,6 +8,7 @@ const Container = styled.div`
   width: 100%;
   min-height: 100vh;
   height: 100%;
+  min-height: 100vh;
   max-width: 599px;
   margin: auto;
   padding: 0 0 10vh 0;

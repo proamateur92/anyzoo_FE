@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { AiFillEyeInvisible, AiFillEye, AiOutlineCheckCircle } from 'react-icons/ai';
 
 const StepPassword = ({
-  text,
+  mode,
   userPassword,
   validation,
   isShowPassword,
@@ -15,15 +15,24 @@ const StepPassword = ({
   setEnteredPasswordCheckValue,
   setIsShowPassword,
 }) => {
+  console.log(mode);
   return (
     <>
-      <span className='desc'>
-        <p>
-          <span className='strong'>{text.substr(0, 4)}</span>
-          {text.substr(4, 1)}
-        </p>
-        <p>{text.substr(5)}</p>
-      </span>
+      {mode === 'signup' && (
+        <span className='desc'>
+          <p>
+            <span className='strong'>비밀번호</span>를 입력해주세요.
+          </p>
+        </span>
+      )}
+      {mode === 'update' && (
+        <span className='desc'>
+          <p>
+            <p>새로 변경하실</p>
+            <span className='strong'>비밀번호</span>를 입력해주세요.
+          </p>
+        </span>
+      )}
       {userPassword.trim().length !== 0 && !validation && (
         <Validation>
           *대문자, 특수문자를 포함해주세요.
@@ -34,7 +43,7 @@ const StepPassword = ({
       {passwordCheckValue.trim().length !== 0 && !passwordMatch && (
         <Validation>*비밀번호가 일치하지 않아요.</Validation>
       )}
-      <InputBox>
+      <InputBox mode={mode}>
         <input
           value={userPassword}
           onChange={setEnteredPassword}
@@ -47,7 +56,7 @@ const StepPassword = ({
           {isShowPassword && <AiFillEye onClick={() => setIsShowPassword(false)} />}
         </Icon>
       </InputBox>
-      <InputBox>
+      <InputBox mode={mode}>
         <input
           value={passwordCheckValue}
           onChange={setEnteredPasswordCheckValue}
@@ -100,7 +109,7 @@ const InputBox = styled.div`
     font-size: 20px;
   }
   input::placeholder {
-    font-size: 20px;
+    font-size: ${(props) => (props.mode === 'update' ? '14px' : '20px')};
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
