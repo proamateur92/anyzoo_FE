@@ -56,7 +56,7 @@ const WeeklyRank = () => {
               {ranker?.nickname}
             </span> 
             <VoteBar votes={ranker?.likeCnt} mostVotes={mostVotes}>
-              {ranker?.likeCnt}표
+              {ranker?.likeCnt ? ranker?.likeCnt.toLocaleString() : '- '}표
             </VoteBar>
           </RankerInfo>
         </CategoryRanking>
@@ -68,13 +68,14 @@ const WeeklyRank = () => {
 export default WeeklyRank;
 
 const WeeklyRankWrap = styled.div`
-margin-bottom: 3.2rem;
+margin-bottom: 2rem;
 `;
 
 const CategoryTitle = styled.div`
   display: flex;
   justify-content: space-between;
   height: 6rem;
+  white-space: nowrap;
 
   span {
     display: flex;
@@ -82,6 +83,7 @@ const CategoryTitle = styled.div`
     align-items: center;
     width: 25%;
     height: 100%;
+    font-size: 1.6rem;
     font-weight: bolder;
     color: #c2c2c2;
     cursor: pointer;
@@ -142,6 +144,8 @@ const VoteBar = styled.div`
   align-items: center;
   padding: 0px 1rem;
   width: ${(props) => ( props.votes / props.mostVotes) * 100}%;
+  min-width: 15%;
   font-size: 1.2rem;
+  white-space: nowrap;
   color: #fff;
 `;

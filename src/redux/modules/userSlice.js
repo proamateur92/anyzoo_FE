@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // axios
 import instance from '../../shared/axios';
+import { getCookie } from '../../shared/cookie';
 
 export const setUserDB = createAsyncThunk('setUser', async () => {
   try {

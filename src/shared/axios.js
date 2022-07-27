@@ -1,15 +1,15 @@
-import axios from 'axios';
-import { getCookie, setCookie } from './cookie';
+import axios from "axios";
+import { getCookie, setCookie } from "./cookie";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL,
 });
 
 export const setAccessToken = () => {
-  let accessToken = getCookie('accessToken');
+  let accessToken = getCookie("accessToken");
 
   if (accessToken) {
-    instance.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+    instance.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
   }
 };
 
@@ -24,21 +24,22 @@ instance.interceptors.response.use(
       response: { status },
     } = error;
     if (status === 401) {
-      console.log('권한 인증 에러');
+      console.log("권한 인증 에러");
       console.log(error);
-      if (error.response.data.msg === 'TokenExpiredError') {
-        console.log('토큰 만료 에러');
+      if (error.response.data.msg === "TokenExpiredError") {
+        console.log("토큰 만료 에러");
         const originalRequest = config;
-        const refreshToken = getCookie('refreshToken');
+        const refreshToken = getCookie("refreshToken");
         // token refresh 요청
-        const { data } = await instance.post('/user/reissue', {
+        const { data } = await instance.post("/user/reissue", {
           refreshToken,
         });
         // 새로운 토큰 저장
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = data;
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          data;
 
-        setCookie('accessToken', newAccessToken);
-        setCookie('refreshToken', newRefreshToken);
+        setCookie("accessToken", newAccessToken);
+        setCookie("refreshToken", newRefreshToken);
 
         instance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

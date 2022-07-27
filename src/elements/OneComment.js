@@ -3,17 +3,35 @@ import React from "react";
 // style
 import styled from "styled-components";
 
-import { loadCommentsDB, editCommentDB, deleteCommentDB } from "../redux/modules/commentSlice";
+import { editCommentDB, deleteCommentDB } from "../redux/modules/commentSlice";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
 
+import instance from "../shared/axios";
+
+import ReComment from "../components/ReComment";
+
 const OneComment = (props) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.info)
+  const user = useSelector((state) => state.user.info);
   const data = props.commentData;
-  const postId = props.postId;
+  // const postId = props.postId;
   const commentRef = React.useRef(null);
+  const [openReplies, setOpenReplies] = React.useState(null);
+  const [replyList, setReplyList] = React.useState(null);
+  const [replyLength, setReplyLength] = React.useState(0);
+  const isReply = props.isReply;
+
+  // 대댓글리스트
+  React.useEffect(() => {
+    if (!isReply) {
+      instance.get("/api/reply/" + data.id).then((res) => {
+        setReplyList(res);
+        setReplyLength(res.data.length);
+      });
+    }
+  }, [isReply, data.id]);
 
   // 오늘 날짜 구해오기
   const today = new Date();
@@ -23,9 +41,11 @@ const OneComment = (props) => {
   const createdAt = props.commentData?.createdAt;
   const createdAtDisplay =
     todayString !== createdAt?.split("T")[0]
-      ? createdAt?.split("T")[0].substr(2)
+      ? createdAt?.split("T")[0].substr(5)
       : createdAt?.split("T")[1].substr(0, 5);
 
+
+  // 코멘트 수정/삭제 메뉴
   const [isEditOptOpen, setIsEditOptOpen] = React.useState(false);
   const openEditOpt = () => {
     if (data.userNickname === user.nickname) {
@@ -35,13 +55,11 @@ const OneComment = (props) => {
 
   // 코멘트 삭제하기
   const deleteComment = async () => {
-    if (data.userNickname === user.nickname) {
-      const commentData = {
-        commentId: data.id,
-        boardMainId: postId,
-      };
-      await dispatch(deleteCommentDB(commentData));
-      dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
+    if (!isReply && data.userNickname === user.nickname) {
+      await dispatch(deleteCommentDB(data.id));
+      // dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
+    } else if (isReply && data.userNickname === user.nickname) {
+      await instance.delete("/api/reply/edit/" + data.id);
     } else {
       window.alert("작성자만 삭제할수 있어요");
     }
@@ -59,23 +77,31 @@ const OneComment = (props) => {
   };
 
   const editComment = async () => {
-    const commentData = {
-      commentId: data.id,
-      comment: commentRef.current.value,
-    };
-    await dispatch(editCommentDB(commentData));
+    if (!isReply && commentRef.current.value !== "") {
+      await dispatch(
+        editCommentDB({
+          commentId: data.id,
+          comment: commentRef.current.value,
+        })
+      );
+      // dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
+    } else if (isReply && commentRef.current.value !== "") {
+      await instance.patch("/api/reply/edit/" + data.id, { reply: commentRef.current.value });
+    } else {
+      window.alert("내용을 입력해주세요");
+    }
+
     commentRef.current.value = "";
-    await dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
     setIsEdit(false);
-    setIsEditOptOpen(false)
+    setIsEditOptOpen(false);
   };
 
-  React.useEffect(()=>{
-    if(isEdit) {
-      commentRef.current.value = data.comment;
+  React.useEffect(() => {
+    if (isEdit) {
+      commentRef.current.value = isReply ? data.reply : data.comment;
       commentRef.current.focus();
     }
-  },[isEdit, data.comment])
+  }, [isEdit, data.comment]);
 
   return (
     <CommentWrap>
@@ -94,11 +120,14 @@ const OneComment = (props) => {
       ) : (
         <Content>
           <TextBubble onClick={() => openEditOpt()}>
-            <span> {data.comment} </span>
+            <span> {isReply ? data.reply : data.comment} </span>
           </TextBubble>
           <Time> {createdAtDisplay} </Time>
+          {isReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
         </Content>
       )}
+
+      {openReplies ? <ReComment commentId={data.id} replyList={replyList} /> : null}
 
       {isEditOptOpen ? (
         <EditOption>
@@ -180,12 +209,18 @@ const EditArea = styled.div`
     border: none;
     resize: none;
   }
-  
-  `;
+`;
 
 const Time = styled.span`
   font-size: 1.2rem;
   color: #b3b3b3;
+`;
+
+const Replies = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3cd9d0;
+  cursor: pointer;
 `;
 
 const EditOption = styled.div`
@@ -203,6 +238,6 @@ const EditBtn = styled.button`
   padding: 1% 3%;
   border-radius: 1rem;
   color: #5f5f5f;
-`
+`;
 
 export default OneComment;
