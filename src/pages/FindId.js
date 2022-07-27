@@ -102,7 +102,7 @@ const FindId = () => {
           {username.isShow && (
             <InputBox>
               <span>이메일 계정 확인</span>
-              <span class='email_result'>{username.result}</span>
+              <span className='email_result'>{username.result}</span>
             </InputBox>
           )}
           <button onClick={handleFindId}>계정 정보 확인</button>
