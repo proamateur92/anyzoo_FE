@@ -6,14 +6,19 @@ import styled from "styled-components";
 //component
 import PostResponses from "./PostResponses";
 
+// router
+import { useNavigate } from "react-router-dom";
+
+
 const CommunityCard = (props) => {
+  const navigate = useNavigate();
   const data = props.data
 
     // 오늘 날짜 구해오기
     const today = new Date();
     const month = today.getMonth() > 9 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
     const todayString = today.getFullYear() + "-" + month + "-" + today.getDate();
-  
+
     const createdAt = data.dateTime;
     const createdAtDisplay =
       todayString !== createdAt?.split("T")[0]
@@ -30,7 +35,7 @@ const CommunityCard = (props) => {
         <span>{createdAtDisplay}</span>
       </Header>
 
-      <Content>
+      <Content onClick={()=> navigate("/community/detail/"+data.boardMainId)}>
         {data.contents}
       </Content>
 

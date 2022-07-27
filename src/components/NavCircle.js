@@ -47,8 +47,8 @@ const NavCircle = (props) => {
       case '/community' :
         setWriteOpt(          
         <>
-          <div onClick={() => moveTo("/")}> 커뮤니티 글 작성 </div>
-          <div onClick={() => moveTo("/")}> 산책모집 작성 </div>
+          <div onClick={() => moveTo("/community/write")}> 커뮤니티 글 작성 </div>
+          <div onClick={() => moveTo("/recruit/write")}> 산책모집 작성 </div>
         </>)
         break
       default :
