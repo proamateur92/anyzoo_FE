@@ -98,6 +98,7 @@ const Content = styled.p`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   line-height: 1.29;
+  cursor:pointer;
 
   font-size: 1.4rem;
   color: #666;

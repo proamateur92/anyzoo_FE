@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import Wrap from "../elements/Wrap";
 import TogetherCard from "../components/TogetherCard";
@@ -10,43 +10,72 @@ import styled from "styled-components";
 
 import instance from "../shared/axios";
 
-const CommunityList = () => {
-  const [type, setType] = React.useState("together");
+// redux
+import { useSelector, useDispatch } from "react-redux";
+import { loadPostsDB as loadTogether } from "../redux/modules/recruitSlice";
+import { loadPostsDB as loadCommunity } from "../redux/modules/communitySlice";
+
+// route
+import { useNavigate } from "react-router-dom";
+
+const CommunityList = ( props ) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const type = props.type
   const [city, setCity] = React.useState("all");
   const [province, setProvince] = React.useState("all");
+ 
+  const communityList = useSelector((state) => state.community.list);
+  const togetherList = useSelector((state) => state.recruit.list);
+  const isLastPg = useSelector((state) => state.post.isLast);
+  const listEndRef = React.useRef();
+  const [page, setPage] = React.useState(-1);
 
-  const [list, setList] = React.useState([]);
+    // 페이지인덱스넘버 바꾸기
+    const loadinghandler = useCallback(
+      (entries) => {
+        if (entries[0].isIntersecting && !isLastPg) {
+          setPage((page) => page + 1);
+        }
+      },
+      [isLastPg]
+    );
 
-  React.useEffect(() => {
-    instance.get("/api/community?page=0").then((res) => setList(res.data.content));
-  }, []);
+    // 리스트 끝 감지
+    React.useEffect(() => {
+      const observer = new IntersectionObserver(loadinghandler, { threshold: 0.5 });
+      if (listEndRef.current) {
+        observer.observe(listEndRef.current);
+      }
+      return () => {
+        observer.disconnect();
+      };
+    }, [loadinghandler]);
 
-  const changeType = (newType) => {
-    setType(newType);
-    window.scrollTo(0, 0);
-  };
+      // 포스트 로딩
+    React.useEffect(() => {
+      if ( page >= 0 && !isLastPg ) {
+        if (type === 'together') {
+          const pageInfo = { page: page, provinceId: province };
+          dispatch(loadTogether(pageInfo));
+        } else if (type === 'community') {
+          dispatch(loadCommunity(page));
+        }
+      } else {
+        console.log("마지막 페이지");
+      }
+    }, [page, dispatch, isLastPg, type, province]);
 
-  const data = [
-    {
-      boardMainId: 1,
-      title: "산책모집 방 제목",
-      content: "모집글 내용이 들어갑니다. 모집글 내용이 들어갑니다.모집글 내용이 들어갑니다.",
-      img: "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png",
-      limitPeople: "10",
-      date: "3분 전",
-      location: "머머구",
-      peopleCnt: "7",
-      createdAt: "3분 전",
-    },
-  ];
+
+
 
   return (
     <Wrap>
       <Header type={type}>
-        <div id="together" onClick={() => changeType("together")}>
+        <div id="together" onClick={() => navigate("/together")}>
           산책 메이트
         </div>
-        <div id="community" onClick={() => changeType("community")}>
+        <div id="community" onClick={() => navigate("/community")}>
           커뮤니티
         </div>
       </Header>
@@ -56,12 +85,14 @@ const CommunityList = () => {
           <SetAddress setCity={setCity} setProvince={setProvince} />
         </ListOption>
       ) : null}
-
+ 
       <InnerWrap type={type}>
         {type === "together"
-          ? data.map((item) => <TogetherCard key={item.boardMainId} data={item} />)
-          : list.map((item) => <CommunityCard data={item} key={item.boardMainId} />)}
+          ? togetherList.map((item) => <TogetherCard key={item.boardMainId} data={item} />)
+          : communityList.map((item) => <CommunityCard key={item.boardMainId} data={item} />)}
       </InnerWrap>
+
+      <div ref={listEndRef} />
     </Wrap>
   );
 };

@@ -4,6 +4,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 //axios
 import instance from "../../shared/axios";
 
+
+// 리스트 불러오기
+export const loadPostsDB = createAsyncThunk(
+  "community/loadPost",
+  async (page) => {
+    const response = await instance
+      .get(`/api/community?page=${page}`)
+      .catch((err) => console.log(err));
+    console.log(response)
+     return response.data;
+  }
+);
+
 // 자랑하기 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
   const response = await instance
@@ -44,10 +57,22 @@ const postSlice = createSlice({
   initialState: {
     list: [],
     pageNumber: 0,
-    last: false,
+    isLast: false,
   },
 
   extraReducers: {
+    
+    // 불러오기
+    [loadPostsDB.fulfilled]: (state, { payload }) => {
+      if (payload.pageable.pageNumber === 0) {
+        state.list = [...payload.content];
+      } else {
+        state.list = [...state.list, ...payload.content];
+      }
+      state.pageNumber = payload.pageable.pageNumber;
+      state.last = payload.isLast;
+    },
+
     //추가하기
     [addDataDB.fulfilled]: (state, { payload }) => {
       state.list.push(payload);

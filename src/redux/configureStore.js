@@ -4,6 +4,8 @@ import postReducer from './modules/postSlice';
 import heartReducer from './modules/heartSlice';
 import commentReducer from './modules/commentSlice';
 import noticeReducer from './modules/noticeSlice';
+import communityReducer from './modules/communitySlice';
+import recruitReducer from './modules/recruitSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ const store = configureStore({
     comment: commentReducer,
     heart: heartReducer,
     notice: noticeReducer,
+    community: communityReducer,
+    recruit: recruitReducer
   },
 });
 

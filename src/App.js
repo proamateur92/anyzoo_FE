@@ -81,7 +81,8 @@ function App() {
           <Route path="/community/write" element={<CommunityWrite />} />
           <Route path="/community/update/:id" element={<CommunityUpdate />} />
           <Route path="/community/detail/:id" element={<CommunityDetail />} />
-          <Route path="/community" element={<CommunityList />} />
+          <Route path="/community" element={<CommunityList type='community' />} />
+          <Route path="/together" element={<CommunityList type='together'/>} />
           <Route path="/recruit/write" element={<RecruitWrite />} />
           <Route path="/recruit/update/:id" element={<RecruitUpdate />} />
           <Route path="/recruit/detail/:id" element={<RecruitDetail />} />

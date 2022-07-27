@@ -8,6 +8,16 @@ import { FiUser } from "react-icons/fi";
 const TogetherCard = (props) => {
   const data = props.data
 
+  const today = new Date();
+  const month = today.getMonth() > 9 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
+  const todayString = today.getFullYear() + "-" + month + "-" + today.getDate();
+
+  const createdAt = props.commentData?.createdAt;
+  const createdAtDisplay =
+    todayString !== createdAt?.split("T")[0]
+      ? createdAt?.split("T")[0].substr(5)
+      : createdAt?.split("T")[1].substr(0, 5);
+
   return (
     <CardOuter>
       <FindMate>
@@ -15,13 +25,13 @@ const TogetherCard = (props) => {
         <CardContent>
           <Title>
             <h5 id="title"> {data?.title}</h5>
-            <span id="time">{data?.createdAt}</span>
+            <span id="time">{createdAtDisplay}</span>
           </Title>
           <p>{data?.content}</p>
           <AdditionalInfo>
             <div>
-              <span className="address">#{data?.location}</span>
-              <span className="address">#{data?.location}</span>
+              <span className="address">#{data?.cityName}</span>
+              <span className="address">#{data?.provinceName}</span>
             </div>
             <span> <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}</span>
           </AdditionalInfo>
