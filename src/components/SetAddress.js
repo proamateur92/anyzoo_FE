@@ -14,6 +14,7 @@ const SetAddress = (props) => {
   const [provinceList, setProvinceList] = React.useState([]);
   const setCity = props.setCity
   const setProvince = props.setProvince
+  const setPage = props.setPage
 
 
   React.useEffect(() => {
@@ -24,6 +25,7 @@ const SetAddress = (props) => {
     setCity(e.target.value)
     const cityId = e.target.value
     instance.get('/api/together/province/'+cityId).then((res) => setProvinceList(res.data))
+    setPage(()=>0)
   };
 
   const changeProv = (e) => {

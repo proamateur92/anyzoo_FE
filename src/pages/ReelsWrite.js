@@ -13,10 +13,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 // video player
 import ReactPlayer from "react-player/lazy";
 
-import { FiPlay, FiPause, FiCheck, FiFolderPlus, FiCamera, FiCrop } from "react-icons/fi";
+// icons
+import { FiPlay, FiPause, FiCheck, FiFolderPlus} from "react-icons/fi";
+// FiCamera, FiCrop 
 import { RiDropFill } from "react-icons/ri";
 
-const ReelsWrite = (props) => {
+const ReelsWrite = () => {
   const params = useParams()
   const navigate = useNavigate()
   const textRef = React.useRef();
