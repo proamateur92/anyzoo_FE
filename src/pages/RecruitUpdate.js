@@ -20,6 +20,8 @@ import instance from "../shared/axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const RecruitUpdate = () => {
+  const numberRef = useRef();
+  const dateRef = useRef();
   const titleRef = useRef();
   const contentRef = useRef();
   const params = useParams();
@@ -29,31 +31,33 @@ const RecruitUpdate = () => {
   const [select, setSelect] = useState();
 
   const [date, setDate] = useState();
-  const [siGunGu, setSiGunGu] = useState();
+  // const [siGunGu, setSiGunGu] = useState();
   const [city, setCity] = useState();
-  const [dongEbMun, setDongEbMun] = useState();
-  const [province, setProvince] = useState();
+  // const [dongEbMun, setDongEbMun] = useState();
+  // const [province, setProvince] = useState();
 
   //수정할때 데이터 value 값으로 불러오기
   useEffect(() => {
-    instance.get("/api/community/" + params.id).then((response) => {
+    instance.get("/api/together/detail/" + params.id).then((response) => {
       setData(response.data);
+      setSelect(response.data.limitPeople);
+      console.log("뭐야", response.data);
     });
   }, [params.id]);
 
-  useEffect(() => {
-    instance.get("/api/together/city/").then((response) => {
-      setSiGunGu(response.data); //useState의 data에 넣어준다.
-      console.log(response.data, "시군구");
-    });
-  }, []);
+  // useEffect(() => {
+  //   instance.get("/api/together/city/").then((response) => {
+  //     setSiGunGu(response.data); //useState의 data에 넣어준다.
+  //     console.log(response.data, "시군구");
+  //   });
+  // }, []);
 
-  const dongMyun = () => {
-    instance.get("/api/together/province/" + city).then((response) => {
-      setDongEbMun(response.data); //useState의 data에 넣어준다.
-      console.log(response.data, "동면읍");
-    });
-  };
+  // const dongMyun = () => {
+  //   instance.get("/api/together/province/" + city).then((response) => {
+  //     setDongEbMun(response.data); //useState의 data에 넣어준다.
+  //     console.log(response.data, "동면읍");
+  //   });
+  // };
 
   // 카테고리 값 select으로 넣기
   const numbers = () => {
@@ -68,10 +72,10 @@ const RecruitUpdate = () => {
     return num;
   };
 
-  const gu = (e) => {
-    console.log(e.target.value);
-    setCity(e.target.value);
-  };
+  // const gu = (e) => {
+  //   console.log(e.target.value);
+  //   setCity(e.target.value);
+  // };
 
   const count = (e) => {
     setSelect(e.target.value);
@@ -83,24 +87,29 @@ const RecruitUpdate = () => {
     setDate(e.target.value);
   };
 
-  const dong = (e) => {
-    setProvince(e.target.value);
-  };
+  // const dong = (e) => {
+  //   setProvince(e.target.value);
+  // };
 
   //data 설정해 reducer로 보내기(더하기)
   const updateRecruit = async (e) => {
     e.preventDefault();
+    console.log(dateRef.current.value, numberRef.current.value);
 
-    const data = {
+    const Data = {
       title: titleRef.current.value,
-      date: date,
+      dday: dateRef.current.value,
       content: contentRef.current.value,
-      limitPeople: select,
-      provinceId: province,
+      limitPeople: numberRef.current.value,
+    };
+
+    const newData = {
+      id: params.id,
+      data: Data,
     };
 
     console.log(data);
-    dispatch(modifyDataDB(data));
+    dispatch(modifyDataDB(newData));
   };
 
   return (
@@ -110,53 +119,48 @@ const RecruitUpdate = () => {
       </TitleBox>
       <InputBox>
         <p>지역 설정</p>
-        <Location onChange={gu} onClick={dongMyun} defaultValue={data?.cityId}>
-          <option value="none" disabled>
-            시/군/구
-          </option>
-          {siGunGu?.map((v) => {
-            return (
-              <option key={v.cityId} value={v.cityId}>
-                {v.cityName}
-              </option>
-            );
-          })}
+        <Location>
+          <input type="text" value={data?.cityName} />
+          <input type="text" value={data?.provinceName} />
         </Location>
-        <Location onChange={dong} defaultValue={data?.provinceId}>
-          <option disabled value="none">
-            동/읍/면
-          </option>
-          {dongEbMun?.map((v) => {
-            return (
-              <option key={v.provinceId} value={v.provinceId}>
-                {v.provinceName}
-              </option>
-            );
-          })}
-        </Location>
+
         <p>게시물 제목</p>
-        <input type="text" defaultValue={data?.title} />
+        <input ref={titleRef} type="text" defaultValue={data?.title} />
         <p>인원 설정</p>
         <People
           onClick={numbers}
           onChange={count}
           defaultValue={data?.limitPeople}
+          ref={numberRef}
         >
           <option disabled value="none">
             인원수
           </option>
 
           {numbers().map((n) => {
-            return (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            );
+            if (data?.limitPeople === n) {
+              return (
+                <option key={n} value={n} selected>
+                  {n}
+                </option>
+              );
+            } else {
+              return (
+                <option key={n} value={n}>
+                  {n}
+                </option>
+              );
+            }
           })}
         </People>
         <p>날짜 설정</p>
-        <DatePut onChange={dates} type="date"></DatePut>
-        <p>사진 첨부 (최대 5장)</p>
+        <DatePut
+          onChange={dates}
+          type="datetime-local"
+          ref={dateRef}
+          defaultValue={data?.dday}
+        ></DatePut>
+        <p>첨부한 사진 보기</p>
         <Preview>
           {data?.img.map((v, id) => {
             return (
@@ -194,15 +198,18 @@ const InputBox = styled.div`
   width: 80%;
   height: 70vh;
   margin: 0 10% 0 10%;
+  div {
+    display: flex;
+  }
   p {
     color: #000;
     font-size: clamp(8px, 3.67vw, 16px);
-    opacity: 0.5;
+    opacity: 0.6;
     margin: 15px 0;
   }
   input {
     font-size: clamp(8px, 3.67vw, 16px);
-    opacity: 20%;
+    opacity: 30%;
     padding: 3px;
     width: 100%;
     height: 6%;
@@ -212,7 +219,7 @@ const InputBox = styled.div`
 `;
 const People = styled.select`
   font-size: clamp(8px, 3.67vw, 16px);
-  opacity: 20%;
+  opacity: 30%;
   padding: 3px;
   width: 100%;
   height: 6%;
@@ -220,14 +227,20 @@ const People = styled.select`
   margin: 0 3% 0 0;
 `;
 
-const Location = styled.select`
+const Location = styled.div`
   font-size: clamp(8px, 3.67vw, 16px);
-  opacity: 20%;
+  opacity: 100%;
   padding: 3px;
-  width: 47%;
+  width: 100%;
   height: 6%;
   border-radius: 10px;
   margin: 0 3% 0 0;
+
+  input {
+    height: 100%;
+    width: 48%;
+    margin-right: 4%;
+  }
 `;
 
 const DatePut = styled.input`

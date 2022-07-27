@@ -104,7 +104,7 @@ const RecruitDetail = () => {
             src={require("../assets/images/back.png.png")}
           />
           <HeadTitle>
-            <p>커뮤니티</p>
+            <p>{data?.title}</p>
             <span>{data?.postCategory}</span>
           </HeadTitle>
           <JumMom>
@@ -112,7 +112,7 @@ const RecruitDetail = () => {
             {bubbleOn ? (
               <EditBubble
                 data={data}
-                page={"community"}
+                page={"recruit"}
                 setBubbleOn={setBubbleOn}
               />
             ) : null}
@@ -195,7 +195,7 @@ const RecruitDetail = () => {
             </Gu>
           </JengBoLocation>
           <Chatting>
-            <AddBtn>채팅하기</AddBtn>
+            <AddBtn disabled="disabled">Comming soon</AddBtn>
           </Chatting>
           <Recruitment>
             <div>
@@ -495,7 +495,7 @@ const AddBtn = styled.button`
   flex-grow: 0;
   font-weight: bold;
   border-radius: 10px;
-  background-color: #44dcd3;
+  background-color: #d3d3d3;
 `;
 
 const Recruitment = styled.div`

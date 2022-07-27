@@ -34,6 +34,7 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
 export const removeDataDB = createAsyncThunk("removeData", async (id) => {
   await instance.delete("/api/community/" + id);
   window.alert("삭제되었습니다");
+  window.location.replace("/community");
   return id;
 });
 

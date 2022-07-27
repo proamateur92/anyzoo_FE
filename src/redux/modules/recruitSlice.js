@@ -21,10 +21,10 @@ export const addDataDB = createAsyncThunk("addData", async (data) => {
 export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   console.log(newData.data, "data", newData.id, "id");
   await instance
-    .patch("/api/together/" + newData.id, newData.data)
+    .patch("/api/together/detail/" + newData.id, newData.data)
     .then((res) => {
       window.alert("수정되었습니다");
-      window.location.replace("/together");
+      window.location.replace("/recruit");
     })
     .catch((err) => console.log(err));
   return newData;
@@ -32,8 +32,9 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
 
 // 글 삭제
 export const removeDataDB = createAsyncThunk("removeData", async (id) => {
-  await instance.delete("/api/together/" + id);
+  await instance.delete("/api/together/detail/" + id);
   window.alert("삭제되었습니다");
+  window.location.replace("/recruit");
   return id;
 });
 

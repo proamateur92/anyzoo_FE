@@ -20,6 +20,7 @@ import instance from "../shared/axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const PostUpdate = () => {
+  const selectRef = useRef();
   const contentRef = useRef();
   const params = useParams();
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const PostUpdate = () => {
   useEffect(() => {
     instance.get("/api/post/" + params.id).then((response) => {
       setData(response.data);
+
       console.log(response.data, "222");
     });
   }, [params.id]);
@@ -46,9 +48,10 @@ const PostUpdate = () => {
   //data 수정해 reducer로 보내기(수정하기)
   const updatePost = async (e) => {
     e.preventDefault();
+    console.log(selectRef.current.value);
 
     const Data = {
-      categoryName: select,
+      categoryName: selectRef.current.value,
       content: contentRef.current.value,
     };
 
@@ -102,6 +105,7 @@ const PostUpdate = () => {
           key={data?.postCategory}
           defaultValue={data?.postCategory}
           onChange={category}
+          ref={selectRef}
         >
           <option disabled>== 카테고리 ==</option>
           <option value="PRETTY">이쁨</option>
