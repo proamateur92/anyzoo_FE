@@ -4,6 +4,7 @@ import Wrap from "../elements/Wrap";
 
 // style
 import styled from "styled-components";
+// import styled, { keyframes } from "styled-components";
 import instance from "../shared/axios";
 
 // video player
@@ -12,16 +13,68 @@ import ReactPlayer from "react-player/lazy";
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
 import { FiAlignJustify } from "react-icons/fi";
+import EditBubble from "../elements/EditBubble";
 
 const Reels = (props) => {
   const [reelsData, setReelsData] = React.useState();
+  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [startX, setStartX] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const [isLast, setIsLast] = React.useState(false);
+  const [showCover, setShowCover] = React.useState(true);
+  const coverRef = React.useRef();
 
-  console.log(reelsData)
+  const [menuOpen, setMenuOpen]= React.useState(false);
 
+
+  // 영상 불러오기 && 재생 타이머 걸기
   React.useEffect(() => {
-    instance.get("/api/reels/category/all?page=0").then((res) => setReelsData(res.data.content[0]));
-  }, []);
+    setIsPlaying(false)
+    setShowCover(true)
 
+    instance.get("/api/reels/category/all?page="+page)
+    .then((res) => {
+      setIsLast(()=>res.last)
+      setReelsData(res.data.content[0])
+    });
+
+    const coverControl =  setTimeout(()=>{ 
+      setIsPlaying(true)
+      setShowCover(false)
+    }, 1500)
+
+    return ( ) => clearTimeout(coverControl)
+  }, [page]);
+
+  const playVideo = () => {
+    setIsPlaying(!isPlaying)
+    setShowCover(false)
+  }
+
+  const moveSlide = (target, endX) => {
+    const distance = Math.abs(startX - endX);
+
+    if (distance > 30 && startX !== 0 && endX !== 0) {
+      startX - endX > 0 ? showNext(): showPrev()
+    } else if (distance < 30 && startX !== 0 && endX !== 0) {
+      if (target === coverRef.current) {
+        setShowCover(false)
+        playVideo()
+      }
+    }
+  };
+
+  const showNext = () => {
+    isLast ?  console.log('마지막페이지에요') : setPage(()=>page+1)
+  };
+
+  const showPrev = () => {
+    page > 0 ? setPage(()=>page-1) : setPage(()=>0);
+  };
+
+
+
+  // 반응(좋아요, 댓글) 컨트롤
   const [commentCount, setCommentCount] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);
   const [likefluc, setLikefluc] = React.useState(0);
@@ -52,7 +105,13 @@ const Reels = (props) => {
 
   return (
     <Wrap>
-      <Cover>
+      <Cover 
+      ref={coverRef}
+      onMouseDown={(e) => setStartX(e.clientX)}
+      onMouseUp={(e) => moveSlide(e.target, e.clientX)}
+      onTouchStart={(e) => setStartX(e.touches[0].clientX)}
+      onTouchEnd={(e) => moveSlide(e.target, e.changedTouches[0].clientX)}
+      >
         <InfoBox>
           <UserInfo>
             <UserProfile img={reelsData?.userProfileImg} />
@@ -72,17 +131,19 @@ const Reels = (props) => {
               </span>
             </Reactions>
 
-            <FiAlignJustify id="seeMore" />
+            {menuOpen ? <EditBubble data={reelsData} setBubbleOn={setMenuOpen}/> : null} 
+            <FiAlignJustify id="seeMore" onClick={()=> setMenuOpen(!menuOpen)} />
           </More>
         </InfoBox>
       </Cover>
+
       <VideoClip>
-        {/* <Preview img={reelsData?.thumbnail}/> */}
+        {showCover ? <Preview img={reelsData?.thumbnail}/> : null}
         <ReactPlayer 
           width={"100%"} 
           height={"100%"} 
           url={reelsData?.video}
-          playing={true}
+          playing={isPlaying}
           muted={false}
           />
       </VideoClip>
@@ -97,7 +158,7 @@ const Cover = styled.div`
   min-height: 92vh;
   margin-bottom: -2.3vh;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(to top, #0000004d 10%, transparent);
   overflow: hidden;
   position: relative;
 `;
@@ -181,7 +242,9 @@ const Reactions = styled.div`
 
 const Preview = styled.div`
   width: 100%;
-  height: 100%;
+  height: 0%;
+  min-height: 92vh;
+  margin-bottom: -2.3vh;
   background: url(${props => props.img});
   background-position: center;
   background-size:cover;
@@ -193,5 +256,4 @@ const VideoClip = styled.div`
   top: 0;
   width: 100%;
   max-width: 599px;
-  height: 100%;
 `;

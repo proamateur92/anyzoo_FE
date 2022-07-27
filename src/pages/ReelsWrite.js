@@ -5,31 +5,50 @@ import Wrap from "../elements/Wrap";
 import styled from "styled-components";
 
 // axios
-// import instance from '../shared/axios';
+import instance from '../shared/axios';
+
+// router
+import { useNavigate, useParams } from 'react-router-dom';
 
 // video player
 import ReactPlayer from "react-player/lazy";
 
-import { FiPlay, FiPause, FiRotateCw, FiFolderPlus, FiCamera, FiCrop } from "react-icons/fi";
+import { FiPlay, FiPause, FiCheck, FiFolderPlus, FiCamera, FiCrop } from "react-icons/fi";
 import { RiDropFill } from "react-icons/ri";
-import instance from "../shared/axios";
 
 const ReelsWrite = (props) => {
+  const params = useParams()
+  const navigate = useNavigate()
   const textRef = React.useRef();
   const [video, setVideo] = React.useState(null);
   const [videoUrl, setVideoUrl] = React.useState(null);
-  const [thumbIdx, setThumbIdx] = React.useState("00:00:01");
   const [isPlaying, setIsPlaying] = React.useState(false);
-  const [seeking, setSeeking] = React.useState(false);
 
   const videoRef = React.useRef();
+  const trackRef = React.useRef();
   const [duration, setDuration] = React.useState(null);
+  const [stopper, setStopper] = React.useState(null);
   const [currentTime, setCurrentTime] = React.useState(0);
 
+  const startPtRef = React.useRef();
+  // const endPtRef = React.useRef();
   const [startPoint, setStartPoint] = React.useState(0);
   const [endPoint, setEndPoint] = React.useState(15);
 
-  const timeFormater = (source) => {
+  // 새로 작성인지, 수정인지 판별
+  const isNew = params.id === 'new' ? true : false
+
+  // 수정이라면 : 현재 릴스의 데이터를 불러와 state로 저장
+  const [thisPost, setThisPost] = React.useState(null)
+
+  React.useEffect(()=>{
+    if (!isNew){
+    instance.get('/api/reels/'+params.id).then((res)=> setThisPost(res.data))
+  }
+  },[params, isNew])
+
+  // 시간 00초 -> 00:00 으로 맞추기
+  const timeFormater = (source, getfull) => {
     const Totalseconds = Math.floor(source);
     const hour = Math.floor(Totalseconds / 3600)
       .toString()
@@ -37,89 +56,136 @@ const ReelsWrite = (props) => {
     const minute = (Math.floor(Totalseconds / 60) - hour * 60).toString().padStart(2, "0");
     const second = (Totalseconds % 60).toString().padStart(2, "0");
 
-    return hour > 0 ? `${hour}${minute}:${second}` : `${minute}:${second}`;
+    if (getfull || hour > 0) {
+      return `${hour}:${minute}:${second}`;
+    } else {
+      return `${minute}:${second}`;
+    }
   };
 
   const addVideo = (e) => {
     const uploaded = e.target?.files[0];
-    const typeValidity = uploaded.type.split("/")[0] === "video"
-    const sizeValidity = uploaded.size
+    const typeValidity = uploaded?.type?.split("/")[0] === "video";
+    const sizeValidity = uploaded?.size < (100*1024*1024);
 
-    if (typeValidity) {
-      console.log("영상입니다!");
+    if (typeValidity && sizeValidity) {
       setVideo(uploaded);
       setVideoUrl(URL.createObjectURL(uploaded));
-    } else {
+    } else if (!typeValidity) {
       window.alert("영상 파일만 업로드 가능합니다");
+    } else if (!sizeValidity) {
+      window.alert("100MB 이하의 파일로 올려주세요");
     }
   };
 
   const addReels = async () => {
     const formData = new FormData();
     formData.append("video", video);
-    formData.append("thumbnail", thumbIdx);
-    formData.append("startPoint", startPoint);
-    formData.append("endPoint", endPoint);
+    formData.append("thumbnailTime", timeFormater(currentTime, true));
+    formData.append("startPoint", timeFormater(startPoint, true));
 
-    for (var key of formData.keys()) {
-      console.log(key);
-    }
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    // }
 
-    for (var value of formData.values()) {
-      console.log(value);
-    }
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
 
-    // const videoData =  await instance.post('/api/upload', formData)
-    // console.log(videoData)
+    const videoData = await instance.post("/api/upload", formData);
 
     const reelsData = {
       content: textRef.current.value,
-      video: "",
-      img: "",
+      video: videoData.data.video,
+      titleImg: videoData.data.thumbnail,
+      categoryName: "cute",
     };
 
-    console.log(reelsData)
+    await instance.post("/api/reels/", reelsData).then((res) => {
+      if (res.status === 200) {
+        window.alert('업로드 성공!')
+        navigate('/reels')
+      } else {
+        window.alert('문제가 발생하였습니다')
+        console.log(res);
+      }
+    }).catch((err) => console.log(err));
+
   };
 
-
-  const onSeekAction = (e) => {
-    console.log('seek', e)
-
-  }
-
-  const testerAct = (e) =>{
-    e.stopPropagation()
-    console.log('tester!')
-    videoRef.current.seekTo(currentTime + 10)
+  const editReels = () =>{
+    const newData = {
+      content: textRef.current.value,
+      category: 'cute'
+    }
+    instance.patch('/api/reels/' + params.id, newData).then(res => console.log(res))
   }
 
   const getDuration = (e) => {
     setDuration(e);
-
+    setStopper(e);
     if (e < 15) {
       setEndPoint(e);
     }
   };
 
   const getPlayedSeconds = (e) => {
+    const now = Math.round(e.playedSeconds);
+    trackRef.current.value = now;
+    setCurrentTime(() => now);
+
+    if (e.playedSeconds >= stopper) {
+      setIsPlaying(false);
+      setStopper(duration);
+    }
   };
 
-  // console.log(playPreview)
+  const changeCurrentTime = (e) => {
+    videoRef.current.seekTo(e.target.value);
+    setCurrentTime(e.target.value);
+  };
+
+  const changeStartPt = (e) => {
+    setStartPoint(e.target.value);
+    if (duration > e.target.value + 15) {
+      setEndPoint(e.target.value + 15);
+    } else {
+      setEndPoint(duration);
+    }
+  };
+
+  // const changeEndPt = (e) => {
+  //   setEndPoint(e.target.value);
+  // };
+
+  const testPlay = () => {
+    trackRef.current.value = startPoint;
+    videoRef.current.seekTo(startPoint);
+    setStopper(endPoint);
+    setIsPlaying(true);
+  };
 
   return (
     <Wrap>
       <Header> 릴스 </Header>
 
       <Contents>
+        
+        {
+        isNew ?
         <div>
           <p> 영상 올리기 </p>
-          <input type="file" onChange={(e) => addVideo(e)} />
+          <LabelIcon htmlFor="videoinput"> <FiFolderPlus/> </LabelIcon>
+          <input id='videoinput' type="file" onChange={(e) => addVideo(e)} />
         </div>
+        :null
+        }
 
-        {video ? (
+        {
+        video ? (
           <div>
-            <p> 썸네일 지정 / 영상 자르기 (최대 15초) </p>
-            <PlayerWrap onClick={() => setIsPlaying(!isPlaying)}>
+            <p> 영상 미리보기 </p>
+            <PlayerWrap>
               <ReactPlayer
                 ref={videoRef}
                 url={videoUrl}
@@ -131,39 +197,65 @@ const ReelsWrite = (props) => {
                 onDuration={(e) => getDuration(e)}
                 onProgress={(e) => getPlayedSeconds(e)}
                 controls={false}
-                onSeek={(e) => onSeekAction(e)}
               />
 
               <VideoController>
-
                 <ProgressWrap>
-
-                <Progress type="range" min="0" max={duration} step={1}/>
-
-                </ProgressWrap>
-
-
-                <ProgressBar>
-                  <ThumbIndicator onClick={(e)=>testerAct(e)}>
-                    <div id="pointerwrap">
-                      <RiDropFill id="pointer" />
-                      <span> 썸네일 </span>
-                    </div>
-                  </ThumbIndicator>
-
-                  {/* <Indicator id="start" position={startPoint} duration={duration}>ㅣ</Indicator>
-                  <Indicator id="end" position={endPoint} duration={duration}>ㅣ</Indicator> */}
-                </ProgressBar>
-
-
-                
-                <PlayStatus>
-                  <div>
-                    {isPlaying ? <FiPause className="playbtn" /> : <FiPlay className="playbtn" />}
-                    <FiRotateCw className="playbtn" onClick={() => console.log('호이')}/>
+                  <CropBar>
+                    <StartPt
+                      ref={startPtRef}
+                      type="range"
+                      min="0"
+                      max={duration}
+                      step={1}
+                      defaultValue={startPoint}
+                      duration={duration}
+                      onChange={changeStartPt}
+                    />
+                    {/* <EndPt
+                      ref={endPtRef}
+                      type="range"
+                      min="0"
+                      max={duration}
+                      step={1}
+                      defaultValue={endPoint}
+                      duration={duration}
+                      onChange={changeEndPt}
+                    /> */}
+                  </CropBar>
+                  <div className="guidetrack">
+                    <ThumbIndicator position={currentTime} duration={duration}>
+                      <div id="pointerwrap">
+                        <RiDropFill id="pointer" />
+                        <span> 썸네일 </span>
+                      </div>
+                    </ThumbIndicator>
                   </div>
 
-                  <span> {timeFormater(currentTime)} / {timeFormater(duration)} </span>
+                  <ProgressBar
+                    ref={trackRef}
+                    type="range"
+                    min="0"
+                    max={duration}
+                    step={1}
+                    onChange={(e) => changeCurrentTime(e)}
+                    defaultValue={0}
+                  />
+                </ProgressWrap>
+
+                <PlayStatus>
+                  <div>
+                    {isPlaying ? (
+                      <FiPause onClick={() => setIsPlaying(!isPlaying)} className="playbtn" />
+                    ) : (
+                      <FiPlay onClick={() => setIsPlaying(!isPlaying)} className="playbtn" />
+                    )}
+                    <FiCheck className="playbtn" onClick={() => testPlay()} />
+                  </div>
+
+                  <span>
+                    {timeFormater(currentTime)} / {timeFormater(duration)}
+                  </span>
                 </PlayStatus>
               </VideoController>
             </PlayerWrap>
@@ -172,13 +264,18 @@ const ReelsWrite = (props) => {
 
         <div>
           <p> 게시글 내용 </p>
-          <textarea ref={textRef} />
+          <textarea ref={textRef} defaultValue={isNew ? '' : thisPost?.contents} />
         </div>
       </Contents>
 
       <Buttons>
-        <button id="cancel"> 취소 </button>
-        <button id="write" onClick={() => addReels()}> 작성하기 </button>
+        <button id="cancel" onClick={() => navigate(-1)}> 취소 </button>
+        {
+          isNew ? 
+          <button id="write" onClick={() => addReels()}> 작성하기 </button>
+          : <button id="write" onClick={() => editReels()}> 수정하기 </button>
+        }
+        
       </Buttons>
     </Wrap>
   );
@@ -196,6 +293,7 @@ const Header = styled.div`
   font-size: 1.8rem;
   font-weight: bold;
 `;
+
 const Contents = styled.div`
   width: 80%;
   margin: auto;
@@ -220,7 +318,25 @@ const Contents = styled.div`
     font-size: 1.4rem;
     padding: 1rem;
   }
+
+  #videoinput{
+    display:none;
+  }
 `;
+
+const LabelIcon = styled.label`
+  background: #e4e4e4;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 10px;
+  margin: 1rem 1rem 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:#333;
+  font-size: 1.6rem;
+  cursor: pointer;
+`
 
 const Buttons = styled.div`
   width: 80%;
@@ -237,12 +353,12 @@ const Buttons = styled.div`
   }
 
   #cancel {
-    background: #F2F2F2;
+    background: #f2f2f2;
     color: #aaa;
   }
 
   #write {
-    background: #44DCD3;
+    background: #44dcd3;
     color: #333;
   }
 `;
@@ -272,18 +388,76 @@ const VideoController = styled.div`
 `;
 
 const ProgressWrap = styled.div`
-
-
-`
-
-const ProgressBar = styled.div`
   width: 90%;
   margin: auto;
+
+  .guidetrack {
+    background: transparent;
+    height: 1px;
+    width: 95%;
+    margin: auto;
+    position: relative;
+  }
+`;
+
+const ProgressBar = styled.input`
+  -webkit-appearance: none;
+  overflow: hidden;
+  width: 100%;
   height: 2rem;
   background: #ddd;
   border-radius: 2rem;
-  position: relative;
+  z-index: 1;
+
+  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 2rem;
+    background: #fff;
+    box-shadow: -21rem 0px 0 20rem #4addd0;
+    cursor: pointer;
+  }
 `;
+
+const CropBar = styled.div`
+  width: 100%;
+  margin: auto;
+  height: 1rem;
+  display: flex;
+`;
+const StartPt = styled.input`
+  -webkit-appearance: none;
+  background: transparent;
+  margin: 0px;
+  width: ${(props) => (props.duration - props.max / props.duration) * 100}%;
+  min-width: 0.8rem;
+
+  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1.5rem;
+    width: 0.8rem;
+    border-radius: 0 0 0 1rem;
+    background: #fff;
+    cursor: pointer;
+  }
+`;
+
+// const EndPt = styled.input`
+//   -webkit-appearance: none;
+//   background: blue;
+//   margin: 0px;
+//   width: 100%;
+
+//   ::-webkit-slider-thumb {
+//     -webkit-appearance: none;
+//     height: 1.5rem;
+//     width: 0.8rem;
+//     border-radius: 0 0 1rem 0;
+//     background: #fff;
+//     cursor: pointer;
+//   }
+// `;
 
 const PlayStatus = styled.div`
   width: 88%;
@@ -297,6 +471,7 @@ const PlayStatus = styled.div`
   .playbtn {
     font-size: 2.4rem;
     margin-right: 1.5rem;
+    cursor: pointer;
   }
 
   span {
@@ -304,31 +479,11 @@ const PlayStatus = styled.div`
   }
 `;
 
-const Progress = styled.input`
-  width: ${(props) => (props.currentTime / props.duration) * 100}%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: #4addd0;
-  border-radius: 2rem;
-  position: absolute;
-
-  display: flex;
-  justify-content: flex-end;
-
-  #progressEnd {
-    width: 1%;
-    height: 100%;
-    position: relative;
-  }
-`;
-
 const ThumbIndicator = styled.div`
   position: absolute;
   top: -4.5rem;
-  left: 1rem;
-  cursor: pointer;
-  transform: translate(-50%, 0);
+  left: ${(props) => (props.position / props.duration) * 100}%;
+  transform: translate(-45%, 0);
 
   #pointerwrap {
     position: relative;
@@ -347,19 +502,4 @@ const ThumbIndicator = styled.div`
     text-align: center;
     width: 100%;
   }
-`;
-
-const Indicator = styled.div`
-  position: absolute;
-  top: -0.4rem;
-  height: 2.8rem;
-  width: 0.8rem;
-  border-radius: 1rem;
-  background: #fff;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #aaa;
-  left: ${(props) => (props.position / props.duration) * 100}%;
 `;
