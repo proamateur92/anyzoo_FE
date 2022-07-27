@@ -12,8 +12,6 @@ const TogetherSlide = () => {
   const dispatch = useDispatch()
   const data = useSelector((state) => state.recruit.list);
 
-  console.log(data)
-
   React.useEffect(()=>{
     const pageInfo = { page: 0, provinceId: 'all'};
     dispatch(loadTogether(pageInfo))

@@ -1,0 +1,1 @@
+export const GATrackingId = 'G-99V2E6H06P'
