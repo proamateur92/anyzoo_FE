@@ -21,7 +21,7 @@ const NavMenu = () => {
   return dontShowIn.includes(currentLocation) ? null : (
     <NavWrap>
       <Inner>
-        <LeftBtn onClick={() => navigate('/post')}> 자랑하기 </LeftBtn>
+        <LeftBtn onClick={() => navigate('/post')}> 자랑하개 </LeftBtn>
         <RightBtn onClick={() => navigate('/reels')}> 릴스 </RightBtn>
 
         <RoundOuter>
