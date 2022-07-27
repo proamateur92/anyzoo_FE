@@ -10,11 +10,15 @@ import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiFilm } from "react-i
 // route
 import { useNavigate, useLocation } from "react-router-dom";
 
+// redux
+import { useSelector } from "react-redux";
+
 const NavCircle = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const setCircleOn = props.setCircleOn;
   const backDropRef = React.useRef();
+  const userInfo = useSelector((state) => state.user.info);
   const [plusOpen, setPlusOpen] = React.useState(false);
   const [writeOpt, setWriteOpt] = React.useState(null);
 
@@ -79,7 +83,7 @@ const NavCircle = (props) => {
             <h5> 채팅 </h5>
           </Menu>
 
-          <Menu order={1} onClick={() => moveTo("/mypage")}>
+          <Menu order={1} onClick={() => moveTo(`/mypage/${userInfo.nickname}`)}>
             <FiUser className={"icons"} />
             <h5> 마이페이지 </h5>
           </Menu>

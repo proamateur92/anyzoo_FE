@@ -20,7 +20,7 @@ import {
   Signup,
   Reels,
   CommunityList,
-  Oauth
+  Oauth,
 } from './pages/Index';
 
 // style
@@ -66,7 +66,7 @@ function App() {
           <Route path='/oauth' element={<Oauth />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/mypage' element={<Mypage />} />
-          <Route path='/mypage/:id' element={<Mypage />} />
+          <Route path='/mypage/:nickname' element={<Mypage />} />
           <Route path='/myedit' element={<UserEdit />} />
           <Route path='/user/findId' element={<FindId />} />
           <Route path='/user/findPassword' element={<FindPassword />} />
