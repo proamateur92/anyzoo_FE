@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 
 // components
 import Comment from "../components/Comment";
-import PhotoSlide from "../components/PhotoSlide";
 
 // elements
 import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
+import PhotoSlide from "../components/PhotoSlide";
 
 // style
 import styled from "styled-components";
@@ -22,31 +22,32 @@ import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
 // axios
 import instance from "../shared/axios";
 
-const PostDetail = () => {
+const CommunityDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState(); //Api에서 받은 데이터 변수 설정
   const [bubbleOn, setBubbleOn] = React.useState(false);
   const [like, setLike] = useState();
-  const [test, setTest] = useState([
-    "http://img.khan.co.kr/news/2019/11/29/l_2019112901003607500286631.jpg",
-    "https://petnolza.com/wp-content/uploads/2021/11/dog-america-name.jpg",
-  ]);
+  const [box, setBox] = useState(true);
 
   const menuOpen = () => {
     setBubbleOn(!bubbleOn);
   };
 
+  const changeBox = () => {
+    setBox(!box);
+  };
+
   // axios에서 데이터를 받아오기
   useEffect(() => {
-    instance.get("/api/post/" + params.id).then((response) => {
+    instance.get("/api/community/" + params.id).then((response) => {
       setData(response.data); //useState의 data에 넣어준다.
-      // console.log(response.data)
+      console.log(response.data, "datatat");
     });
   }, [params.id, like]);
 
   useEffect(() => {
-    instance.get("/api/post/category/all?page=0").then((response) => {
+    instance.get("/api/community?page=0").then((response) => {
       console.log(response.data);
     });
   }, []);
@@ -76,7 +77,7 @@ const PostDetail = () => {
             src={require("../assets/images/back.png.png")}
           />
           <HeadTitle>
-            <p>자랑하개</p>
+            <p>커뮤니티</p>
             <span>{data?.postCategory}</span>
           </HeadTitle>
           <JumMom>
@@ -84,9 +85,8 @@ const PostDetail = () => {
             {bubbleOn ? (
               <EditBubble
                 data={data}
-                contentsId={data?.boardMainId}
+                page={"community"}
                 setBubbleOn={setBubbleOn}
-                page={"post"}
               />
             ) : null}
           </JumMom>
@@ -100,9 +100,12 @@ const PostDetail = () => {
             <UserName>{data?.nickname}</UserName>
           </User>
         </UserInfo>
-        <ImgBox>
-          <PhotoSlide photos={data?.img} />
-        </ImgBox>
+        {data?.img.length === 0 ? null : (
+          <ImgBox>
+            <PhotoSlide photos={data?.img} />
+          </ImgBox>
+        )}
+
         <Content>{data?.contents}</Content>
         <Reactions>
           <span>
@@ -231,4 +234,4 @@ const Reactions = styled.div`
   }
 `;
 
-export default PostDetail;
+export default CommunityDetail;
