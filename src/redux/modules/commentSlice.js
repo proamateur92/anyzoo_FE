@@ -6,7 +6,7 @@ import instance from '../../shared/axios';
 export const loadCommentsDB = createAsyncThunk(
   'loadComment', async ( data ) => {
     const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
-    return response.data.comments
+    return {list: response.data, pgNo: data.pgNo}
   }
 );
 
@@ -14,7 +14,7 @@ export const addCommentDB = createAsyncThunk(
   'addComment',
   async (commentData) => {
     const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.comment})
-    const newComment = {...commentData, id:response.data, createdAt:'작성방금 전'}
+    const newComment = {...commentData, id:response.data.data, createdAt:'작성방금 전'}
     return newComment;
   }
 );
@@ -26,24 +26,30 @@ export const editCommentDB = createAsyncThunk('editComment', async (commentData)
   return commentData;
 });
 
-export const deleteCommentDB = createAsyncThunk('deleteComment', async (commentData) => {
-  await instance.delete(`/api/comment/edit/${commentData.boardMainId}/${commentData.commentId}`);
+export const deleteCommentDB = createAsyncThunk('deleteComment', async (commentId) => {
+  await instance.delete(`/api/comment/edit/${commentId}`);
   window.alert('삭제되었습니다');
-  return commentData.commentId;
+  return commentId;
 });
 
 const commentSlice = createSlice({
   name: 'comment',
   initialState: {
     list: [],
+    isLast: false
   },
   reducers: {},
   extraReducers: {
     [loadCommentsDB.fulfilled]: (state, { payload }) => {
-      state.list = payload;
+      if (payload.pgNo === 0) {
+        state.list = payload.list.comments;
+      } else {
+        state.list = [...state.list, ...payload.list.comments];
+      }
+      state.isLast = payload.list.last
     },
     [addCommentDB.fulfilled]: (state, { payload }) => {
-      state.list = [...state.list, payload];
+      state.list = [payload, ...state.list];
     },
     [editCommentDB.fulfilled]: (state, { payload }) => {
       state.list.map((c) => (c.id !== payload.id ? c : payload));

@@ -80,7 +80,7 @@ const PostDetail = () => {
           <Jum>
             <JumMom>
               <IoMdMore id='optionMenu' onClick={menuOpen} />
-              {bubbleOn ? <EditBubble contentsId={data?.boardMainId} setBubbleOn={setBubbleOn} /> : null}
+              {bubbleOn ? <EditBubble data={data} setBubbleOn={setBubbleOn} /> : null}
             </JumMom>
           </Jum>
         </UserInfo>

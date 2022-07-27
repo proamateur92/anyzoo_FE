@@ -42,11 +42,11 @@ const PostResponses = (props) => {
     <Reactions>
       <span className="like" onClick={() => likePost()}>
         {isLiked ? <IoHeartOutline /> : <IoHeart className="filled" />}
-        {likeCnt + likefluc}
+        {(likeCnt + likefluc).toLocaleString()}
       </span>
-
+ 
       <span>
-        <IoChatbubbleOutline /> {commentCount ? commentCount : 0}
+        <IoChatbubbleOutline /> {commentCount ? commentCount.toLocaleString() : 0}
       </span>
   </Reactions>
   )
