@@ -1,18 +1,22 @@
 //redux-toolkit
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 //axios
-import instance from '../../shared/axios';
+import instance from "../../shared/axios";
 
 // 자랑하기 글 불러오기
 export const loadPostsDB = createAsyncThunk(
-  'post/loadPost', async(pageInfo) => {
-    const response = await instance.get( `/api/post/category/${pageInfo.sorting}?page=${pageInfo.page}`).catch((err) => console.log(err))
+  "post/loadPost",
+  async (pageInfo) => {
+    const response = await instance
+      .get(`/api/post/category/${pageInfo.sorting}?page=${pageInfo.page}`)
+      .catch((err) => console.log(err));
     // console.log(response)
     // const response = await axios.get('http://localhost:5000/post?page='+ pageNo).catch((err) => console.log(err))
-    return response.data
+    return response.data;
   }
 );
+
 // 자랑하기 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
   console.log(data, "츄가");
@@ -26,6 +30,7 @@ export const addDataDB = createAsyncThunk("addData", async (data) => {
   const newPoster = { ...data, boardmainId: response.data.boardMainId };
   return newPoster;
 });
+
 // 자랑하기 글 수정
 export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   console.log(newData.data, "data", newData.id, "id");
@@ -40,15 +45,16 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
 });
 
 // 자랑하기 글 삭제
-export const removeDataDB = createAsyncThunk('removeData', async (id) => {
-  await instance.delete('/api/post/' + id);
-  window.alert('삭제되었습니다');
+export const removeDataDB = createAsyncThunk("removeData", async (id) => {
+  await instance.delete("/api/post/" + id);
+  window.alert("삭제되었습니다");
+  window.location.replace("/post");
   return id;
 });
 
 //Reducer
 const postSlice = createSlice({
-  name: 'post',
+  name: "post",
   initialState: {
     list: [],
     pageNumber: 0,
@@ -75,7 +81,7 @@ const postSlice = createSlice({
     //수정하기
     [modifyDataDB.fulfilled]: (state, { payload }) => {
       state.list.map((post) => {
-        console.log(payload, '무 ㅓ야야야');
+        console.log(payload, "무 ㅓ야야야");
         if (post.id === payload.id) {
           return {
             ...post,

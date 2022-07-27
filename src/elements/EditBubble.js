@@ -1,3 +1,6 @@
+// style
+import styled from "styled-components";
+
 // router
 import { useNavigate } from "react-router-dom";
 
@@ -14,8 +17,9 @@ import instance from "../shared/axios";
 import Bubble from "./Bubble";
 
 // postSlice
-import { removeDataDB } from "../redux/modules/postSlice";
-import styled from "styled-components";
+import { removeDataDB as postRemove } from "../redux/modules/postSlice";
+import { removeDataDB as communityRemove } from "../redux/modules/communitySlice";
+import { removeDataDB as recruitRemove } from "../redux/modules/recruitSlice";
 
 const EditBubble = (props) => {
   const user = useSelector((state) => state.user.info);
@@ -23,6 +27,7 @@ const EditBubble = (props) => {
   const navigate = useNavigate();
   const data = props.data;
   const contentsId = props.data?.boardMainId;
+  const page = props.page;
   const setBubbleOn = props.setBubbleOn;
   const dispatch = useDispatch();
 
@@ -34,16 +39,12 @@ const EditBubble = (props) => {
 
   const moveToEdit = () => {
     switch (data.boardKind) {
-      case "POST":
-        navigate("/post/update/" + contentsId);
-        break;
-
       case "REELS":
         navigate('/reels/write/' + contentsId)
         break;
 
       default:
-        return null;
+        return navigate("/" + page + "/update/" + data?.boardMainId)
     }
   };
 
@@ -52,11 +53,19 @@ const EditBubble = (props) => {
     if (window.confirm("정말 삭제하시겠어요?")) {
       switch (data.boardKind) {
         case "POST":
-          dispatch(removeDataDB(contentsId)) //removeDateDB에 id 전달해줌.
+          dispatch(postRemove(data?.boardMainId)) //removeDateDB에 id 전달해줌.
           .then((res)=> {
             console.log(res) 
             setBubbleOn(false)
           }); 
+          break;
+        
+        case "COMMUNITY" :
+          dispatch(communityRemove(data?.boardMainId));
+          break;
+        
+        case "Together" :
+          dispatch(recruitRemove(data?.boardMainId));
           break;
 
         case "REELS":

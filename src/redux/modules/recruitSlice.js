@@ -4,27 +4,27 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 //axios
 import instance from "../../shared/axios";
 
-// 자랑하기 글 작성
+// 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
   const response = await instance
-    .post("/api/community", data)
+    .post("/api/together", data)
     .then((res) => {
       window.alert("추가되었습니다");
-      window.location.replace("/community");
+      window.location.replace("/together");
     })
     .catch((err) => console.log(err));
-  const newCommunity = { ...data, boardmainId: response.data.boardMainId };
-  return newCommunity;
+  const newPoster = { ...data, boardmainId: response.data.boardMainId };
+  return newPoster;
 });
 
-// 자랑하기 글 수정
+// 글 수정
 export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   console.log(newData.data, "data", newData.id, "id");
   await instance
-    .patch("/api/community/" + newData.id, newData.data)
+    .patch("/api/together/detail/" + newData.id, newData.data)
     .then((res) => {
       window.alert("수정되었습니다");
-      window.location.replace("/community");
+      window.location.replace("/recruit");
     })
     .catch((err) => console.log(err));
   return newData;
@@ -32,15 +32,15 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
 
 // 글 삭제
 export const removeDataDB = createAsyncThunk("removeData", async (id) => {
-  await instance.delete("/api/community/" + id);
+  await instance.delete("/api/together/detail/" + id);
   window.alert("삭제되었습니다");
-  window.location.replace("/community");
+  window.location.replace("/recruit");
   return id;
 });
 
 //Reducer
 const postSlice = createSlice({
-  name: "community",
+  name: "together",
   initialState: {
     list: [],
     pageNumber: 0,
@@ -56,6 +56,7 @@ const postSlice = createSlice({
     //수정하기
     [modifyDataDB.fulfilled]: (state, { payload }) => {
       state.list.map((post) => {
+        console.log(payload, "무야야");
         if (post.id === payload.id) {
           return {
             ...post,
