@@ -5,66 +5,37 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 // component
-import EditBubble from "../elements/EditBubble";
 import PhotoSlide from "./PhotoSlide";
+import PostResponses from "./PostResponses";
+
+//element
+import EditBubble from "../elements/EditBubble";
 
 // style
 import styled from "styled-components";
 
 // icon
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
 
-// axios
-import instance from "../shared/axios";
 
 const PostCard = (props) => {
   const navigate = useNavigate();
   const postData = props.data;
   const boardMainId = props.data.boardMainId;
   const [bubbleOn, setBubbleOn] = React.useState(false);
-  const [commentCount, setCommentCount] = React.useState(null);
-  const [isLiked, setIsLiked] = React.useState(false);
-  const [likefluc, setLikefluc] = React.useState(0);
 
   const cardWrapRef = React.useRef();
-  const [cardWidth, setCardWidth] = React.useState(null);
-
-  const likePost = () => {
-    instance.post('/api/heart/' + boardMainId)
-    .then(() => {
-      setIsLiked(!isLiked)
-      isLiked ? setLikefluc((prev) => prev + 1) : setLikefluc((prev) => prev - 1)
-    })
-    .catch((err) => console.log(err));
-  };
-
-  React.useEffect(() => {
-    setCardWidth(cardWrapRef?.current?.offsetWidth);
-  }, [cardWrapRef?.current?.offsetWidth]);
 
   const menuOpen = () => {
-    setBubbleOn(!bubbleOn);
+      setBubbleOn(!bubbleOn);
   };
-
-  React.useEffect(() => {
-    instance
-      .get("/api/comment/count/" + boardMainId)
-      .then((res) => setCommentCount(res.data))
-      .catch((err) => console.log(err));
-
-    instance
-      .get("/api/heart/" + boardMainId)
-      .then((res) => setIsLiked(res.data))
-      .catch((err) => console.log(err));
-  }, [boardMainId, isLiked]);
 
   return (
     <OuterWrap>
-      <CardWrap ref={cardWrapRef} cardWidth={cardWidth}>
+      <CardWrap ref={cardWrapRef}>
         <CardHeader>
           <UserInfo>
-            <UserProfile img={postData.userProfileImg} cardWidth={cardWidth} />
+            <UserProfile img={postData.userProfileImg}/>
             <p>
               <span className="grade"> Purple </span>
               {postData.nickname}
@@ -72,7 +43,7 @@ const PostCard = (props) => {
           </UserInfo>
 
           <IoMdMore id="optionMenu" onClick={menuOpen} />
-          {bubbleOn ? <EditBubble contentsId={boardMainId} setBubbleOn={setBubbleOn} /> : null}
+          {bubbleOn ? <EditBubble data={postData} setBubbleOn={setBubbleOn} /> : null}
         </CardHeader>
 
         <Contents>
@@ -84,16 +55,8 @@ const PostCard = (props) => {
           </TextPreview>
         </Contents>
 
-        <Reactions>
-          <span className="like" onClick={() => likePost()}>
-            {isLiked ? <IoHeartOutline /> : <IoHeart className="filled" />}
-            {postData.likeCnt + likefluc}
-          </span>
-
-          <span>
-            <IoChatbubbleOutline /> {commentCount}
-          </span>
-        </Reactions>
+        <PostResponses boardMainId={boardMainId} likeCnt={postData.likeCnt}/>
+        
       </CardWrap>
     </OuterWrap>
   );
@@ -139,7 +102,7 @@ const UserInfo = styled.span`
   display: flex;
   align-items: center;
   margin: 0px;
-  width: 100%;
+  width: 95%;
   flex-shrink: 0;
 
   p {
@@ -206,30 +169,5 @@ const TextPreview = styled.p`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-`;
-
-const Reactions = styled.div`
-  display: flex;
-  align-items: center;
-  height: 12.7%;
-  padding: 0px 10%;
-  border-top: 2px solid rgba(0, 0, 0, 0.1);
-  color: #b3b3b3;
-  font-size: 1.5rem;
-
-  span {
-    margin-right: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .like {
-    cursor: pointer;
-  }
-
-  .filled {
-    color: red;
   }
 `;

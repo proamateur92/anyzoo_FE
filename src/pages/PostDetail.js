@@ -80,14 +80,20 @@ const PostDetail = () => {
             <span>{data?.postCategory}</span>
           </HeadTitle>
           <JumMom>
-            <IoMdMore id="optionMenu" onClick={menuOpen} />
+            <IoMdMore
+              id="optionMenu"
+              onClick={menuOpen}
+              style={{ marginLeft: "80%" }}
+            />
             {bubbleOn ? (
-              <EditBubble
-                data={data}
-                contentsId={data?.boardMainId}
-                setBubbleOn={setBubbleOn}
-                page={"post"}
-              />
+              <div>
+                <EditBubble
+                  data={data}
+                  contentsId={data?.boardMainId}
+                  setBubbleOn={setBubbleOn}
+                  page={"post"}
+                />
+              </div>
             ) : null}
           </JumMom>
         </HeadBtn>
@@ -146,6 +152,8 @@ const Back = styled.img`
 const HeadTitle = styled.div`
   text-align: center;
   width: 40%;
+  margin-left: 29%;
+  margin-top: 1%;
 
   /* margin-top: -50px; */
 
@@ -194,8 +202,8 @@ const UserName = styled.span`
 const JumMom = styled.div`
   position: relative;
   font-size: 25px;
-  opacity: 0.6;
   z-index: 10;
+  width: 50%;
 `;
 
 const ImgBox = styled.div`

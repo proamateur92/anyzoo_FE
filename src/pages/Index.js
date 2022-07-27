@@ -1,4 +1,5 @@
-import FindPwd from "./FindPwd";
+import FindId from "./FindId";
+import FindPassword from "./FindPassword";
 import Home from "./Home";
 import Login from "./Login";
 import Mypage from "./Mypage";
@@ -12,6 +13,7 @@ import PostUpdate from "./PostUpdate";
 import Signup from "./Signup";
 import UserEdit from "./UserEdit";
 import Reels from "./Reels";
+import ReelsWrite from "./ReelsWrite";
 import CommunityList from "./CommunityList";
 import CommunityWrite from "./CommunityWrite";
 import CommunityUpdate from "./CommunityUpdate";
@@ -36,6 +38,7 @@ export {
   PostUpdate,
   Signup,
   Reels,
+  ReelsWrite,
   CommunityList,
   CommunityWrite,
   CommunityUpdate,
