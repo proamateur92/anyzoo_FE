@@ -8,8 +8,6 @@ import SetAddress from "../components/SetAddress";
 // style
 import styled from "styled-components";
 
-import instance from "../shared/axios";
-
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { loadPostsDB as loadTogether } from "../redux/modules/recruitSlice";
@@ -56,7 +54,7 @@ const CommunityList = ( props ) => {
     React.useEffect(() => {
       if ( page >= 0 && !isLastPg ) {
         if (type === 'together') {
-          const pageInfo = { page: page, provinceId: province };
+          const pageInfo = { page: page, provinceId: province, cityId: city };
           dispatch(loadTogether(pageInfo));
         } else if (type === 'community') {
           dispatch(loadCommunity(page));
@@ -64,7 +62,7 @@ const CommunityList = ( props ) => {
       } else {
         console.log("마지막 페이지");
       }
-    }, [page, dispatch, isLastPg, type, province]);
+    }, [page, dispatch, isLastPg, type, city, province]);
 
 
 
@@ -73,7 +71,7 @@ const CommunityList = ( props ) => {
     <Wrap>
       <Header type={type}>
         <div id="together" onClick={() => navigate("/together")}>
-          산책 메이트
+          함께하개
         </div>
         <div id="community" onClick={() => navigate("/community")}>
           커뮤니티
@@ -82,7 +80,7 @@ const CommunityList = ( props ) => {
 
       {type === "together" ? (
         <ListOption>
-          <SetAddress setCity={setCity} setProvince={setProvince} />
+          <SetAddress setCity={setCity} setProvince={setProvince} setPage={setPage} />
         </ListOption>
       ) : null}
  

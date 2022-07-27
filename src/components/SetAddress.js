@@ -14,6 +14,7 @@ const SetAddress = (props) => {
   const [provinceList, setProvinceList] = React.useState([]);
   const setCity = props.setCity
   const setProvince = props.setProvince
+  const setPage = props.setPage
 
 
   React.useEffect(() => {
@@ -24,6 +25,7 @@ const SetAddress = (props) => {
     setCity(e.target.value)
     const cityId = e.target.value
     instance.get('/api/together/province/'+cityId).then((res) => setProvinceList(res.data))
+    setPage(()=>0)
   };
 
   const changeProv = (e) => {
@@ -33,7 +35,7 @@ const SetAddress = (props) => {
   return (
       <SelectWrap>
         <select onChange={(e)=>changeCity(e)}>
-          <option value="">서울시 전체</option>
+          <option value="all">서울시 전체</option>
           {cityList?.map((city) => (
             <option key={city.cityId} value={city.cityId}>
               {city.cityName}
@@ -46,7 +48,7 @@ const SetAddress = (props) => {
         </SelectArrow>
 
         <select onChange={(e)=>changeProv(e)}>
-          <option value="">ㅇㅇ동</option>
+          <option value="all">ㅇㅇ동</option>
           {provinceList?.map((prov) => (
             <option key={prov.provinceId} value={prov.provinceId}>
             {prov.provinceName}

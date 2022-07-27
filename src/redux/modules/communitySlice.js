@@ -12,7 +12,6 @@ export const loadPostsDB = createAsyncThunk(
     const response = await instance
       .get(`/api/community?page=${page}`)
       .catch((err) => console.log(err));
-    console.log(response)
      return response.data;
   }
 );

@@ -8,8 +8,13 @@ import instance from "../../shared/axios";
 export const loadPostsDB = createAsyncThunk(
   "recruit/loadPost",
   async (pageInfo) => {
+    console.log(pageInfo)
+    const url = 
+      pageInfo.provinceId === 'all' || pageInfo.cityId === 'all' ?
+        '/api/together' : '/api/together/category/'+ pageInfo.provinceId
+      
     const response = await instance
-      .get(`/api/together/category/${pageInfo.provinceId}?page=${pageInfo.page}`)
+      .get(`${url}?page=${pageInfo.page}`)
       .catch((err) => console.log(err));
     console.log(response)
      return response.data;
