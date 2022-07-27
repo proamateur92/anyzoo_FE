@@ -1,5 +1,5 @@
 // react
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 // element
 import Wrap from '../elements/Wrap';
@@ -33,8 +33,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [validation, setValidation] = useState({ onEmail: false, onPassword: false, msg: '' });
+
   const isLogin = getCookie('accessToken') ? true : false;
-  console.log(isLogin);
 
   useEffect(() => {
     if (isLogin) navigate('/');
@@ -62,17 +63,28 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    if (!validation.onEmail && !validation.onPassword) {
+      return;
+    }
+    setTimeout(() => {
+      setValidation({ onEmail: false, onPassword: false });
+    }, 1000);
+  }, [validation]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = eamilValue.current;
     const password = pwdValue.current;
 
     if (email.value.trim().length === 0) {
+      setValidation({ ...validation, onEmail: true });
       email.focus();
       return;
     }
 
     if (password.value.trim().length === 0) {
+      setValidation({ ...validation, onPassword: true });
       password.focus();
       return;
     }
@@ -89,9 +101,11 @@ const Login = () => {
     <Wrap>
       <Container>
         <Logo>ANYZOO</Logo>
-        <LoginForm onSubmit={handleSubmit}>
+        <LoginForm onSubmit={handleSubmit} validation={validation.onEmail}>
           <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
+          {validation.onEmail && <span className='validation'>이메일을 입력해주세요.</span>}
           <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
+          {validation.onPassword && <span className='validation'>비밀번호를 입력해주세요.</span>}
           <Buttons>
             <button onClick={() => handleSubmit}>로그인</button>
             <button onClick={() => navigate('/signup')}>회원가입</button>
@@ -119,24 +133,22 @@ const Login = () => {
 };
 
 const Container = styled.div`
+  padding-top: 12vw;
   text-align: center;
-  height: 100%;
 `;
 
 const Logo = styled.span`
   display: inline-block;
   font-size: 30px;
   font-weight: 800;
+  padding-bottom: 8%;
   color: ${(props) => props.theme.color.main};
-  padding: 15% 0;
 `;
 
 const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 0 16.5%;
-  height: 100%;
   input {
     box-sizing: border-box;
     width: 100%;
@@ -145,11 +157,11 @@ const LoginForm = styled.form`
     padding: 7%;
     outline: none;
   }
-  input:first-of-type {
-    margin-bottom: 3%;
-  }
   input {
     background-color: ${(props) => props.theme.color.grey};
+  }
+  input:first-of-type {
+    margin-bottom: ${(props) => (props.validation ? '0' : '3%')};
   }
   input::placeholder {
     color: rgba(0, 0, 0, 0.3);
@@ -163,6 +175,16 @@ const LoginForm = styled.form`
     border: none;
     outline: none;
     cursor: pointer;
+  }
+  .validation {
+    display: inline-block;
+    margin: 3% 0;
+    text-align: left;
+    font-size: 14px;
+    color: red;
+  }
+  .validation:first-of-type {
+    margin-bottom: 5%;
   }
 `;
 
@@ -206,7 +228,7 @@ const SimpleLogin = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0 15px 0;
+  padding: 5% 0 3% 0;
   width: 100%;
   .simple {
     font-size: 14px;
@@ -227,7 +249,7 @@ const SocialButtons = styled.div`
     border-radius: 12px;
   }
   a:first-of-type {
-    margin: 3% 0;
+    margin: 4% 0;
     background-color: #ffffff;
   }
   a:nth-of-type(2) {
