@@ -205,22 +205,22 @@ const InputBox = styled.div`
     color: #000;
     font-size: clamp(8px, 3.67vw, 16px);
     opacity: 0.6;
-    margin: 15px 0;
+    margin: 0.9375rem 0;
   }
   input {
     font-size: clamp(8px, 3.67vw, 16px);
     opacity: 30%;
-    padding: 3px;
+    padding: 0.1875rem;
     width: 100%;
     height: 6%;
-    border-radius: 10px;
+    border-radius: 0.625rem;
     border: 1px solid black;
   }
 `;
 const People = styled.select`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   opacity: 30%;
-  padding: 3px;
+  padding: 0.1875rem;
   width: 100%;
   height: 6%;
   border-radius: 10px;
@@ -228,12 +228,12 @@ const People = styled.select`
 `;
 
 const Location = styled.div`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   opacity: 100%;
-  padding: 3px;
+  padding: 0.1875rem;
   width: 100%;
   height: 6%;
-  border-radius: 10px;
+  border-radius: 0.625rem;
   margin: 0 3% 0 0;
 
   input {
@@ -244,26 +244,21 @@ const Location = styled.div`
 `;
 
 const DatePut = styled.input`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   opacity: 20%;
-  padding: 3px;
-  width: 300px;
+  padding: 0.1875rem;
+  width: 18.75rem;
   height: 6%;
   border-radius: 10px;
   width: 30%;
   margin: 0 3% 0 0;
 `;
 
-const ImgBox = styled.div`
-  width: 100%;
-  height: 16%;
-`;
-
 const Preview = styled.div`
   justify-content: center;
   display: flex;
   width: 100%;
-  height: 90px;
+  height: 80px;
 
   overflow: auto;
 `;
@@ -275,44 +270,11 @@ const PreviewImg = styled.img`
   margin-top: 5px;
 `;
 
-const PlusImgBox = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 68px;
-  margin-top: 11px;
-  /* background-color: aqua; */
-`;
-
-const PlusImg = styled.div`
-  border: 2px solid #000;
-  opacity: 0.3;
-  width: 25px;
-  height: 25px;
-  margin-top: 20px;
-  border-radius: 20px;
-  padding: 2px;
-  text-align: center;
-
-  p {
-    color: black;
-    font-weight: bold;
-    font-size: 25px;
-    margin: auto;
-    margin-top: -7px;
-  }
-`;
-
-const DeleteImg = styled.button`
-  background-color: transparent;
-  color: gray;
-  left: 2px;
-`;
-
 const Content = styled.textarea`
   border: none;
   width: 100%;
   height: 40%;
-  margin: 5px 0 0;
+  margin: 0.3125rem 0 0;
   border-radius: 10px;
   background-color: #f8f8f8;
 `;

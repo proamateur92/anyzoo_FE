@@ -196,39 +196,36 @@ const RecruitWrite = () => {
         <p>날짜 설정</p>
         <DatePut onChange={dates} type="datetime-local"></DatePut>
         <p>사진 첨부 (최대 5장)</p>
-        <ImgBox>
-          <Preview>
-            {showImages &&
-              showImages.map((image, id) => {
-                return (
-                  <div key={id}>
-                    <PreviewImg src={image} />
-                    <DeleteImg onClick={() => handleDeleteImage(id)}>
-                      x
-                    </DeleteImg>
-                  </div>
-                );
-              })}
-            {showImages.length === 5 ? null : (
-              <label onChange={handelAddImg}>
-                <input
-                  type="file"
-                  id="input-file"
-                  multiple="multiple"
-                  style={{
-                    display: "none",
-                  }}
-                />
 
-                <PlusImgBox>
-                  <PlusImg>
-                    <p>+</p>
-                  </PlusImg>
-                </PlusImgBox>
-              </label>
-            )}
-          </Preview>
-        </ImgBox>
+        <Preview>
+          {showImages &&
+            showImages.map((image, id) => {
+              return (
+                <div key={id}>
+                  <PreviewImg src={image} />
+                  <DeleteImg onClick={() => handleDeleteImage(id)}>x</DeleteImg>
+                </div>
+              );
+            })}
+          {showImages.length === 5 ? null : (
+            <label onChange={handelAddImg}>
+              <input
+                type="file"
+                id="input-file"
+                multiple="multiple"
+                style={{
+                  display: "none",
+                }}
+              />
+
+              <PlusImgBox>
+                <PlusImg>
+                  <p>+</p>
+                </PlusImg>
+              </PlusImgBox>
+            </label>
+          )}
+        </Preview>
 
         <p>게시글 내용</p>
         <Content ref={contentRef} />
@@ -248,7 +245,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
     margin-top: 10%;
   }
@@ -257,17 +254,17 @@ const TitleBox = styled.div`
 const InputBox = styled.div`
   width: 80%;
   height: 70vh;
-  margin: 0 10% 0 10%;
+  margin: 6% 10% 0 10%;
   p {
     color: #000;
-    font-size: clamp(8px, 3.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.5;
-    margin: 15px 0;
+    margin: 0.9375rem 0;
   }
   input {
-    font-size: clamp(8px, 3.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 20%;
-    padding: 3px;
+    padding: 0.1875rem;
     width: 100%;
     height: 6%;
     border-radius: 10px;
@@ -275,9 +272,9 @@ const InputBox = styled.div`
   }
 `;
 const People = styled.select`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   opacity: 20%;
-  padding: 3px;
+  padding: 0.1875rem;
   width: 100%;
   height: 6%;
   border-radius: 10px;
@@ -285,9 +282,9 @@ const People = styled.select`
 `;
 
 const Location = styled.select`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   opacity: 20%;
-  padding: 3px;
+  padding: 0.1875rem;
   width: 47%;
   height: 6%;
   border-radius: 10px;
@@ -297,25 +294,19 @@ const Location = styled.select`
 const DatePut = styled.input`
   font-size: clamp(8px, 3.67vw, 16px);
   opacity: 20%;
-  padding: 3px;
-  width: 300px;
+  padding: 0.1875rem;
+  width: 18.75rem;
   height: 6%;
   border-radius: 10px;
   width: 30%;
   margin: 0 3% 0 0;
 `;
 
-const ImgBox = styled.div`
-  width: 100%;
-  height: 16%;
-`;
-
 const Preview = styled.div`
   justify-content: center;
   display: flex;
   width: 100%;
-  height: 90px;
-
+  height: 80px;
   overflow: auto;
 `;
 
@@ -330,7 +321,7 @@ const PlusImgBox = styled.div`
   display: flex;
   justify-content: center;
   width: 68px;
-  margin-top: 11px;
+  margin-top: 0.6875rem;
   /* background-color: aqua; */
 `;
 
@@ -356,14 +347,14 @@ const PlusImg = styled.div`
 const DeleteImg = styled.button`
   background-color: transparent;
   color: gray;
-  left: 2px;
+  left: 0.125rem;
 `;
 
 const Content = styled.textarea`
   border: none;
   width: 100%;
   height: 40%;
-  margin: 5px 0 0;
+  margin: 0.3125rem 0 0;
   border-radius: 10px;
   background-color: #f8f8f8;
 `;

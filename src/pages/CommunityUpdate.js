@@ -85,7 +85,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
     margin-top: 10%;
   }
@@ -94,19 +94,19 @@ const TitleBox = styled.div`
 const InputBox = styled.div`
   width: 80%;
   height: 70vh;
-  margin: 10% 10% 0 10%;
+  margin: 6% 10% 0 10%;
 
   p {
     color: #000;
-    font-size: clamp(8px, 2.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.5;
-    margin: 15px 0;
+    margin: 0.9375rem 0;
   }
 
   input {
-    font-size: 16px;
+    font-size: 1.2rem;
     opacity: 20%;
-    padding: 3px;
+    padding: 0.1875rem;
     width: 100%;
     height: 4%;
     border-radius: 10px;
@@ -117,21 +117,21 @@ const InputBox = styled.div`
 const Preview = styled.div`
   justify-content: center;
   display: flex;
-  height: 11%;
+  height: 80px;
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
-  height: 100%;
+  height: 68%%;
   border-radius: 5px;
-  margin-top: 1%;
+  margin-top: 5px;
 `;
 
 const Content = styled.textarea`
   border: none;
   width: 100%;
   height: 40%;
-  margin: 5px 0 0;
+  margin: 0.3125rem 0 0;
   border-radius: 10px;
   background-color: #f8f8f8;
 `;

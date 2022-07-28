@@ -102,39 +102,36 @@ const CommunityWrite = () => {
         {/* <p>게시글 제목</p>
         <input type="text" ref={titleRef} /> */}
         <p>사진 첨부 (최대 5장)</p>
-        <ImgBox>
-          <Preview>
-            {showImages &&
-              showImages.map((image, id) => {
-                return (
-                  <div key={id}>
-                    <PreviewImg src={image} />
-                    <DeleteImg onClick={() => handleDeleteImage(id)}>
-                      x
-                    </DeleteImg>
-                  </div>
-                );
-              })}
-            {showImages.length === 5 ? null : (
-              <label onChange={handelAddImg}>
-                <input
-                  type="file"
-                  id="input-file"
-                  multiple="multiple"
-                  style={{
-                    display: "none",
-                  }}
-                />
 
-                <PlusImgBox>
-                  <PlusImg>
-                    <p>+</p>
-                  </PlusImg>
-                </PlusImgBox>
-              </label>
-            )}
-          </Preview>
-        </ImgBox>
+        <Preview>
+          {showImages &&
+            showImages.map((image, id) => {
+              return (
+                <div key={id}>
+                  <PreviewImg src={image} />
+                  <DeleteImg onClick={() => handleDeleteImage(id)}>x</DeleteImg>
+                </div>
+              );
+            })}
+          {showImages.length === 5 ? null : (
+            <label onChange={handelAddImg}>
+              <input
+                type="file"
+                id="input-file"
+                multiple="multiple"
+                style={{
+                  display: "none",
+                }}
+              />
+
+              <PlusImgBox>
+                <PlusImg>
+                  <p>+</p>
+                </PlusImg>
+              </PlusImgBox>
+            </label>
+          )}
+        </Preview>
 
         <p>게시글 내용</p>
         <Content ref={contentRef} />
@@ -154,7 +151,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
     margin-top: 12%;
   }
@@ -166,15 +163,15 @@ const InputBox = styled.div`
   margin: 0 10% 0 10%;
   p {
     color: #000;
-    font-size: clamp(8px, 3.4vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.5;
     /* margin: 15px 0; */
     margin: 5% 0 3% 0;
   }
   input {
-    font-size: 16px;
+    font-size: 1.2rem;
     opacity: 20%;
-    padding: 3px;
+    padding: 0.1875rem;
     width: 100%;
     height: 5%;
     border-radius: 10px;
@@ -182,25 +179,19 @@ const InputBox = styled.div`
   }
 `;
 
-const ImgBox = styled.div`
-  width: 100%;
-  height: 15%;
-`;
-
-const ImgPut = styled.input`
-  margin-top: 5px;
-`;
-
 const Preview = styled.div`
   justify-content: center;
   display: flex;
+  width: 100%;
+  height: 80px;
+  overflow: auto;
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
-  height: 80%;
+  height: 68%;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 0.625rem;
 `;
 
 const PlusImgBox = styled.div`
@@ -235,34 +226,36 @@ const DeleteImg = styled.button`
   background-color: transparent;
   color: gray;
   display: inline-block;
-  margin-bottom: 1px;
+  margin-bottom: 0.0625rem;
 `;
 
 const Content = styled.textarea`
   border: none;
   width: 100%;
   height: 50%;
-  margin: 5px 0 0;
+  margin: 0.3125rem 0 0;
   border-radius: 10px;
   background-color: #f8f8f8;
 `;
 
 const ButtonBox = styled.div`
   text-align: center;
-  padding: 20px;
+  padding: 4% 0 4% 0;
+  width: 100%;
+  height: 30%;
 `;
 
 const CancelBtn = styled.button`
-  width: 40%;
-  height: 50px;
+  width: 46%;
+  height: 28%;
   flex-grow: 0;
 
   border-radius: 10px;
   background-color: #f2f2f2;
 `;
 const AddBtn = styled.button`
-  width: 40%;
-  height: 50px;
+  width: 46%;
+  height: 28%;
   flex-grow: 0;
   margin-left: 7%;
   border-radius: 10px;

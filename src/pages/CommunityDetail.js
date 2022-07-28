@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // components
 import Comment from "../components/Comment";
-
+import PostResponses from "../components/PostResponses";
 // elements
 import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
@@ -34,10 +34,6 @@ const CommunityDetail = () => {
     setBubbleOn(!bubbleOn);
   };
 
-  const changeBox = () => {
-    setBox(!box);
-  };
-
   // axios에서 데이터를 받아오기
   useEffect(() => {
     instance.get("/api/community/" + params.id).then((response) => {
@@ -52,13 +48,6 @@ const CommunityDetail = () => {
     });
   }, []);
 
-  const clickHeart = () => {
-    instance.post("/api/heart/" + params.id).then((res) => {
-      console.log(res);
-      setLike(!like);
-    });
-  };
-
   useEffect(() => {
     instance.get("/api/heart/" + params.id).then((res) => {
       // console.log(res)
@@ -72,7 +61,7 @@ const CommunityDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/community");
+              navigate(-1);
             }}
             src={require("../assets/images/back.png.png")}
           />
@@ -110,19 +99,10 @@ const CommunityDetail = () => {
         )}
 
         <Content>{data?.contents}</Content>
-        <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-          <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
-          </span>
-        </Reactions>
+        <PostResponses
+          boardMainId={data?.boardMainId}
+          likeCnt={data?.likeCnt}
+        />
       </All>
 
       <Comment postId={params.id} />
