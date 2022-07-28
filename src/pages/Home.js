@@ -108,7 +108,7 @@ const Logo = styled.div`
 
   color: #fff;
   font-weight: bolder;
-  font-size: 2.5rem;
+  font-size: 2.7rem;
 `;
 
 const SubTitle = styled.div`
@@ -119,13 +119,14 @@ const SubTitle = styled.div`
 h3 {
   display: flex;
   align-items: center;
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
   white-space: nowrap;
+  letter-spacing: -0.15rem;
 }
 
 .icon {
-  font-size: 2.4rem;
+  font-size: 2.6rem;
   color: #29d5ca;
   margin-right: 0.5rem;
 }

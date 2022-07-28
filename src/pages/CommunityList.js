@@ -117,6 +117,7 @@ const Header = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 0.2rem solid #fff;
     cursor: pointer;
   }
 
