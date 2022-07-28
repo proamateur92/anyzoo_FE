@@ -16,7 +16,6 @@ export const loadPostsDB = createAsyncThunk(
     const response = await instance
       .get(`${url}?page=${pageInfo.page}`)
       .catch((err) => console.log(err));
-    console.log(response)
      return response.data;
   }
 );

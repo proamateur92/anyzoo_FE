@@ -18,7 +18,7 @@ const TogetherCard = (props) => {
   const month = today.getMonth() > 9 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
   const todayString = today.getFullYear() + "-" + month + "-" + today.getDate();
 
-  const createdAt = props.commentData?.createdAt;
+  const createdAt = data?.dateTime;
   const createdAtDisplay =
     todayString !== createdAt?.split("T")[0]
       ? createdAt?.split("T")[0].substr(5)
