@@ -10,12 +10,13 @@ import instance from '../../shared/axios';
 // redux
 import { useSelector } from 'react-redux';
 
+// router
 import { useNavigate } from 'react-router-dom';
 
 // sweetalert
 import Swal from 'sweetalert2';
 
-const Friends = ({ nickname }) => {
+const Friends = ({ nickname, handleMoveStep }) => {
   const userInfo = useSelector((state) => state.user.info);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +32,8 @@ const Friends = ({ nickname }) => {
     try {
       const response = await instance.post(`/api/follow/${nickname}`);
       console.log(response.data);
+      const newFriendList = friendList.following.filter((friend) => friend.nickname != nickname);
+      setFriendList({ ...friendList, following: newFriendList });
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +70,7 @@ const Friends = ({ nickname }) => {
               className='friend_row'
               key={friend.nickname}
               onClick={() => {
+                handleMoveStep(0);
                 navigate(`/mypage/${friend.nickname}`);
               }}
             >
@@ -88,7 +92,13 @@ const Friends = ({ nickname }) => {
       <FriendList>
         {!!friendList.follower.length &&
           friendList.follower.map((friend) => (
-            <div className='friend_row'>
+            <div
+              className='friend_row'
+              onClick={() => {
+                handleMoveStep(0);
+                navigate(`/mypage/${friend.nickname}`);
+              }}
+            >
               <div className='friend_profile'>
                 <img src={friend.userProfileImg} alt='유저 이미지' />
                 <span>{friend.nickname}</span>
@@ -99,6 +109,7 @@ const Friends = ({ nickname }) => {
       </FriendList>
     );
   }
+
   const getFolllowing = useCallback(async () => {
     try {
       const response = await instance.get(`/api/following/${nickname}`);
@@ -158,12 +169,10 @@ const Tap = styled.div`
     border-radius: 10px 10px 0 0;
   }
   div:first-of-type {
-    border-bottom: 3px solid ${(props) => (props.mode === 'following' ? props.theme.color.main : '#d9d9d9')};
-    background-color: ${(props) => props.mode === 'following' && 'rgba(0, 0, 0, 0.1)'};
+    border-bottom: 0.2rem solid ${(props) => (props.mode === 'following' ? props.theme.color.main : '#d9d9d9')};
   }
   div:nth-of-type(2) {
-    border-bottom: 3px solid ${(props) => (props.mode === 'follower' ? props.theme.color.main : '#d9d9d9')};
-    background-color: ${(props) => props.mode === 'follower' && 'rgba(0, 0, 0, 0.1)'};
+    border-bottom: 0.2rem solid ${(props) => (props.mode === 'follower' ? props.theme.color.main : '#d9d9d9')};
   }
 `;
 
@@ -185,10 +194,6 @@ const FriendList = styled.div`
       padding-left: 4%;
       font-size: 14px;
     }
-  }
-  .friend_row:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
   }
   .friend_profile {
     width: 100%;
