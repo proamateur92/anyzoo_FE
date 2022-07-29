@@ -70,6 +70,7 @@ const Inner = styled.div`
 const LeftBtn = styled.div`
   background: #fff;
   height: 100%;
+  margin-bottom: -0.1rem;
   width: 45.3%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.25);
@@ -87,6 +88,7 @@ const LeftBtn = styled.div`
 const RightBtn = styled.div`
   background: #fff;    
   height:100%;
+  margin-bottom: -0.1rem;
   width: 45.3%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0px -1px 4px 0px rgba(0, 0, 0, 0.25);

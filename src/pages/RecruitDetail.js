@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // components
 import PhotoSlide from "../components/PhotoSlide.js";
-
+import PostResponses from "../components/PostResponses.js";
 // elements
 import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
@@ -99,7 +99,7 @@ const RecruitDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/post");
+              navigate(-1);
             }}
             src={require("../assets/images/back.png.png")}
           />
@@ -136,16 +136,20 @@ const RecruitDetail = () => {
           </ImgBox>
         )}
         <Content>{data?.contents}</Content>
-        <Reactions>
+        {/* <Reactions>
           <span>
             {like === true ? (
               <IoHeartOutline onClick={clickHeart} />
             ) : (
-              <IoHeart onClick={clickHeart} />
+              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
             )}
             <span>{data?.likeCnt}</span>{" "}
           </span>
-        </Reactions>
+        </Reactions> */}
+        <PostResponses
+          boardMainId={data?.boardMainId}
+          likeCnt={data?.likeCnt}
+        />
       </All>
       {box === true ? (
         <ChatBox>
@@ -244,12 +248,12 @@ const HeadTitle = styled.div`
 
   p {
     margin: 1.5%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
   }
 
   span {
-    font-size: clamp(8px, 2.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.6;
   }
 `;
@@ -317,14 +321,6 @@ const Content = styled.p`
   font-size: clamp(8px, 3.6vw, 20px);
 `;
 
-const Reactions = styled.div`
-  padding-top: 15px;
-  font-size: clamp(8px, 3.2vw, 15px);
-  span {
-    margin-right: 10px;
-  }
-`;
-
 const ChatBox = styled.div`
   position: fixed;
   width: 100%;
@@ -344,7 +340,7 @@ const ChatBtn = styled.button`
   height: 100%;
   right: 12%;
   width: 48px;
-  font-size: 30px;
+  font-size: 2.1rem;
   font-weight: 300;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
@@ -377,7 +373,6 @@ const InfoUserImg = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 100px;
-  border: solid 1px black;
 `;
 
 const InfoUser = styled.div`
@@ -407,7 +402,7 @@ const Gu = styled.div`
 
   span {
     opacity: 0.7;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 `;
 const Dong = styled.div`
@@ -416,7 +411,7 @@ const Dong = styled.div`
   border: 1px solid gray;
   margin: 0 2% 0 2%;
   text-align: center;
-  line-height: 33px;
+  line-height: 2.0625rem;
   border-radius: 30px;
 
   span {
@@ -429,7 +424,7 @@ const JengBo = styled.div`
   position: fixed;
   width: 100%;
   max-width: 600px;
-  height: 26vh;
+  height: 28vh;
   bottom: 90px;
   left: 50%;
   transform: translate(-50%, 0);
@@ -442,7 +437,7 @@ const ChatB = styled.button`
   position: fixed;
   height: 45px;
   width: 48px;
-  font-size: 30px;
+  font-size: 2.1rem;
   font-weight: 300;
   border-bottom-right-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -450,6 +445,8 @@ const ChatB = styled.button`
   color: black;
   margin-left: 76%;
   padding-top: 10px;
+  span {
+  }
 `;
 
 const JengBoUser = styled.div`

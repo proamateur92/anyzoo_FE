@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 // icon
 import { IoIosArrowBack } from 'react-icons/io';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaSignOutAlt } from 'react-icons/fa';
 
 // sweetalert
@@ -18,8 +17,10 @@ import 'react-circular-progressbar/dist/styles.css';
 
 // 로그아웃
 import { clearCookie } from '../shared/cookie';
+import { useSelector } from 'react-redux';
 
 const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
+  const myInfo = useSelector((state) => state.user.info);
   const navigate = useNavigate();
   let icon = '';
 
@@ -42,7 +43,7 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
   };
 
   if (type === 'mypage' && showLogout && step === 0) {
-    icon = <FaSignOutAlt style={{ fontSize: '30px', color: 'red' }} onClick={() => logout()} />;
+    icon = <FaSignOutAlt style={{ fontSize: '3rem', color: 'red' }} onClick={() => logout()} />;
   } else if (type === 'signup') {
     icon = (
       <CircularProgressbar
@@ -60,8 +61,13 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
           <IoIosArrowBack />
         </Icon>
       )}
-      {type === 'mypage' && (
+      {type === 'mypage' && title === '마이페이지' && (
         <Icon onClick={() => (step === 0 ? navigate('/') : moveStep(0))}>
+          <IoIosArrowBack />
+        </Icon>
+      )}
+      {type === 'mypage' && title !== '마이페이지' && (
+        <Icon onClick={() => (step === 0 ? navigate(`/mypage/${myInfo.nickname}`) : moveStep(0))}>
           <IoIosArrowBack />
         </Icon>
       )}
@@ -76,7 +82,7 @@ const Top = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: 18px;
+  font-size: 2rem;
   text-align: center;
   height: 18vw;
   span {
@@ -88,14 +94,14 @@ const Icon = styled.div`
   position: absolute;
   width: ${(props) => props.type === 'signup' && '11%'};
   font-weight: ${(props) => props.type === 'signup' && '800'};
+  cursor: pointer;
+  font-size: 3rem;
   &:first-of-type {
     left: 0;
   }
   &:nth-of-type(2) {
     right: 2%;
   }
-  cursor: pointer;
-  font-size: 35px;
 `;
 
 export default UserTop;

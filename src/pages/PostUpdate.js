@@ -142,7 +142,7 @@ const TitleBox = styled.div`
 
   h1 {
     width: 100%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
     margin-top: 10%;
   }
@@ -151,19 +151,19 @@ const TitleBox = styled.div`
 const InputBox = styled.div`
   width: 80%;
   height: 70vh;
-  margin: 0 10% 0 10%;
+  margin: 6% 10% 0 10%;
 
   p {
     color: #000;
-    font-size: clamp(8px, 2.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.5;
     margin: 15px 0;
   }
 
   input {
-    font-size: 16px;
+    font-size: 1.2rem;
     opacity: 20%;
-    padding: 3px;
+    padding: 0.1875rem;
     width: 100%;
     height: 4%;
     border-radius: 10px;
@@ -171,10 +171,10 @@ const InputBox = styled.div`
   }
 
   select {
-    font-size: 16px;
+    font-size: 1.2rem;
     opacity: 20%;
-    padding: 3px;
-    width: 300px;
+    padding: 0.1875rem;
+    width: 18.75rem;
     height: 5%;
     border-radius: 10px;
     width: 50%;
@@ -184,59 +184,25 @@ const InputBox = styled.div`
 const Preview = styled.div`
   justify-content: center;
   display: flex;
-  height: 11%;
+  width: 100%;
+  height: 80px;
 
-  div {
-    margin: 1%;
-  }
+  overflow: auto;
 `;
 
 const PreviewImg = styled.img`
   width: 68px;
-  height: 100%;
+  height: 68%;
   border-radius: 5px;
-`;
-
-const PlusImgBox = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 68px;
-  height: 100%;
-  /* margin-top: 11px; */
-  /* background-color: aqua; */
-`;
-
-const PlusImg = styled.div`
-  border: 2px solid #000;
-  opacity: 0.3;
-  width: 25px;
-  height: 25px;
-  margin-top: 20px;
-  border-radius: 20px;
-  padding: 2px;
-  text-align: center;
-
-  p {
-    color: black;
-    font-weight: bold;
-    font-size: 25px;
-    margin: auto;
-    margin-top: -7px;
-  }
-`;
-
-const DeleteImg = styled.button`
-  background-color: transparent;
-  color: gray;
-  left: 2px;
+  margin-top: 5px;
 `;
 
 const Content = styled.textarea`
   border: none;
   width: 100%;
   height: 40%;
-  margin: 5px 0 0;
-  border-radius: 10px;
+  margin: 0.3125rem 0 0;
+  border-radius: 0.625rem;
   background-color: #f8f8f8;
 `;
 

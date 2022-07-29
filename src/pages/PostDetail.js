@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 // components
 import Comment from "../components/Comment";
 import PhotoSlide from "../components/PhotoSlide";
-
+import PostResponses from "../components/PostResponses";
 // elements
 import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
@@ -71,7 +71,7 @@ const PostDetail = () => {
         <HeadBtn>
           <Back
             onClick={() => {
-              navigate("/post");
+              navigate(-1);
             }}
             src={require("../assets/images/back.png.png")}
           />
@@ -110,19 +110,23 @@ const PostDetail = () => {
           <PhotoSlide photos={data?.img} />
         </ImgBox>
         <Content>{data?.contents}</Content>
-        <Reactions>
+        {/* <Reactions>
           <span>
             {like === true ? (
               <IoHeartOutline onClick={clickHeart} />
             ) : (
-              <IoHeart onClick={clickHeart} />
+              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
             )}
             <span>{data?.likeCnt}</span>{" "}
           </span>
           <span>
             <IoChatbubbleOutline /> {data?.viewCnt}{" "}
           </span>
-        </Reactions>
+        </Reactions> */}
+        <PostResponses
+          boardMainId={data?.boardMainId}
+          likeCnt={data?.likeCnt}
+        />
       </All>
 
       <Comment postId={params.id} />
@@ -159,12 +163,12 @@ const HeadTitle = styled.div`
 
   p {
     margin: 1.5%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.65rem;
     font-weight: bold;
   }
 
   span {
-    font-size: clamp(8px, 2.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.6;
   }
 `;
@@ -190,11 +194,10 @@ const UserImg = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 100px;
-  border: solid 1px black;
 `;
 
 const UserName = styled.span`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   width: 70%;
   margin: 4%;
 `;
@@ -208,9 +211,9 @@ const JumMom = styled.div`
 
 const ImgBox = styled.div`
   display: flex;
-  overflow-x: auto;
+
   /* overflow-x: hidden; */
-  scroll-snap-type: x mandatory;
+
   width: 100%;
   height: 22vh;
   margin-left: -1%;
@@ -228,14 +231,15 @@ const Content = styled.p`
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: clamp(8px, 3.6vw, 20px);
+  font-size: 1.25rem;
 `;
 
 const Reactions = styled.div`
-  padding-top: 15px;
-  font-size: clamp(8px, 3.2vw, 15px);
+  padding-top: 0.9375rem;
+
   span {
-    margin-right: 10px;
+    margin-right: 1.2rem;
+    font-size: 1.5rem;
   }
 `;
 

@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 
 // route
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import {
   FindId,
   FindPassword,
@@ -48,10 +48,12 @@ import { setUserDB } from "./redux/modules/userSlice";
 //component
 import NavMenu from "./components/NavMenu";
 import ScrollRestore from "./elements/ScrollRestore";
+import RouteTracker from "./components/RouteTracker.js";
 
 function App() {
   const theme = defaultTheme;
   setAccessToken();
+  RouteTracker();
 
   const dispatch = useDispatch();
 
@@ -60,11 +62,10 @@ function App() {
       dispatch(setUserDB());
     }
   }, [dispatch]);
-
+ 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <BrowserRouter>
         <ScrollRestore />
         <NavMenu />
         <Routes>
@@ -94,7 +95,6 @@ function App() {
           <Route path="/reels/write/:id" element={<ReelsWrite />} />
           <Route path="*" element={<NotFound />} />
         </Routes> 
-      </BrowserRouter>
     </ThemeProvider>
   );
 }
