@@ -22,13 +22,20 @@ const OneComment = (props) => {
   const [replyList, setReplyList] = React.useState(null);
   const [replyLength, setReplyLength] = React.useState(0);
   const isReply = props.isReply;
+  const blockReply = props.blockReply
 
   // 대댓글리스트
   React.useEffect(() => {
     if (!isReply) {
       instance.get("/api/reply/" + data.id).then((res) => {
         setReplyList(res);
-        setReplyLength(res.data.length);
+
+        if (res.data.length < 100) {
+          setReplyLength(res.data.length);
+        } else {
+          setReplyLength('99+');
+        }
+        
       });
     }
   }, [isReply, data.id]);
@@ -123,11 +130,11 @@ const OneComment = (props) => {
             <span> {isReply ? data.reply : data.comment} </span>
           </TextBubble>
           <Time> {createdAtDisplay} </Time>
-          {isReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
+          {isReply || blockReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
         </Content>
       )}
 
-      {openReplies ? <ReComment commentId={data.id} replyList={replyList} /> : null}
+      {openReplies ? <ReComment originalData={data} replyList={replyList} setOpenReplies={setOpenReplies}/> : null}
 
       {isEditOptOpen ? (
         <EditOption>

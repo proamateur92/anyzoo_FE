@@ -51,12 +51,12 @@ const PostResponses = (props) => {
 
   return(
     <Reactions>
-      <span className="like" onClick={() => likePost()}>
+      <span className="icon" onClick={() => likePost()}>
         {isLiked ? <IoHeartOutline /> : <IoHeart className="filled" />}
         {(likeCnt + likefluc).toLocaleString()}
       </span>
  
-      <span>
+      <span className="icon">
         <IoChatbubbleOutline onClick={() => navigate(pagetitle+boardMainId)}/> {commentCount ? commentCount.toLocaleString() : 0}
       </span>
   </Reactions>
@@ -81,7 +81,7 @@ const Reactions = styled.div`
     gap: 0.5rem;
   }
 
-  .like {
+  .icon {
     cursor: pointer;
   }
 
