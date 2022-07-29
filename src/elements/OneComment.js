@@ -23,8 +23,6 @@ const OneComment = (props) => {
   const isReply = props.isReply;
   const blockReply = props.blockReply
 
-  console.log(data)
-
   // 대댓글리스트
   React.useEffect(() => {
     if (!isReply) {
@@ -135,7 +133,7 @@ const OneComment = (props) => {
         </Content>
       )}
 
-      {openReplies ? <ReComment originalData={data} replyList={replyList} setOpenReplies={setOpenReplies}/> : null}
+      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies}/> : null}
 
       {isEditOptOpen ? (
         <EditOption>
