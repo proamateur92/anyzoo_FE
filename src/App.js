@@ -65,14 +65,19 @@ function App() {
     }
   }, [dispatch]);
 
+  console.log(!getCookie("accessToken"));
+
   useEffect(() => {
     if (!getCookie("accessToken")) {
+      console.log(location.pathname);
       if (
-        location.pathname !== "/oauth" ||
-        location.pathname !== "/login" ||
-        location.pathname !== "/signup" ||
-        location.pathname !== "/user/findId" ||
-        location.pathname !== "/user/findPassword"
+        !(
+          location.pathname === "/oauth" ||
+          location.pathname === "/login" ||
+          location.pathname === "/signup" ||
+          location.pathname === "/user/findId" ||
+          location.pathname === "/user/findPassword"
+        )
       ) {
         navigate("/login");
       }
