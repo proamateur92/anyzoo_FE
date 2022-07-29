@@ -1,6 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import reset from 'styled-reset';
-
+import { createGlobalStyle } from "styled-components";
+import reset from "styled-reset";
 const GlobalStyles = createGlobalStyle`
     ${reset};
     html {
@@ -14,11 +13,7 @@ const GlobalStyles = createGlobalStyle`
         box-sizing:border-box;
     }
     body{
-        // 폰트 스타일 적용
-        /* font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
-        
-        // 기본 폰트 컬러 
-        // color: ${props => props.theme.color.blue}
+        font-family: 'Roboto', sans-serif;
     }
     input {
         outline: none;

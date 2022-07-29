@@ -938,9 +938,8 @@ const SingleInput = styled.input`
 const Title = styled.span`
   display: block;
   padding-top: 10%;
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  color: ${(props) => props.theme.color.main};
 `;
 
 const Profile = styled.div`
@@ -973,7 +972,7 @@ const GuideBox = styled.div`
   border-radius: 30px;
   background-color: ${(props) => props.theme.color.lightGrey};
   div {
-    font-size: 20px;
+    font-size: 2rem;
     color: rgba(0, 0, 0, 0.6);
   }
 `;
