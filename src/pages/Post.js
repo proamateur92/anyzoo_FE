@@ -107,7 +107,7 @@ const Post = () => {
       {posts.map((post) => (
         <PostCard key={post.boardMainId} data={post} />
       ))}
-      <div ref={postEndRef} />
+      <ScrollDetect ref={postEndRef} />
     </Wrap>
   );
 };
@@ -148,3 +148,12 @@ const SelectCategory = styled.div`
     font-size: 2.2rem;
   }
 `;
+
+
+const ScrollDetect = styled.div`
+  height: 10px;
+  width: 100%;
+  margin-top: -30vh;
+  padding-top: 30vh;
+  padding-bottom: 20vh;
+`

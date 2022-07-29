@@ -91,7 +91,7 @@ const Home = () => {
         <PostCard key={post.boardMainId} data={post} />
       ))}
 
-      <div ref={postEndRef} />
+      <ScrollDetect ref={postEndRef} />
     </Wrap>
   );
 };
@@ -139,3 +139,10 @@ h3 {
 }
 
 `;
+
+const ScrollDetect = styled.div`
+  height: 10px;
+  width: 100%;
+  margin-top: -30vh;
+  padding-top: 30vh;
+`

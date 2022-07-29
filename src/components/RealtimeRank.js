@@ -57,7 +57,7 @@ const RealTimeTopRanker = styled.div`
 
   span {
     color: #ebebeb;
-    font-size: 1.2rem;
+    font-size: 3rem;
     font-weight: 600;
   }
 `;
@@ -85,14 +85,14 @@ const VoteBar = styled.div`
     height: 100%;
     padding: 0 1rem;
     color: #0000004d;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 600;
   }
 
   & div:first-of-type {
     border-radius: 20px 0px 0px 20px;
     background: #44dcd3;
-    width: 100%;
+    width: ${(props) => props?.data[0]?.likeCnt ? (props?.data[0]?.likeCnt / props?.total) * 100 : 50}%;
   }
 
   & div:last-of-type {

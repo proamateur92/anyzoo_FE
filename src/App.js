@@ -92,6 +92,7 @@ function App() {
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/detail/:id" element={<NoticeDetail />} />
           <Route path="/reels" element={<Reels />} />
+          <Route path="/reels/:id" element={<Reels />} />
           <Route path="/reels/write/:id" element={<ReelsWrite />} />
           <Route path="*" element={<NotFound />} />
         </Routes> 

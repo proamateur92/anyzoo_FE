@@ -8,7 +8,6 @@ import instance from "../../shared/axios";
 export const loadPostsDB = createAsyncThunk(
   "recruit/loadPost",
   async (pageInfo) => {
-    console.log(pageInfo)
     const url = 
       pageInfo.provinceId === 'all' || pageInfo.cityId === 'all' ?
         '/api/together' : '/api/together/category/'+ pageInfo.provinceId

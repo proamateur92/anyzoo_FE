@@ -83,7 +83,7 @@ const CategoryTitle = styled.div`
     align-items: center;
     width: 25%;
     height: 100%;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     font-weight: bolder;
     color: #c2c2c2;
     cursor: pointer;
@@ -129,7 +129,7 @@ const RankerInfo = styled.div`
 `
 
 const Rank = styled.h5`
- font-size: 1.6rem;
+ font-size: 1.8rem;
  margin-right: 0.5rem;
  font-weight: bold;
  color: ${(props) => props.rank === 1 ? '#b6762c' : props.rank === 2 ? '#a4adb1' : '#937d69' }
@@ -145,7 +145,7 @@ const VoteBar = styled.div`
   padding: 0px 1rem;
   width: ${(props) => ( props.votes / props.mostVotes) * 100}%;
   min-width: 15%;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   white-space: nowrap;
   color: #fff;
 `;
