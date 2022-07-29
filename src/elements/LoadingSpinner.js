@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { FiLoader } from "react-icons/fi";
 
 const LoadingSpinner = ( props ) => {
-  const setSpinnerOn = props.setSpinner
+  // const setSpinnerOn = props.setSpinner
 
   return (
     <BackDrop>
