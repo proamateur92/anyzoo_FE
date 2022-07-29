@@ -163,7 +163,7 @@ const Tap = styled.div`
   div {
     width: 50%;
     text-align: center;
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 800;
     padding: 5% 0;
     border-radius: 10px 10px 0 0;
@@ -183,7 +183,7 @@ const FriendList = styled.div`
   .friend_row {
     display: flex;
     align-items: center;
-    font-size: 16px;
+    font-size: 1.6rem;
     padding: 2.5% 5%;
     img {
       width: 3em;
@@ -192,7 +192,7 @@ const FriendList = styled.div`
     }
     span {
       padding-left: 4%;
-      font-size: 14px;
+      font-size: 1.4rem;
     }
   }
   .friend_profile {
@@ -205,7 +205,7 @@ const FriendList = styled.div`
     display: inline-block;
     margin-top: 15%;
     text-align: center;
-    font-size: 14px;
+    font-size: 1.4rem;
   }
 `;
 
@@ -215,7 +215,7 @@ const DeleteBtn = styled.div`
   height: 3%;
   padding: 3% 0;
   font-weight: 800;
-  border: 2px solid red;
+  border: 0.2rem solid red;
   border-radius: 30px;
   color: red;
   cursor: pointer;
