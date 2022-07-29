@@ -22,7 +22,7 @@ import RecruitWrite from "./RecruitWrite";
 import RecruitUpdate from "./RecruitUpdate";
 import CommunityDetail from "./CommunityDetail";
 import RecruitDetail from "./RecruitDetail";
-import ChattingRoom from "./ChattingRoom";
+// import ChattingRoom from "./ChattingRoom";
 
 export {
   FindId,
@@ -42,7 +42,7 @@ export {
   Signup,
   Reels,
   ReelsWrite,
-  ChattingRoom,
+  // ChattingRoom,
   CommunityList,
   CommunityWrite,
   CommunityUpdate,
