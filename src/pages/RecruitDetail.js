@@ -43,7 +43,7 @@ const RecruitDetail = () => {
 
       // console.log(response.data.dday);
 
-      setInterval(() => {
+      let timer = setInterval(() => {
         const masTime = new Date(response.data.dday);
         const todayTime = new Date();
         const diff = masTime - todayTime;
@@ -52,7 +52,12 @@ const RecruitDetail = () => {
         const diffMin = Math.floor((diff / (1000 * 60)) % 60);
         const diffSec = Math.floor((diff / 1000) % 60);
 
-        if (diffHour < 10) {
+        // console.log(diff, diffHour, diffMin, diffSec);
+        if (diff < 0) {
+          const Dday = `00:00:00`;
+          setLastDay(Dday);
+          clearInterval(timer);
+        } else if (diffHour < 10) {
           const Dday = `0${diffHour}:${diffMin}:${diffSec}`;
           setLastDay(Dday);
         } else if (diffMin < 10) {
@@ -61,7 +66,7 @@ const RecruitDetail = () => {
         } else if (diffSec < 10) {
           const Dday = `${diffHour}:${diffMin}:0${diffSec}`;
           setLastDay(Dday);
-        } else {
+        } else if (diffHour && diffMin && diffSec >= 10) {
           const Dday = `${diffHour}:${diffMin}:${diffSec}`;
           setLastDay(Dday);
         }
@@ -169,10 +174,10 @@ const RecruitDetail = () => {
               </InfoUser>
               <Location>
                 <Gu>
-                  <span>{data?.cityName}</span>
+                  <span>#{data?.cityName}</span>
                 </Gu>
                 <Gu>
-                  <span>{data?.provinceName}</span>
+                  <span>#{data?.provinceName}</span>
                 </Gu>
               </Location>
             </Info>
@@ -193,14 +198,18 @@ const RecruitDetail = () => {
           </JengBoUser>
           <JengBoLocation>
             <Dong>
-              <span>{data?.cityName}</span>
+              <span>#{data?.cityName}</span>
             </Dong>
             <Gu>
-              <span>{data?.provinceName}</span>
+              <span>#{data?.provinceName}</span>
             </Gu>
           </JengBoLocation>
           <Chatting>
-            <AddBtn disabled="disabled">Comming soon</AddBtn>
+            {lastDay === "00:00:00" ? (
+              <FinishBtn disabled="disabled">Comming soon</FinishBtn>
+            ) : (
+              <ChattingBtn disabled="disabled">Comming soon</ChattingBtn>
+            )}
           </Chatting>
           <Recruitment>
             <div>
@@ -333,13 +342,13 @@ const ChatBox = styled.div`
 `;
 
 const BtnBox = styled.div`
-  height: 40px;
+  height: 4rem;
 `;
 
 const ChatBtn = styled.button`
   height: 100%;
   right: 12%;
-  width: 48px;
+  width: 4rem;
   font-size: 2.1rem;
   font-weight: 300;
   border-top-right-radius: 25px;
@@ -347,7 +356,7 @@ const ChatBtn = styled.button`
   background-color: #44dcd3;
   color: black;
   margin-left: 76%;
-  padding-top: 5px;
+  padding-top: 0.3125rem;
 `;
 
 const InfoAll = styled.div`
@@ -411,7 +420,7 @@ const Dong = styled.div`
   border: 1px solid gray;
   margin: 0 2% 0 2%;
   text-align: center;
-  line-height: 2.0625rem;
+  line-height: 33px;
   border-radius: 30px;
 
   span {
@@ -435,8 +444,8 @@ const JengBo = styled.div`
 
 const ChatB = styled.button`
   position: fixed;
-  height: 45px;
-  width: 48px;
+  height: 4rem;
+  width: 4rem;
   font-size: 2.1rem;
   font-weight: 300;
   border-bottom-right-radius: 25px;
@@ -444,7 +453,7 @@ const ChatB = styled.button`
   background-color: #44dcd3;
   color: black;
   margin-left: 76%;
-  padding-top: 10px;
+  padding-top: 0.625rem;
   span {
   }
 `;
@@ -490,13 +499,25 @@ const Chatting = styled.div`
   margin: 10px 25% 0 25%;
 `;
 
-const AddBtn = styled.button`
+const FinishBtn = styled.button`
   width: 100%;
   height: 100%;
   flex-grow: 0;
   font-weight: bold;
   border-radius: 10px;
+
   background-color: #d3d3d3;
+`;
+
+const ChattingBtn = styled.button`
+  width: 100%;
+  height: 100%;
+  flex-grow: 0;
+  font-weight: bold;
+  border-radius: 10px;
+
+  background-color: #d3d3d3;
+  /* background-color: #44dcd3; */
 `;
 
 const Recruitment = styled.div`
