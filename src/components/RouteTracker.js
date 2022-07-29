@@ -13,7 +13,9 @@ const RouteTracker = () => {
   const [initialized, setInitialized] = React.useState(false)
 
   React.useEffect(()=>{
-    ReactGA.initialize(GATrackingId)
+    if(!window.location.href.includes('localhost')){
+      ReactGA.initialize(GATrackingId)
+    }
     setInitialized(true)
   },[])
 
