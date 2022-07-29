@@ -23,10 +23,12 @@ const PhotoSlide = (props) => {
   const moveSlide = (endX) => {
     const distance = Math.abs(startX - endX);
 
-    if (distance > 10 && startX !== 0 && endX !== 0) {
+    if (distance > 20 && startX !== 0 && endX !== 0) {
       startX - endX > 0 ? showNext() : showPrev();
     } else if (distance < 20 && startX !== 0 && endX !== 0) {
-      clickAction();
+      if (clickAction) {
+        clickAction();
+      }
     }
   };
 
