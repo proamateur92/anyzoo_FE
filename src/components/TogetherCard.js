@@ -1,6 +1,5 @@
 import React from "react";
 
-
 // router
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,7 @@ import { FiUser } from "react-icons/fi";
 
 const TogetherCard = (props) => {
   const navigate = useNavigate();
-  const data = props.data
+  const data = props.data;
 
   const today = new Date();
   const month = today.getMonth() > 9 ? today.getMonth() + 1 : "0" + (today.getMonth() + 1);
@@ -26,7 +25,7 @@ const TogetherCard = (props) => {
 
   return (
     <CardOuter>
-      <FindMate onClick={()=>navigate("/recruit/detail/" + data.boardMainId)}>
+      <FindMate onClick={() => navigate("/recruit/detail/" + data.boardMainId)}>
         <CardImg />
 
         <CardContent>
@@ -34,14 +33,20 @@ const TogetherCard = (props) => {
             <h5 id="title"> {data?.title}</h5>
             <span id="time">{createdAtDisplay}</span>
           </Title>
-          <p>{data?.contents} <br/><span id="dot">.</span></p>
+          <p>
+            {data?.contents} <br />
+            <span id="dot">.</span>
+          </p>
 
           <AdditionalInfo>
             <div>
               <span className="address">#{data?.cityName}</span>
               <span className="address">#{data?.provinceName}</span>
             </div>
-            <span> <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}</span>
+            <span>
+              {" "}
+              <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}
+            </span>
           </AdditionalInfo>
         </CardContent>
       </FindMate>
@@ -61,7 +66,7 @@ const CardOuter = styled.div`
   background-color: #fff;
   position: relative;
   flex-shrink: 0;
-  cursor:pointer;
+  cursor: pointer;
   overflow: hidden;
 `; 
 
@@ -77,7 +82,7 @@ const CardImg = styled.div`
   width: 30%;
   min-width: 30%;
   padding-top: 30%;
-  background: url('https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png');
+  background: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png");
   background-size: cover;
   background-position: center;
   border-radius: 2rem;
@@ -89,8 +94,7 @@ const CardContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex-grow:0;
-  
+  flex-grow: 0;
 
   p {
     overflow: hidden;
