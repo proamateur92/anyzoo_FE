@@ -94,10 +94,10 @@ const Comment = (props) => {
   };
 
   return (
-    <CommentsWrap>
+    <CommentsWrap overflow={overflow}>
       <div ref={topRef}/>
 
-      <InnerWrap className={overflow}>
+      <InnerWrap>
               {comments?.length > 0 ? (
         comments.map((v) => <OneComment key={v.id} commentData={v} postId={postId} blockReply={blockReply}/>)
       ) : (
@@ -129,13 +129,8 @@ const CommentsWrap = styled.div`
   display: flex;
   flex-direction: column;
   border: 1px solid #eee;
-  overflow: scroll;
   height: 100%;
-
-  .overflowScroll{
-    overflow: scroll;
-    height: 100%;
-  }
+  overflow: ${(props) => props.overflow === 'overflowScroll' ?  'scroll' : 'hidden'};
 `;
 
 const InnerWrap = styled.div`
