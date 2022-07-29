@@ -1,5 +1,5 @@
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StepPhone = ({
   mode,
@@ -26,10 +26,10 @@ const StepPhone = ({
   };
   return (
     <>
-      <span className='desc'>
+      <span className="desc">
         <p>본인 확인을 위해</p>
         <p>
-          <span className='strong'>휴대폰 인증</span>이 필요합니다.
+          <span className="strong">휴대폰 인증</span>이 필요합니다.
         </p>
       </span>
 
@@ -45,7 +45,7 @@ const StepPhone = ({
           mode={mode}
           value={userPhoneNumber}
           onChange={setEnteredPhoneNumber}
-          type='text'
+          type="text"
           placeholder="'-' 없이 입력해 주세요."
           maxLength={11}
         />
@@ -55,8 +55,8 @@ const StepPhone = ({
         mode={mode}
         value={authNumber}
         onChange={setAuthNumber}
-        type='text'
-        placeholder='인증 코드를 입력해주세요.'
+        type="text"
+        placeholder="인증 코드를 입력해주세요."
       />
     </>
   );
@@ -67,9 +67,9 @@ const AuthNumber = styled.input`
   border-bottom: 3px solid #000000;
   padding: 5% 0;
   margin-bottom: 5vw;
-  font-size: 20px;
+  font-size: 2rem;
   &::placeholder {
-    font-size: ${(props) => (props.mode === 'signup' ? '20px' : '14px')};
+    font-size: ${(props) => (props.mode === "signup" ? "2rem" : "1.4rem")};
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
@@ -80,9 +80,9 @@ const Input = styled.input`
   border: none;
   border-bottom: 3px solid #000000;
   padding: 5% 0;
-  font-size: 20px;
+  font-size: 2rem;
   &::placeholder {
-    font-size: ${(props) => (props.mode === 'signup' ? '20px' : '14px')};
+    font-size: ${(props) => (props.mode === "signup" ? "2rem" : "1.4rem")};
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
@@ -93,7 +93,7 @@ const AuthBtn = styled.button`
   right: 0;
   width: 30%;
   height: 100%;
-  font-size: 14px;
+  font-size: 1.4rem;
   font-weight: 800;
   background-color: ${(props) => props.theme.color.activeBtn};
   border-radius: 10px;
@@ -107,7 +107,7 @@ const Authorize = styled.div`
 const Validation = styled.span`
   display: block;
   color: red;
-  font-size: 14px;
+  font-size: 1.4rem;
   margin-bottom: 2%;
   &:last-of-type {
     margin-bottom: 8.3%;

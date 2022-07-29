@@ -19,9 +19,6 @@ import { useSelector } from "react-redux";
 // sweetalert
 import Swal from "sweetalert2";
 
-// cookie
-import { getCookie } from "../shared/cookie";
-
 // router
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -34,9 +31,7 @@ const Mypage = () => {
   const [step, setStep] = useState(0);
   const myInfo = useSelector((state) => state.user.info);
   const [userInfo, setUserInfo] = useState({});
-  const isLogin = getCookie("accessToken") ? true : false;
   const navigate = useNavigate();
-
   const [contents, setContents] = useState({ post: [], community: [], together: [], reels: [] });
   const contentType = ["post", "community", "together", "reels"];
   const [tap, setTap] = useState(contentType[0]);
@@ -89,10 +84,6 @@ const Mypage = () => {
     const newTap = tap;
     getContent(newTap);
   }, [tap]);
-
-  useEffect(() => {
-    if (!isLogin) navigate("/login");
-  });
 
   // 페이지 이동
   const handleMoveStep = (stepNum) => {
@@ -255,7 +246,8 @@ const Follow = styled.div`
   text-align: center;
   font-size: 1.6rem;
   font-weight: 800;
-  margin-bottom: 6%;
+  width: 40%;
+  margin: 0 auto 5% auto;
   div {
     display: flex;
     flex-direction: column;
