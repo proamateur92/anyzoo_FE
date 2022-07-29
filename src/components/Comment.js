@@ -14,22 +14,22 @@ import styled from "styled-components";
 import OneComment from "../elements/OneComment";
 import SendBtn from "../elements/SendBtn";
 
-// router
-import { useParams } from "react-router-dom";
-
 
 const Comment = (props) => {
-  const params = useParams();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.info);
   const postId = props.postId;
   const commentRef = React.useRef();
   const [btnChange, setBtnChange] = React.useState(false)
+  const blockReply = props.blockReply
+  const overflow = props.overflow
 
   const isLast = useSelector((state) => state.comment.isLast);
   const topRef = React.useRef();
   const bottomRef = React.useRef();
   const [page, setPage] = React.useState(0);
+
+  
 
     // 코멘트 불러오기
     React.useEffect(() => {
@@ -86,6 +86,7 @@ const Comment = (props) => {
       await dispatch(addCommentDB(commentData));
       commentRef.current.value = "";
       setBtnChange(false)
+      dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
       topRef.current.scrollIntoView({ behavior: 'smooth' })
     } else {
       window.alert('댓글을 입력해주세요!')
@@ -96,9 +97,9 @@ const Comment = (props) => {
     <CommentsWrap>
       <div ref={topRef}/>
 
-      <InnerWrap>
+      <InnerWrap className={overflow}>
               {comments?.length > 0 ? (
-        comments.map((v) => <OneComment key={v.id} commentData={v} postId={postId} />)
+        comments.map((v) => <OneComment key={v.id} commentData={v} postId={postId} blockReply={blockReply}/>)
       ) : (
         <NoComments> 아직 댓글이 없어요 </NoComments>
       )}
@@ -124,10 +125,17 @@ export default Comment;
 const CommentsWrap = styled.div`
   width: 100%;
   margin: auto;
-  padding: 2rem 0;
+  padding: 2rem 0 14vh;
   display: flex;
   flex-direction: column;
   border: 1px solid #eee;
+  overflow: scroll;
+  height: 100%;
+
+  .overflowScroll{
+    overflow: scroll;
+    height: 100%;
+  }
 `;
 
 const InnerWrap = styled.div`
@@ -150,11 +158,10 @@ const InputWrapper = styled.div`
   height: 8rem;
   padding: 0 3rem;
   background: #ffffffb3;
-  
-  .fix {
-    position: fixed;
-    bottom: 10vh;
-  }
+  position:fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  bottom: 10vh;
 `
 
 const CommentInput = styled.div`

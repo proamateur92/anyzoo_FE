@@ -71,8 +71,12 @@ const EditBubble = (props) => {
         case "REELS":
           instance.delete('/api/reels/'+contentsId)
           .then((res)=> {
-            console.log(res) 
             setBubbleOn(false)
+            window.alert('삭제되었습니다') 
+            window.location.replace('/reels')
+          }).catch((err) => {
+            console.log(err)
+            window.alert('문제가 발생했어요')
           })
           break;
 

@@ -80,6 +80,7 @@ const SelectWrap = styled.div`
     border-radius: 4rem;
     padding: 0 0 0 5.33%;
     font-size: 1.2rem;
+    outline: none;
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;

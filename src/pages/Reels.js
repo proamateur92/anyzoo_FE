@@ -17,6 +17,8 @@ import { FiAlignJustify } from "react-icons/fi";
 
 //element
 import EditBubble from "../elements/EditBubble";
+import Drawers from "../elements/Drawers";
+import Comment from "../components/Comment";
 
 // router
 import { useParams } from "react-router-dom";
@@ -32,11 +34,18 @@ const Reels = (props) => {
   const coverRef = React.useRef();
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [isDetail, setIsDetail] = React.useState(params.id);
+  const [drawerOn, setDrawerOn] = React.useState(false);
 
 
   // 스크롤 금지!
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
+
+    const clearScrollBlock = () => {
+      document.body.style.overflow = "unset";
+    }
+
+    return clearScrollBlock()
   }, []);
 
   // 영상 불러오기
@@ -143,14 +152,21 @@ const Reels = (props) => {
 
           <More>
             <Reactions>
-              <span className="like" onClick={() => likePost()}>
+              <span className="icons" onClick={() => likePost()}>
                 {isLiked ? <IoHeartOutline /> : <IoHeart className="filled" />}
                 {reelsData?.likeCnt + likefluc}
               </span>
 
-              <span>
+              <span className="icons" onClick={()=> setDrawerOn(true)}>
                 <IoChatbubbleOutline /> {commentCount ? commentCount : 0}
               </span>
+
+              { drawerOn ?
+                <Drawers setDrawerOn={setDrawerOn}>
+                  <Comment postId={ reelsData?.boardMainId } blockReply={true} overflow={'overflowScroll'}/>
+                </Drawers>
+              : null
+              }
             </Reactions>
 
             {menuOpen ? <EditBubble data={reelsData} setBubbleOn={setMenuOpen} /> : null}
@@ -254,7 +270,7 @@ const Reactions = styled.div`
     gap: 0.5rem;
   }
 
-  .like {
+  .icons {
     cursor: pointer;
   }
 
@@ -273,6 +289,7 @@ const VideoClip = styled.div`
   height: 100%;
   min-height: 92vh;
   max-width: 599px;
+  overflow: hidden;
 `;
 
 const Preview = styled.div`
