@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 // icon
 import { IoIosArrowBack } from 'react-icons/io';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { FaSignOutAlt } from 'react-icons/fa';
 
 // sweetalert
@@ -18,8 +17,10 @@ import 'react-circular-progressbar/dist/styles.css';
 
 // 로그아웃
 import { clearCookie } from '../shared/cookie';
+import { useSelector } from 'react-redux';
 
 const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
+  const myInfo = useSelector((state) => state.user.info);
   const navigate = useNavigate();
   let icon = '';
 
@@ -60,8 +61,13 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
           <IoIosArrowBack />
         </Icon>
       )}
-      {type === 'mypage' && (
+      {type === 'mypage' && title === '마이페이지' && (
         <Icon onClick={() => (step === 0 ? navigate('/') : moveStep(0))}>
+          <IoIosArrowBack />
+        </Icon>
+      )}
+      {type === 'mypage' && title !== '마이페이지' && (
+        <Icon onClick={() => (step === 0 ? navigate(`/mypage/${myInfo.nickname}`) : moveStep(0))}>
           <IoIosArrowBack />
         </Icon>
       )}
