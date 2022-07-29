@@ -1,4 +1,4 @@
-import { Cookies } from 'react-cookie';
+import { Cookies } from "react-cookie";
 
 const cookie = new Cookies();
 
@@ -12,9 +12,4 @@ export const getCookie = (key) => {
 
 export const setCookie = (key, value) => {
   cookie.set(key, value, { maxAge: 60 * 60 * 24 * 30 });
-};
-
-export const clearCookie = (key) => {
-  console.log(key + ' 토큰 지우기');
-  cookie.remove(key);
 };

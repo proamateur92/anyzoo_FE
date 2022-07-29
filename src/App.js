@@ -65,11 +65,8 @@ function App() {
     }
   }, [dispatch]);
 
-  console.log(!getCookie("accessToken"));
-
   useEffect(() => {
     if (!getCookie("accessToken")) {
-      console.log(location.pathname);
       if (
         !(
           location.pathname === "/oauth" ||
