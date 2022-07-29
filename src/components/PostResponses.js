@@ -6,12 +6,18 @@ import styled from "styled-components";
 // axios
 import instance from "../shared/axios";
 
+//icon
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
+
+// router
+import { useNavigate } from "react-router-dom";
 
 
 const PostResponses = (props) => {
+  const navigate = useNavigate();
   const boardMainId = props.boardMainId
   const likeCnt = props.likeCnt
+  const pagetitle = props.pagetitle
   const [commentCount, setCommentCount] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);
   const [likefluc, setLikefluc] = React.useState(0);
@@ -51,7 +57,7 @@ const PostResponses = (props) => {
       </span>
  
       <span>
-        <IoChatbubbleOutline /> {commentCount ? commentCount.toLocaleString() : 0}
+        <IoChatbubbleOutline onClick={() => navigate(pagetitle+boardMainId)}/> {commentCount ? commentCount.toLocaleString() : 0}
       </span>
   </Reactions>
   )

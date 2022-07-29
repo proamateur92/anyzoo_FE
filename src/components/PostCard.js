@@ -55,7 +55,11 @@ const PostCard = (props) => {
           </TextPreview>
         </Contents>
 
-        <PostResponses boardMainId={boardMainId} likeCnt={postData.likeCnt}/>
+        <PostResponses 
+          boardMainId={boardMainId} 
+          likeCnt={postData.likeCnt}
+          pagetitle={'/post/detail/'}
+        />
         
       </CardWrap>
     </OuterWrap>

@@ -39,7 +39,11 @@ const CommunityCard = (props) => {
         {data.contents}
       </Content>
 
-      <PostResponses boardMainId={data.boardMainId} likeCnt={data.likeCnt}/>
+      <PostResponses 
+        boardMainId={data.boardMainId} 
+        likeCnt={data.likeCnt}
+        pagetitle={'/community/detail/'}
+      />
 
     </CardWrap>
   )
