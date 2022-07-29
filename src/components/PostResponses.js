@@ -6,12 +6,18 @@ import styled from "styled-components";
 // axios
 import instance from "../shared/axios";
 
+//icon
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
+
+// router
+import { useNavigate } from "react-router-dom";
 
 
 const PostResponses = (props) => {
+  const navigate = useNavigate();
   const boardMainId = props.boardMainId
   const likeCnt = props.likeCnt
+  const pagetitle = props.pagetitle
   const [commentCount, setCommentCount] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);
   const [likefluc, setLikefluc] = React.useState(0);
@@ -21,7 +27,12 @@ const PostResponses = (props) => {
     instance.post('/api/heart/' + boardMainId)
     .then(() => {
       setIsLiked(!isLiked)
-      isLiked ? setLikefluc((prev) => prev + 1) : setLikefluc((prev) => prev - 1)
+
+      if (isLiked) {
+        setLikefluc((prev) => prev + 1) 
+      } else if (likefluc > 0) {
+        setLikefluc((prev) => prev - 1)
+      }
     })
     .catch((err) => console.log(err));
   };
@@ -40,13 +51,13 @@ const PostResponses = (props) => {
 
   return(
     <Reactions>
-      <span className="like" onClick={() => likePost()}>
+      <span className="icon" onClick={() => likePost()}>
         {isLiked ? <IoHeartOutline /> : <IoHeart className="filled" />}
         {(likeCnt + likefluc).toLocaleString()}
       </span>
  
-      <span>
-        <IoChatbubbleOutline /> {commentCount ? commentCount.toLocaleString() : 0}
+      <span className="icon">
+        <IoChatbubbleOutline onClick={() => navigate(pagetitle+boardMainId)}/> {commentCount ? commentCount.toLocaleString() : 0}
       </span>
   </Reactions>
   )
@@ -70,7 +81,7 @@ const Reactions = styled.div`
     gap: 0.5rem;
   }
 
-  .like {
+  .icon {
     cursor: pointer;
   }
 

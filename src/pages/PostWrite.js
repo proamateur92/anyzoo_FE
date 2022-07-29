@@ -232,7 +232,7 @@ const PlusImg = styled.div`
     font-weight: bold;
     font-size: 25px;
     margin: auto;
-    margin-top: -7px;
+    margin-top: -5px;
   }
 `;
 

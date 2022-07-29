@@ -68,19 +68,19 @@ const CardOuter = styled.div`
   flex-shrink: 0;
   cursor: pointer;
   overflow: hidden;
-`;
+`; 
 
 const FindMate = styled.div`
   width: 90%;
   position: absolute;
-  top: 16%;
+  top: 15%;
   left: 5%;
   display: flex;
 `;
 
 const CardImg = styled.div`
   width: 30%;
-  min-width: 20%;
+  min-width: 30%;
   padding-top: 30%;
   background: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png");
   background-size: cover;
@@ -90,7 +90,7 @@ const CardImg = styled.div`
 
 const CardContent = styled.div`
   width: 65%;
-  margin-left: 1.5rem;
+  margin-left: 1.4rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -106,7 +106,7 @@ const CardContent = styled.div`
     margin: 1rem 0;
 
     color: #666;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     line-height: 1.5;
   }
 
@@ -124,7 +124,7 @@ const Title = styled.div`
   h5 {
     display: block;
     width: 69.84%;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
@@ -132,7 +132,7 @@ const Title = styled.div`
   }
 
   span {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     color: #b4b4b4;
     white-space: nowrap;
   }

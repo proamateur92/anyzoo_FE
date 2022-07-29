@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom'
 import ReactGA from "react-ga4";
 import { GATrackingId } from './shared/global_variables'
 ReactGA.initialize(GATrackingId);
-
+ 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>

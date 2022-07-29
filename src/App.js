@@ -84,35 +84,36 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
-      <ScrollRestore />
-      <NavMenu />
-      <Routes>
-        <Route path="/oauth" element={<Oauth />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/mypage/:nickname" element={<Mypage />} />
-        <Route path="/myedit" element={<UserEdit />} />
-        <Route path="/user/findId" element={<FindId />} />
-        <Route path="/user/findPassword" element={<FindPassword />} />
-        <Route path="/post" element={<Post />} />
-        <Route path="/post/write" element={<PostWrite />} />
-        <Route path="/post/update/:id" element={<PostUpdate />} />
-        <Route path="/post/detail/:id" element={<PostDetail />} />
-        <Route path="/community/write" element={<CommunityWrite />} />
-        <Route path="/community/update/:id" element={<CommunityUpdate />} />
-        <Route path="/community/detail/:id" element={<CommunityDetail />} />
-        <Route path="/together" element={<CommunityList type="together" />} />
-        <Route path="/community" element={<CommunityList type="community" />} />
-        <Route path="/recruit/write" element={<RecruitWrite />} />
-        <Route path="/recruit/update/:id" element={<RecruitUpdate />} />
-        <Route path="/recruit/detail/:id" element={<RecruitDetail />} />
-        <Route path="/notice" element={<Notice />} />
-        <Route path="/notice/detail/:id" element={<NoticeDetail />} />
-        <Route path="/reels" element={<Reels />} />
-        <Route path="/reels/write/:id" element={<ReelsWrite />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+        <ScrollRestore />
+        <NavMenu />
+        <Routes>
+          <Route path="/oauth" element={<Oauth />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/mypage/:nickname" element={<Mypage />} />
+          <Route path="/myedit" element={<UserEdit />} />
+          <Route path="/user/findId" element={<FindId />} />
+          <Route path="/user/findPassword" element={<FindPassword />} />
+          <Route path="/post" element={<Post />} />
+          <Route path="/post/write" element={<PostWrite />} />
+          <Route path="/post/update/:id" element={<PostUpdate />} />
+          <Route path="/post/detail/:id" element={<PostDetail />} />
+          <Route path="/community/write" element={<CommunityWrite />} />
+          <Route path="/community/update/:id" element={<CommunityUpdate />} />
+          <Route path="/community/detail/:id" element={<CommunityDetail />} />
+          <Route path="/together" element={<CommunityList type='together'/>} />
+          <Route path="/community" element={<CommunityList type='community' />} />
+          <Route path="/recruit/write" element={<RecruitWrite />} />
+          <Route path="/recruit/update/:id" element={<RecruitUpdate />} />
+          <Route path="/recruit/detail/:id" element={<RecruitDetail />} />
+          <Route path="/notice" element={<Notice />} />
+          <Route path="/notice/detail/:id" element={<NoticeDetail />} />
+          <Route path="/reels" element={<Reels />} />
+          <Route path="/reels/:id" element={<Reels />} />
+          <Route path="/reels/write/:id" element={<ReelsWrite />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes> 
     </ThemeProvider>
   );
 }
