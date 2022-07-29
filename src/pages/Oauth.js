@@ -26,6 +26,9 @@ const Oauth = () => {
   const code = serachParams.get("code");
   const scope = serachParams.get("scope");
 
+  console.log(searchPrams);
+  console.log("인가코드: ", code);
+  
   const sendAuthCode = useCallback(
     async (url) => {
       try {
@@ -34,7 +37,6 @@ const Oauth = () => {
             code,
           },
         });
-        console.log(response);
         const accessToken = response.data.accesstoken;
         const refreshToken = response.data.refreshtoken;
         setCookie("accessToken", accessToken);
