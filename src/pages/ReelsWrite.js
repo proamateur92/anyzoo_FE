@@ -13,6 +13,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 // video player
 import ReactPlayer from "react-player/lazy";
 
+// element
+import LoadingSpinner from "../elements/LoadingSpinner";
+
 // icons
 import { FiPlay, FiPause, FiCheck, FiFolderPlus} from "react-icons/fi";
 import { RiDropFill } from "react-icons/ri";
@@ -35,6 +38,8 @@ const ReelsWrite = () => {
   // const endPtRef = React.useRef();
   const [startPoint, setStartPoint] = React.useState(0);
   const [endPoint, setEndPoint] = React.useState(15);
+
+  const [spinnerOn, setSpinnerOn] = React.useState(null);
 
   // 새로 작성인지, 수정인지 판별
   const isNew = params.id === 'new' ? true : false
@@ -80,6 +85,7 @@ const ReelsWrite = () => {
   };
 
   const addReels = async () => {
+    setSpinnerOn(()=>true)
     const formData = new FormData();
     formData.append("video", video);
     formData.append("thumbnailTime", timeFormater(currentTime, true));
@@ -97,9 +103,11 @@ const ReelsWrite = () => {
     await instance.post("/api/reels/", reelsData).then((res) => {
       if (res.status === 200) {
         window.alert('업로드 성공!')
+        setSpinnerOn(()=>false)
         navigate('/reels')
       } else {
         window.alert('문제가 발생하였습니다')
+        setSpinnerOn(()=>false)
         console.log(res);
       }
     }).catch((err) => console.log(err));
@@ -167,6 +175,7 @@ const ReelsWrite = () => {
 
   return (
     <Wrap>
+      {spinnerOn ? <LoadingSpinner/> : null} 
       <Header> 릴스 </Header>
 
       <Contents>
@@ -346,7 +355,7 @@ const Buttons = styled.div`
 
   button {
     padding: 0;
-    height: 6.25vh;
+    height: 5rem;
     width: 47.5%;
     border-radius: 1rem;
     font-size: 1.6rem;

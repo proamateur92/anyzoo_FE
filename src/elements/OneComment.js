@@ -16,13 +16,14 @@ const OneComment = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.info);
   const data = props.commentData;
-  // const postId = props.postId;
   const commentRef = React.useRef(null);
   const [openReplies, setOpenReplies] = React.useState(null);
   const [replyList, setReplyList] = React.useState(null);
   const [replyLength, setReplyLength] = React.useState(0);
   const isReply = props.isReply;
   const blockReply = props.blockReply
+
+  console.log(data)
 
   // 대댓글리스트
   React.useEffect(() => {
@@ -161,6 +162,7 @@ const UserInfo = styled.div`
   span {
     font-size: 1.2rem;
     font-weight: 600;
+    color: #333;
   }
 `;
 
@@ -231,6 +233,7 @@ const Replies = styled.span`
 `;
 
 const EditOption = styled.div`
+  display: flex;
   margin-top: 0.5rem;
   margin-left: 17.33%;
   font-size: 1.2rem;
