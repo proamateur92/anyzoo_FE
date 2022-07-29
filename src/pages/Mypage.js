@@ -1,30 +1,29 @@
 // react
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 // components
-import Friends from '../components/Mypage/Friends';
+import Friends from "../components/Mypage/Friends";
+import TogetherCard from "../components/TogetherCard";
+import CommunityCard from "../components/CommunityCard";
 
 // element
-import Wrap from '../elements/Wrap';
-import UserTop from '../elements/UserTop';
+import Wrap from "../elements/Wrap";
+import UserTop from "../elements/UserTop";
 
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // redux
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 // sweetalert
-import Swal from 'sweetalert2';
-
-// cookie
-import { getCookie } from '../shared/cookie';
+import Swal from "sweetalert2";
 
 // router
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from "react-router-dom";
 
 // axios
-import instance from '../shared/axios';
+import instance from "../shared/axios";
 
 const Mypage = () => {
   const { nickname } = useParams();
@@ -32,11 +31,9 @@ const Mypage = () => {
   const [step, setStep] = useState(0);
   const myInfo = useSelector((state) => state.user.info);
   const [userInfo, setUserInfo] = useState({});
-  const isLogin = getCookie('accessToken') ? true : false;
   const navigate = useNavigate();
-
   const [contents, setContents] = useState({ post: [], community: [], together: [], reels: [] });
-  const contentType = ['post', 'community', 'together', 'reels'];
+  const contentType = ["post", "community", "together", "reels"];
   const [tap, setTap] = useState(contentType[0]);
 
   // 회원정보 가져오기
@@ -53,11 +50,11 @@ const Mypage = () => {
       if (!response.data) {
         Swal.fire({
           title: `존재하지 않는 회원이에요. 메인페이지로 이동합니다.`,
-          icon: 'warning',
-          confirmButtonText: '확인',
-          confirmButtonColor: '#44DCD3',
+          icon: "warning",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#44DCD3",
         });
-        navigate('/');
+        navigate("/");
         return;
       }
       setUserInfo(response.data);
@@ -88,22 +85,18 @@ const Mypage = () => {
     getContent(newTap);
   }, [tap]);
 
-  useEffect(() => {
-    if (!isLogin) navigate('/login');
-  });
-
   // 페이지 이동
   const handleMoveStep = (stepNum) => {
     setStep(stepNum);
   };
 
-  let content = '';
+  let content = "";
 
   if (step === 0) {
     content = (
       <>
         <Profile>
-          <img src={userInfo.img} alt='프로필 이미지' />
+          <img src={userInfo.img} alt="프로필 이미지" />
           <span>{nickname}</span>
         </Profile>
         <Follow onClick={() => setStep(1)}>
@@ -140,8 +133,8 @@ const Mypage = () => {
     isLoading && (
       <Wrap>
         <UserTop
-          title={myInfo.nickname !== nickname ? nickname : '마이페이지'}
-          type='mypage'
+          title={myInfo.nickname !== nickname ? nickname : "마이페이지"}
+          type="mypage"
           step={step}
           moveStep={handleMoveStep}
           showLogout={nickname === userInfo.nickname}
@@ -149,13 +142,13 @@ const Mypage = () => {
         {content}
         <ContentContainer>
           {step === 0 &&
-            tap === 'post' &&
+            tap === "post" &&
             (contents.post?.length ? (
               contents.post.map((p) => (
                 <Content key={p.boardMainId}>
                   <img
                     src={p.img[0].url}
-                    alt='자랑하기 글 이미지'
+                    alt="자랑하기 글 이미지"
                     onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
                   />
                 </Content>
@@ -163,46 +156,32 @@ const Mypage = () => {
             ) : (
               <span>작성한 글이 없어요.</span>
             ))}
+          <InnerWrap mode="community" active={tap}>
+            {step === 0 &&
+              tap === "community" &&
+              (contents.community?.length ? (
+                contents.community.map((item) => <CommunityCard key={item.boardMainId} data={item} />)
+              ) : (
+                <span>작성한 커뮤니티 글이 없어요.</span>
+              ))}
+          </InnerWrap>
+          <InnerWrap mode="together" active={tap}>
+            {step === 0 &&
+              tap === "together" &&
+              (contents.together?.length ? (
+                contents.together.map((item) => <TogetherCard key={item.boardMainId} data={item} />)
+              ) : (
+                <span>작성한 함께하기 글이 없어요.</span>
+              ))}
+          </InnerWrap>
           {step === 0 &&
-            tap === 'community' &&
-            (contents.community?.length ? (
-              contents.community.map((p) => (
-                <Content key={p.boardMainId}>
-                  {/* <img
-                    src={p.img[0].url}
-                    alt='커뮤니티 글 이미지'
-                    onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
-                  /> */}
-                  {/* communityId, boardMainId, boardKind, contents, likeCnt, dateTime, nickname, userProfileImg, img */}
-                </Content>
-              ))
-            ) : (
-              <span>작성한 커뮤니티 글이 없어요.</span>
-            ))}
-          {step === 0 &&
-            tap === 'together' &&
-            (contents.together?.length ? (
-              contents.together.map((p) => (
-                <Content key={p.boardMainId}>
-                  {/* <img
-                    src={p.img[0].url}
-                    alt='커뮤니티 글 이미지'
-                    onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
-                  /> */}
-                  {/* togetherId, boardMainId, boardKind, cityName, provinceName, title, contents, peopleCnt, limitPeople, likeCnt, dday, dateTime, nickname, userProfileImg, img */}
-                </Content>
-              ))
-            ) : (
-              <span>작성한 함께하기 글이 없어요.</span>
-            ))}
-          {step === 0 &&
-            tap === 'reels' &&
+            tap === "reels" &&
             (contents.reels?.length ? (
               contents.reels.map((p) => (
                 <Content key={p.boardMainId}>
                   {/* <img src={p.titleImg} alt='릴스 이미지' onClick={() => navigate(`/reels/detail/${p.boardMainId}`)} /> */}
                   {/* 일단 링크 대기중 */}
-                  <img src={p.titleImg} alt='릴스 이미지' />
+                  <img src={p.titleImg} alt="릴스 이미지" />
                 </Content>
               ))
             ) : (
@@ -213,6 +192,15 @@ const Mypage = () => {
     )
   );
 };
+
+const InnerWrap = styled.div`
+  width: 90%;
+  margin: ${(props) => props.mode === "community" && "6.8% auto 0 auto"};
+  margin: ${(props) => props.mode === "together" && "auto"};
+  margin-top: ${(props) => props.active === "reels" && "0"};
+  display: flex;
+  flex-direction: column;
+`;
 
 const ContentContainer = styled.div`
   display: flex;
@@ -258,7 +246,8 @@ const Follow = styled.div`
   text-align: center;
   font-size: 1.6rem;
   font-weight: 800;
-  margin-bottom: 6%;
+  width: 40%;
+  margin: 0 auto 5% auto;
   div {
     display: flex;
     flex-direction: column;
@@ -292,19 +281,19 @@ const Tap = styled.div`
   }
   div:first-of-type {
     border-bottom: ${(props) =>
-      props.mode === 'post' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+      props.mode === "post" ? `0.2rem solid ${props.theme.color.main}` : "0.2rem solid #ffffff"};
   }
   div:nth-of-type(2) {
     border-bottom: ${(props) =>
-      props.mode === 'community' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+      props.mode === "community" ? `0.2rem solid ${props.theme.color.main}` : "0.2rem solid #ffffff"};
   }
   div:nth-of-type(3) {
     border-bottom: ${(props) =>
-      props.mode === 'together' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+      props.mode === "together" ? `0.2rem solid ${props.theme.color.main}` : "0.2rem solid #ffffff"};
   }
   div:nth-of-type(4) {
     border-bottom: ${(props) =>
-      props.mode === 'reels' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+      props.mode === "reels" ? `0.2rem solid ${props.theme.color.main}` : "0.2rem solid #ffffff"};
   }
 `;
 

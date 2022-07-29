@@ -16,19 +16,25 @@ const OneComment = (props) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.info);
   const data = props.commentData;
-  // const postId = props.postId;
   const commentRef = React.useRef(null);
   const [openReplies, setOpenReplies] = React.useState(null);
   const [replyList, setReplyList] = React.useState(null);
   const [replyLength, setReplyLength] = React.useState(0);
   const isReply = props.isReply;
+  const blockReply = props.blockReply
 
   // 대댓글리스트
   React.useEffect(() => {
     if (!isReply) {
       instance.get("/api/reply/" + data.id).then((res) => {
         setReplyList(res);
-        setReplyLength(res.data.length);
+
+        if (res.data.length < 100) {
+          setReplyLength(res.data.length);
+        } else {
+          setReplyLength('99+');
+        }
+        
       });
     }
   }, [isReply, data.id]);
@@ -123,11 +129,11 @@ const OneComment = (props) => {
             <span> {isReply ? data.reply : data.comment} </span>
           </TextBubble>
           <Time> {createdAtDisplay} </Time>
-          {isReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
+          {isReply || blockReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
         </Content>
       )}
 
-      {openReplies ? <ReComment commentId={data.id} replyList={replyList} /> : null}
+      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies}/> : null}
 
       {isEditOptOpen ? (
         <EditOption>
@@ -154,6 +160,7 @@ const UserInfo = styled.div`
   span {
     font-size: 1.2rem;
     font-weight: 600;
+    color: #333;
   }
 `;
 
@@ -224,6 +231,7 @@ const Replies = styled.span`
 `;
 
 const EditOption = styled.div`
+  display: flex;
   margin-top: 0.5rem;
   margin-left: 17.33%;
   font-size: 1.2rem;

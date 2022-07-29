@@ -8,12 +8,25 @@ import instance from "../shared/axios";
 //element
 import OneComment from "../elements/OneComment";
 import SendBtn from "../elements/SendBtn";
+import Drawers from "../elements/Drawers";
 
 const ReComment = (props) => {
-  const replyList = props.replyList.data;
-  const commentId = props.commentId;
+  const [replyList, setReplyList] = React.useState(null);
+  const originalData = props.originalData;
+  const commentId = props.originalData.id;
+  const setOpenReplies = props.setOpenReplies;
   const commentRef = React.useRef();
   const [btnChange, setBtnChange] = React.useState(false);
+
+  React.useEffect(() => {
+    loadReplies()
+  }, []);
+
+  const loadReplies = () => {
+    instance.get("/api/reply/" + commentId).then((res) => {
+      setReplyList(res.data);
+    });
+  }
 
   const inputChange = () => {
     if (commentRef.current.value === "") {
@@ -26,7 +39,8 @@ const ReComment = (props) => {
   // 코멘트 추가하기
   const addComment = async () => {
     if (commentRef.current.value) {
-      instance.post("/api/reply/" + commentId, { reply: commentRef.current.value });
+      instance.post("/api/reply/" + commentId, { reply: commentRef.current.value })
+      .then(loadReplies());
       commentRef.current.value = "";
       setBtnChange(false);
     } else {
@@ -35,46 +49,55 @@ const ReComment = (props) => {
   };
 
   return (
+    <Drawers setDrawerOn={setOpenReplies}>
       <ReplyWrap>
-        
-          {replyList?.map((v) => (
-            <OneComment key={v.id} commentData={v} isReply={true} />
-          ))}
-        <InputWrapper>
-          <CommentInput>
-            <textarea ref={commentRef} onChange={inputChange} placeholder="메세지를 입력하세요" />
-            {btnChange ? <SendBtn onClick={addComment} /> : <button onClick={addComment}>입력</button>}
-          </CommentInput>
-        </InputWrapper>
+        <OriginalComment>
+          <OneComment commentData={originalData} blockReply={true} />
+        </OriginalComment>
+
+        {replyList?.map((v) => (
+          <OneComment key={v.id} commentData={v} isReply={true} />
+        ))}
       </ReplyWrap>
+
+      <InputWrapper>
+        <CommentInput>
+          <textarea ref={commentRef} onChange={inputChange} placeholder="메세지를 입력하세요" />
+          {btnChange ? <SendBtn onClick={addComment} /> : <button onClick={addComment}>입력</button>}
+        </CommentInput>
+      </InputWrapper>
+    </Drawers>
   );
 };
 
 export default ReComment;
 
+const OriginalComment = styled.div`
+  border-bottom: 1px solid #d1d1d6;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+`;
+
 const ReplyWrap = styled.div`
-  width: 100%;
-  max-width: 599px;
+  width: 90%;
+  height: 80%;
+  margin: 2.5rem;
+  overflow: scroll;
 `;
 
 const InputWrapper = styled.div`
   width: 100%;
-  max-width: 599px;
-  height: 8rem;
-  padding: 0 3rem;
-  background: #ffffffb3;
-
-  .fix {
-    position: fixed;
-    bottom: 10vh;
-  }
+  display: flex;
+  justify-content: center;
 `;
 
 const CommentInput = styled.div`
   display: flex;
   height: 4rem;
-  margin: 2.2rem 0rem;
-  position: relative;
+  width: 88%;
+  margin: 1rem 0rem 1.5rem 0rem;
+  position: fixed;
+  bottom: 12vh;
 
   textarea {
     width: 100%;

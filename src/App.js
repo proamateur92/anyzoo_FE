@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 
 // route
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import {
   FindId,
   FindPassword,
@@ -51,18 +51,36 @@ import ScrollRestore from "./elements/ScrollRestore";
 import RouteTracker from "./components/RouteTracker.js";
 
 function App() {
+  const navigate = useNavigate();
   const theme = defaultTheme;
   setAccessToken();
   RouteTracker();
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     if (getCookie("accessToken")) {
       dispatch(setUserDB());
     }
   }, [dispatch]);
- 
+
+  useEffect(() => {
+    if (!getCookie("accessToken")) {
+      if (
+        !(
+          location.pathname === "/oauth" ||
+          location.pathname === "/login" ||
+          location.pathname === "/signup" ||
+          location.pathname === "/user/findId" ||
+          location.pathname === "/user/findPassword"
+        )
+      ) {
+        navigate("/login");
+      }
+    }
+  }, [navigate, location.pathname]);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
@@ -92,6 +110,7 @@ function App() {
           <Route path="/notice" element={<Notice />} />
           <Route path="/notice/detail/:id" element={<NoticeDetail />} />
           <Route path="/reels" element={<Reels />} />
+          <Route path="/reels/:id" element={<Reels />} />
           <Route path="/reels/write/:id" element={<ReelsWrite />} />
           <Route path="*" element={<NotFound />} />
         </Routes> 
