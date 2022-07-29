@@ -28,33 +28,30 @@ const Oauth = () => {
 
   const sendAuthCode = useCallback(
     async (url) => {
-      console.log('인가코드 체크', code);
-      // try {
-      //   console.log('인가코드 체크', code);
-      //   const response = await instance.get(url, {
-      //     headers: {
-      //       code,
-      //     },
-      //   });
-      //   console.log(response);
-      //   const accessToken = response.data.accesstoken;
-      //   const refreshToken = response.data.refreshtoken;
-      //   setCookie('accessToken', accessToken);
-      //   setCookie('refreshToken', refreshToken);
-      //   navigate('/');
-      //   setAccessToken();
-      //   dispatch(setUserDB());
-      // } catch (error) {
-      //   console.log(error);
-      //   Swal.fire({
-      //     title: '로그인에 실패하였습니다',
-      //     icon: 'error',
-      //     confirmButtonText: '확인',
-      //     confirmButtonColor: '#44DCD3',
-      //   }).then(() => {
-      //     navigate('/login');
-      //   });
-      // }
+      try {
+        const response = await instance.get(url, {
+          headers: {
+            code,
+          },
+        });
+        const accessToken = response.data.accesstoken;
+        const refreshToken = response.data.refreshtoken;
+        setCookie('accessToken', accessToken);
+        setCookie('refreshToken', refreshToken);
+        navigate('/');
+        setAccessToken();
+        dispatch(setUserDB());
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: '로그인에 실패하였습니다',
+          icon: 'error',
+          confirmButtonText: '확인',
+          confirmButtonColor: '#44DCD3',
+        }).then(() => {
+          navigate('/login');
+        });
+      }
     },
     [code]
   );
