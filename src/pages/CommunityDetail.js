@@ -138,12 +138,12 @@ const HeadTitle = styled.div`
 
   p {
     margin: 1.5%;
-    font-size: clamp(10px, 5.67vw, 20px);
+    font-size: 1.45rem;
     font-weight: bold;
   }
 
   span {
-    font-size: clamp(8px, 2.67vw, 16px);
+    font-size: 1.2rem;
     opacity: 0.6;
   }
 `;
@@ -166,16 +166,15 @@ const User = styled.div`
 `;
 
 const UserImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 2.875rem;
+  height: 2.875rem;
   border-radius: 100px;
-  border: solid 1px black;
 `;
 
 const UserName = styled.span`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.4rem;
   width: 70%;
-  margin: 4%;
+  margin: 5%;
 `;
 
 const JumMom = styled.div`
@@ -192,7 +191,7 @@ const ImgBox = styled.div`
   /* overflow-x: hidden; */
   scroll-snap-type: x mandatory;
   width: 100%;
-  height: 22vh;
+  height: 55%;
   margin-left: -1%;
   margin-top: 3%;
   border-radius: 20px;
@@ -209,14 +208,6 @@ const Content = styled.p`
   margin-bottom: 2%;
   line-height: 1.8;
   font-size: clamp(8px, 3.6vw, 20px);
-`;
-
-const Reactions = styled.div`
-  padding-top: 15px;
-  font-size: clamp(8px, 3.2vw, 15px);
-  span {
-    margin-right: 10px;
-  }
 `;
 
 export default CommunityDetail;

@@ -272,16 +272,15 @@ const User = styled.div`
 `;
 
 const UserImg = styled.img`
-  width: 30px;
-  height: 30px;
+  height: 2.875rem;
+  width: 2.875rem;
   border-radius: 100px;
-  border: solid 1px black;
 `;
 
 const UserName = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   width: 70%;
-  margin: 4%;
+  margin: 5%;
 `;
 
 const JumMom = styled.div`

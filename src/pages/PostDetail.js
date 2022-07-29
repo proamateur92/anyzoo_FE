@@ -191,15 +191,15 @@ const User = styled.div`
 `;
 
 const UserImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 2.875rem;
+  height: 2.875rem;
   border-radius: 100px;
 `;
 
 const UserName = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   width: 70%;
-  margin: 4%;
+  margin: 5%;
 `;
 
 const JumMom = styled.div`
@@ -211,11 +211,11 @@ const JumMom = styled.div`
 
 const ImgBox = styled.div`
   display: flex;
-
+  overflow-x: auto;
   /* overflow-x: hidden; */
-
+  scroll-snap-type: x mandatory;
   width: 100%;
-  height: 22vh;
+  height: 55%;
   margin-left: -1%;
   margin-top: 3%;
   border-radius: 20px;
@@ -232,15 +232,6 @@ const Content = styled.p`
   margin-bottom: 2%;
   line-height: 1.8;
   font-size: 1.25rem;
-`;
-
-const Reactions = styled.div`
-  padding-top: 0.9375rem;
-
-  span {
-    margin-right: 1.2rem;
-    font-size: 1.5rem;
-  }
 `;
 
 export default PostDetail;

@@ -13,14 +13,13 @@ import instance from "../shared/axios";
 
 const CommunityWrite = () => {
   //   const titleRef = useRef();
-  const imgRef = useRef();
+
   const contentRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [select, setSelect] = useState();
+
   const [showImages, setShowImages] = useState([]);
   const [getImages, setGetImages] = useState([]);
-  const [saveImage, setSaveImage] = useState();
 
   //data 설정해 reducer로 보내기(더하기)
   const addPost = async (e) => {
@@ -41,7 +40,6 @@ const CommunityWrite = () => {
 
       const response = await instance.post("/api/community/image", formData);
       console.log(response.data);
-      setSaveImage(response.data);
 
       const data = {
         // title: titleRef.current.value,
