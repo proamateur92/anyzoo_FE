@@ -1,23 +1,23 @@
 /* eslint-disable */
 
 // react
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // components
-import StepPassword from './StepPassword';
+import StepPassword from "./StepPassword";
 
 // style
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from "styled-components";
 
 // image
-import profile from '../../assets/images/noProfile.png';
+import profile from "../../assets/images/noProfile.png";
 
 // sweetalert
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 // axios
-import instance from '../../shared/axios';
-import StepPhone from './StepPhone';
+import instance from "../../shared/axios";
+import StepPhone from "./StepPhone";
 
 const Step = ({ step, onCountChange, onSignup }) => {
   // 패스워드 일치 여부
@@ -33,22 +33,22 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 유효성 검사 함수
   const checkValidation = (value) => {
-    let regExp = '';
+    let regExp = "";
 
     switch (curData) {
-      case 'nickname': {
+      case "nickname": {
         regExp = /^[a-zA-Z가-힣0-9]{3,9}$/;
         break;
       }
-      case 'username': {
+      case "username": {
         regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
         break;
       }
-      case 'password': {
+      case "password": {
         regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
         break;
       }
-      case 'phoneNumber': {
+      case "phoneNumber": {
         regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{5})$/;
         break;
       }
@@ -65,16 +65,16 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
 
   const [userInfo, setUserInfo] = useState({
-    nickname: '',
-    username: '',
-    password: '',
-    phoneNumber: '',
-    userImage: '',
+    nickname: "",
+    username: "",
+    password: "",
+    phoneNumber: "",
+    userImage: "",
   });
 
-  const [passwordCheckValue, setPasswordCheckValue] = useState('');
+  const [passwordCheckValue, setPasswordCheckValue] = useState("");
 
-  const userInfoArr = ['agree', 'nickname', 'username', 'password', 'phoneNumber', 'userImage'];
+  const userInfoArr = ["agree", "nickname", "username", "password", "phoneNumber", "userImage"];
 
   // 현재 입력될 input의 이름
   const curData = userInfoArr[step];
@@ -82,7 +82,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 이전에 입력된 input의 이름
   const prevData = step !== 0 && userInfoArr[step - 1];
 
-  const [imageData, setImageData] = useState({ previewImage: '', imageFile: '' });
+  const [imageData, setImageData] = useState({ previewImage: "", imageFile: "" });
 
   // 회원가입 버튼을 클릭하면
   const [isSubmit, setIsSubmit] = useState(false);
@@ -96,10 +96,10 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 업로드 이미지 -> 서버 통신
   const uploadImage = async () => {
     const formData = new FormData();
-    formData.append('file', imageData.imageFile);
+    formData.append("file", imageData.imageFile);
     try {
       // 서버 이미지 업로드 api 필요
-      const response = await instance.post('/user/image', formData);
+      const response = await instance.post("/user/image", formData);
       // 유저 정보에 서버 이미지 url 저장
       setUserInfo({ ...userInfo, [curData]: response.data.id });
     } catch (error) {
@@ -111,31 +111,31 @@ const Step = ({ step, onCountChange, onSignup }) => {
   // 입력 값 유저 정보 state에 넣기
   const handleEnteredInfo = async (event) => {
     // 이미지 업로드할 때
-    if (curData === 'userImage') {
+    if (curData === "userImage") {
       const uploadFile = event.target.files[0];
 
       if (uploadFile) {
         const previewImagePath = URL.createObjectURL(uploadFile);
         setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
       } else {
-        setImageData({ previewImage: '', imageFile: '' });
-        setUserInfo({ ...userInfo, userImage: '' });
+        setImageData({ previewImage: "", imageFile: "" });
+        setUserInfo({ ...userInfo, userImage: "" });
         return;
       }
       return;
     }
 
     // 숫자 이외의 값 입력 방지
-    if (curData === 'phoneNumber') {
+    if (curData === "phoneNumber") {
       if (isNaN(Number(event.target.value))) {
         return;
       }
     }
 
     // 별명, 이메일, 핸드폰 번호 중복 여부 갱신
-    if (curData === 'nickname' || curData === 'username' || curData === 'phoneNumber') {
+    if (curData === "nickname" || curData === "username" || curData === "phoneNumber") {
       setIsDuplicated({ ...isDuplicated, [curData]: false });
-      if (curData === 'phoneNumber') {
+      if (curData === "phoneNumber") {
         setIsDuplicated({ ...isDuplicated, [curData]: false });
         setIsAuthorized(false);
         setPhoneMessage(false);
@@ -167,20 +167,20 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
     // 페이지 이동이 일어날 때
     if (step !== 0 && moveStep === -1) {
-      setUserInfo({ ...userInfo, [prevData]: '', [curData]: '' });
+      setUserInfo({ ...userInfo, [prevData]: "", [curData]: "" });
       setValidation({ ...validation, [prevData]: false, [curData]: false });
 
       // 비밀번호 입력 페이지
       // 비밀번호 관련 값 초기화
       if (step === 3 || (step === 4 && moveStep === -1)) {
-        setPasswordCheckValue('');
+        setPasswordCheckValue("");
         setIsShowPassword(false);
       }
 
       // 휴대폰 인증 페이지
       // 인증 관련 값 초기화
       if (step === 4 || (step === 5 && moveStep === -1)) {
-        setAuthNumber('');
+        setAuthNumber("");
         setIsAuthorized(false);
       }
 
@@ -204,9 +204,13 @@ const Step = ({ step, onCountChange, onSignup }) => {
     setIsSubmit(true);
   };
 
+  // 인증 코드 대기
+  const [waitSendCodeTime, setWaitSendCodeTime] = useState(false);
+  const [leftTime, setLeftTime] = useState(5);
+
   // 사용자 입력 중복체크
   const handleInputDuplicated = async () => {
-    if (curData === 'nickname') {
+    if (curData === "nickname") {
       try {
         const response = await instance.get(`/user/checkNickname/${userInfo.nickname}`);
         if (response.data) {
@@ -217,10 +221,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
       } catch (error) {
         console.log(error);
       }
-    } else if (curData === 'username') {
+    } else if (curData === "username") {
       try {
         const response = await instance.get(`/user/checkUsername/${userInfo.username}`);
-
         if (response.data) {
           setIsDuplicated({ ...isDuplicated, [curData]: response.data });
           return;
@@ -230,7 +233,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
       } catch (error) {
         console.log(error);
       }
-    } else if (curData === 'phoneNumber') {
+    } else if (curData === "phoneNumber") {
+      if (waitSendCodeTime) {
+        Swal.fire({
+          title: `${leftTime}초 후에 요청이 가능해요.`,
+          icon: "warning",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#44DCD3",
+        });
+        return;
+      }
+
       try {
         const response = await instance.get(`/user/checkPhoneNumber/${userInfo.phoneNumber}`);
         if (response.data) {
@@ -238,6 +251,21 @@ const Step = ({ step, onCountChange, onSignup }) => {
           return;
         }
         setIsDuplicated({ ...isDuplicated, [curData]: response.data });
+        setWaitSendCodeTime(true);
+
+        setTimeout(() => {
+          setWaitSendCodeTime(false);
+        }, 5000);
+
+        const stopLeftTime = setInterval(() => {
+          setLeftTime((prev) => prev - 1);
+        }, 1000);
+
+        setTimeout(() => {
+          clearInterval(stopLeftTime);
+          setLeftTime(5);
+        }, 5000);
+
         setIsSendCode(true);
         sendCode();
       } catch (error) {
@@ -247,15 +275,15 @@ const Step = ({ step, onCountChange, onSignup }) => {
   };
 
   // step별 화면 보여주기
-  let content = '';
+  let content = "";
 
   // 약관 동의 체크
   const [agreeArr, setAgreeArr] = useState({ all: false, first: false, second: false });
   const [isAllAgree, setIsAllAgree] = useState(false);
 
   const handleAgreeCheck = (index) => {
-    if (index === 'all') {
-      const result = agreeArr['all'] ? true : false;
+    if (index === "all") {
+      const result = agreeArr["all"] ? true : false;
       setIsAllAgree(!result);
       setAgreeArr({
         all: !result,
@@ -266,7 +294,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
 
     for (const key in agreeArr) {
-      if (key !== 'all' && index !== key && !agreeArr[index] && agreeArr[key]) {
+      if (key !== "all" && index !== key && !agreeArr[index] && agreeArr[key]) {
         setAgreeArr({ ...agreeArr, all: true, [index]: !agreeArr[index] });
         setIsAllAgree(true);
         return;
@@ -303,23 +331,23 @@ const Step = ({ step, onCountChange, onSignup }) => {
           <GuideBox>
             <div>회원가입 전, ANYZOO 약관을 확인해주세요.</div>
           </GuideBox>
-          <GuideList onClick={() => handleAgreeCheck('all')}>
-            <div className={agreeArr['all'] ? 'box checked' : 'box'}></div>
+          <GuideList onClick={() => handleAgreeCheck("all")}>
+            <div className={agreeArr["all"] ? "box checked" : "box"}></div>
             <span>약관 전체동의</span>
           </GuideList>
-          <GuideList onClick={() => handleAgreeCheck('first')}>
-            <div className={agreeArr['first'] ? 'box checked' : 'box'}></div>
+          <GuideList onClick={() => handleAgreeCheck("first")}>
+            <div className={agreeArr["first"] ? "box checked" : "box"}></div>
             <span>이용약관 동의(필수)</span>
             {/* <span onClick={() => showGuide(0)}>[상세보기]</span> */}
           </GuideList>
-          <GuideList onClick={() => handleAgreeCheck('second')}>
-            <div className={agreeArr['second'] ? 'box checked' : 'box'}></div>
+          <GuideList onClick={() => handleAgreeCheck("second")}>
+            <div className={agreeArr["second"] ? "box checked" : "box"}></div>
             <span>개인정보 수집 및 이용동의(필수)</span>
             {/* <span onClick={(e) => showGuide(e, 1)}>[상세보기]</span> */}
           </GuideList>
         </Guide>
-        <GuideDesc style={{ display: isShowGuide ? 'flex' : 'none' }}>
-          <div className='guide'>
+        <GuideDesc style={{ display: isShowGuide ? "flex" : "none" }}>
+          <div className="guide">
             <GuideDesc_Header>
               <span onClick={(e) => showGuide(e)}>X</span>
               <span>이용약관</span>
@@ -622,9 +650,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 1) {
     content = (
       <StepBox>
-        <span className='desc'>
+        <span className="desc">
           <p>
-            당신의 <span className='strong'>별명</span>은?
+            당신의 <span className="strong">별명</span>은?
           </p>
         </span>
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
@@ -633,7 +661,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
         {userInfo[curData].trim().length !== 0 && isDuplicated[curData] && (
           <Validation>*이미 등록된 별명이에요.</Validation>
         )}
-        <SingleInput value={userInfo.nickname} onChange={handleEnteredInfo} type='text' placeholder='홍길동' />
+        <SingleInput value={userInfo.nickname} onChange={handleEnteredInfo} type="text" placeholder="홍길동" />
       </StepBox>
     );
   }
@@ -642,9 +670,9 @@ const Step = ({ step, onCountChange, onSignup }) => {
   if (step === 2) {
     content = (
       <StepBox>
-        <span className='desc'>
+        <span className="desc">
           <p>
-            <span className='strong'>이메일</span>을
+            <span className="strong">이메일</span>을
           </p>
           <p>입력해주세요.</p>
         </span>
@@ -657,8 +685,8 @@ const Step = ({ step, onCountChange, onSignup }) => {
         <SingleInput
           value={userInfo.username}
           onChange={handleEnteredInfo}
-          type='text'
-          placeholder='이메일을 입력해주세요.'
+          type="text"
+          placeholder="이메일을 입력해주세요."
         />
       </StepBox>
     );
@@ -678,7 +706,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     content = (
       <StepBox>
         <StepPassword
-          mode='signup'
+          mode="signup"
           userPassword={userInfo[curData]}
           setEnteredPassword={handleEnteredInfo}
           validation={validation[curData]}
@@ -695,7 +723,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
   useEffect(() => {}, [isDuplicated.phoneNumber]);
 
   // 인증코드 입력
-  const [authNumber, setAuthNumber] = useState('');
+  const [authNumber, setAuthNumber] = useState("");
 
   const handleSetAuthNumber = (event) => {
     setAuthNumber(event.target.value);
@@ -712,17 +740,17 @@ const Step = ({ step, onCountChange, onSignup }) => {
     setAuthMessage(false);
 
     try {
-      const response = await instance.post('/user/confirm/phoneVerification', {
+      const response = await instance.post("/user/confirm/phoneVerification", {
         phoneNumber: userInfo.phoneNumber,
         numStr: authNumber,
       });
       // 인증코드가 일치하면 true, 다르면 false
       if (!response.data) {
         Swal.fire({
-          title: '인증번호가 일치하지 않아요!',
-          icon: 'warning',
-          confirmButtonText: '확인',
-          confirmButtonColor: '#44DCD3',
+          title: "인증번호가 일치하지 않아요!",
+          icon: "warning",
+          confirmButtonText: "확인",
+          confirmButtonColor: "#44DCD3",
         });
       }
       response.data && handleStepMove(1);
@@ -744,7 +772,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
     content = (
       <StepBox>
         <StepPhone
-          mode='signup'
+          mode="signup"
           step={step}
           userPhoneNumber={userInfo[curData]}
           validation={validation[curData]}
@@ -763,30 +791,30 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
   // 기본 이미지 클릭하면 파일 선택하기 창 띄우기
   const handleSelectImg = () => {
-    const img = document.querySelector('.selectImg');
-    img.addEventListener('click', img.click());
+    const img = document.querySelector(".selectImg");
+    img.addEventListener("click", img.click());
   };
 
   // 프로필 이미지 페이지
   if (step === 5) {
     content = (
       <StepBox>
-        <span className='desc'>
+        <span className="desc">
           <p>마지막으로</p>
           <p>
-            <span className='strong'>프로필이미지</span>를
+            <span className="strong">프로필이미지</span>를
           </p>
           <p>설정해주세요.</p>
         </span>
         <Profile>
           <img
-            className='defaultImg'
+            className="defaultImg"
             src={imageData.previewImage || profile}
-            alt='profile'
-            accept='image/*'
+            alt="profile"
+            accept="image/*"
             onClick={handleSelectImg}
           />
-          <input className='selectImg' onChange={handleEnteredInfo} type='file' accept='image/*' />
+          <input className="selectImg" onChange={handleEnteredInfo} type="file" accept="image/*" />
         </Profile>
       </StepBox>
     );
@@ -797,10 +825,10 @@ const Step = ({ step, onCountChange, onSignup }) => {
     try {
       await instance.get(`/user/send/phoneVerification/${userInfo.phoneNumber}`);
       Swal.fire({
-        title: '인증번호를 발송했어요!',
-        icon: 'success',
-        confirmButtonText: '확인',
-        confirmButtonColor: '#44DCD3',
+        title: "인증번호를 발송했어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
       });
       setIsSendCode(true);
       setAuthMessage(false);
@@ -809,11 +837,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
   };
 
-  let buttons = '';
+  let buttons = "";
 
   if (step === 0) {
     buttons = (
-      <ButtonBox step={step} width='100%' validation={isAllAgree}>
+      <ButtonBox step={step} width="100%" validation={isAllAgree}>
         <NextBtn onClick={() => isAllAgree && handleStepMove(1)}>다음</NextBtn>
       </ButtonBox>
     );
@@ -872,7 +900,7 @@ const Container = styled.div`
   margin: 0 auto;
   .desc {
     display: block;
-    font-size: 20px;
+    font-size: 2rem;
     margin: 10vw 0 5vw 0;
   }
   .strong {
@@ -882,7 +910,7 @@ const Container = styled.div`
     display: block;
     margin-bottom: 5px;
   }
-  input[type='file'] {
+  input[type="file"] {
     display: none;
   }
 `;
@@ -891,18 +919,18 @@ const SingleInput = styled.input`
   box-sizing: border-box;
   width: 100%;
   padding: 5% 10px;
-  font-size: 20px;
+  font-size: 2rem;
   margin-top: 10vw;
   border-bottom: 3px solid #000000;
   &:last-of-type {
     margin-bottom: 5vw;
   }
   &::placeholder {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 800;
     color: rgba(0, 0, 0, 0.3);
   }
-  &[type='file'] {
+  &[type="file"] {
     display: none;
   }
 `;
@@ -910,7 +938,7 @@ const SingleInput = styled.input`
 const Title = styled.span`
   display: block;
   padding-top: 10%;
-  font-size: 30px;
+  font-size: 3rem;
   font-weight: bold;
   color: ${(props) => props.theme.color.main};
 `;
@@ -918,7 +946,7 @@ const Title = styled.span`
 const Profile = styled.div`
   text-align: center;
   margin: 10vw 0;
-  font-size: 16px;
+  font-size: 1.6rem;
   .defaultImg {
     cursor: pointer;
     border-radius: 50%;
@@ -972,20 +1000,20 @@ const GuideList = styled.div`
   }
   .box.checked {
     &::after {
-      content: '✔';
+      content: "✔";
       background-color: ${(props) => props.theme.color.activeBtn};
       color: #ffffff;
       width: 110%;
       height: 110%;
-      font-size: 18px;
+      font-size: 1.8rem;
     }
   }
   span:first-of-type {
-    font-size: 14px;
+    font-size: 1.4rem;
     color: rgba(0, 0, 0, 0.6);
   }
   span:nth-of-type(2) {
-    font-size: 12px;
+    font-size: 1.2rem;
     color: rgba(0, 0, 0, 0.4);
   }
 `;
@@ -1039,7 +1067,7 @@ const GuideDesc_Header = styled.div`
   top: 4%;
   padding: 5% 0;
   text-align: center;
-  font-size: 25px;
+  font-size: 2.5rem;
   background-color: #595959;
   border-radius: 15px 15px 0 0;
   span:first-of-type {
@@ -1053,7 +1081,7 @@ const GuideDesc_Header = styled.div`
 const Validation = styled.span`
   display: block;
   color: red;
-  font-size: 14px;
+  font-size: 1.4rem;
   margin-bottom: 2%;
   &:last-of-type {
     margin-bottom: 8.3%;
@@ -1066,7 +1094,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: space-between;
   button {
-    font-size: 16px;
+    font-size: 1.6rem;
     width: 47%;
     padding: 15px;
     background-color: #ccc;
@@ -1084,7 +1112,7 @@ const ButtonBox = styled.div`
   ${NextBtn} {
     width: ${(props) => props.width};
     background-color: ${(props) => (props.validation ? props.theme.color.activeBtn : props.theme.color.inactiveBtn)};
-    cursor: ${(props) => props.validation && 'pointer'};
+    cursor: ${(props) => props.validation && "pointer"};
     transition: 0.5s;
   }
 `;
