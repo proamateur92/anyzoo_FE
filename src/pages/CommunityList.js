@@ -90,7 +90,7 @@ const CommunityList = ( props ) => {
           : communityList.map((item) => <CommunityCard key={item.boardMainId} data={item} />)}
       </InnerWrap>
 
-      <div ref={listEndRef} />
+      <ScrollDetect ref={listEndRef} />
     </Wrap>
   );
 };
@@ -150,3 +150,12 @@ const InnerWrap = styled.div`
   flex-direction: column;
   padding-top: ${(props) => (props?.type === "together" ? "12rem" : "6rem")};
 `;
+
+
+const ScrollDetect = styled.div`
+  height: 10px;
+  width: 100%;
+  margin-top: -30vh;
+  padding-top: 30vh;
+  padding-bottom: 20vh;
+`
