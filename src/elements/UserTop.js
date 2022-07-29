@@ -43,7 +43,7 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
   };
 
   if (type === 'mypage' && showLogout && step === 0) {
-    icon = <FaSignOutAlt style={{ fontSize: '30px', color: 'red' }} onClick={() => logout()} />;
+    icon = <FaSignOutAlt style={{ fontSize: '3rem', color: 'red' }} onClick={() => logout()} />;
   } else if (type === 'signup') {
     icon = (
       <CircularProgressbar
@@ -82,7 +82,7 @@ const Top = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  font-size: 18px;
+  font-size: 2rem;
   text-align: center;
   height: 18vw;
   span {
@@ -94,14 +94,14 @@ const Icon = styled.div`
   position: absolute;
   width: ${(props) => props.type === 'signup' && '11%'};
   font-weight: ${(props) => props.type === 'signup' && '800'};
+  cursor: pointer;
+  font-size: 3rem;
   &:first-of-type {
     left: 0;
   }
   &:nth-of-type(2) {
     right: 2%;
   }
-  cursor: pointer;
-  font-size: 35px;
 `;
 
 export default UserTop;

@@ -50,7 +50,6 @@ const Mypage = () => {
   const getUserInfo = async () => {
     try {
       const response = await instance.get(`/api/mypage/userInfo/${nickname}`);
-      console.log('로그인 별 회원정보');
       if (!response.data) {
         Swal.fire({
           title: `존재하지 않는 회원이에요. 메인페이지로 이동합니다.`,
@@ -118,7 +117,7 @@ const Mypage = () => {
             <span>{userInfo.follower}</span>
           </div>
         </Follow>
-        <Tap>
+        <Tap mode={tap}>
           <div onClick={() => setTap(contentType[0])}>
             <span>자랑하기</span>
           </div>
@@ -219,11 +218,14 @@ const ContentContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  height: 100%;
 `;
 
 const Content = styled.div`
   width: 25%;
+  height: 24.88vw;
   img {
+    object-fit: cover;
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -235,7 +237,7 @@ const Profile = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 16px;
+  font-size: 1.6rem;
   margin-top: 3%;
   img {
     width: 4.5em;
@@ -244,7 +246,8 @@ const Profile = styled.div`
   }
   span {
     display: block;
-    margin: 3.5% 0 5% 0;
+    font-size: 2rem;
+    margin: 3.5% 0 7% 0;
   }
 `;
 
@@ -253,7 +256,7 @@ const Follow = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 800;
   margin-bottom: 6%;
   div {
@@ -265,7 +268,7 @@ const Follow = styled.div`
   }
   div:nth-of-type(2) {
     margin: 0 4%;
-    font-size: 1px;
+    font-size: 1rem;
     color: #d9d9d9;
   }
   div:nth-of-type(3) {
@@ -278,18 +281,30 @@ const Follow = styled.div`
 
 const Tap = styled.div`
   display: flex;
-  font-size: 12px;
+  font-size: 1.3rem;
   font-weight: 800;
-  border-top: 1.5px solid #d9d9d9;
-  border-bottom: 1.5px solid #d9d9d9;
+  border-top: 0.2rem solid #d9d9d9;
   div {
     padding: 5%;
-    width: 33.3%;
+    width: 25%;
     cursor: pointer;
     text-align: center;
   }
-  div:hover {
-    background-color: red;
+  div:first-of-type {
+    border-bottom: ${(props) =>
+      props.mode === 'post' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+  }
+  div:nth-of-type(2) {
+    border-bottom: ${(props) =>
+      props.mode === 'community' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+  }
+  div:nth-of-type(3) {
+    border-bottom: ${(props) =>
+      props.mode === 'together' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
+  }
+  div:nth-of-type(4) {
+    border-bottom: ${(props) =>
+      props.mode === 'reels' ? `0.2rem solid ${props.theme.color.main}` : '0.2rem solid #ffffff'};
   }
 `;
 
