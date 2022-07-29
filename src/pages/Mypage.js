@@ -165,7 +165,7 @@ const Mypage = () => {
             ) : (
               <span>작성한 글이 없어요.</span>
             ))}
-          <InnerWrap>
+          <InnerWrap mode="community" active={tap}>
             {step === 0 &&
               tap === "community" &&
               (contents.community?.length ? (
@@ -174,7 +174,7 @@ const Mypage = () => {
                 <span>작성한 커뮤니티 글이 없어요.</span>
               ))}
           </InnerWrap>
-          <InnerWrap>
+          <InnerWrap mode="together" active={tap}>
             {step === 0 &&
               tap === "together" &&
               (contents.together?.length ? (
@@ -204,7 +204,9 @@ const Mypage = () => {
 
 const InnerWrap = styled.div`
   width: 90%;
-  margin: auto;
+  margin: ${(props) => props.mode === "community" && "6.8% auto 0 auto"};
+  margin: ${(props) => props.mode === "together" && "auto"};
+  margin-top: ${(props) => props.active === "reels" && "0"};
   display: flex;
   flex-direction: column;
 `;
