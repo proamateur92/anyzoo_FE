@@ -21,7 +21,12 @@ const PostResponses = (props) => {
     instance.post('/api/heart/' + boardMainId)
     .then(() => {
       setIsLiked(!isLiked)
-      isLiked ? setLikefluc((prev) => prev + 1) : setLikefluc((prev) => prev - 1)
+
+      if (isLiked) {
+        setLikefluc((prev) => prev + 1) 
+      } else if (likefluc > 0) {
+        setLikefluc((prev) => prev - 1)
+      }
     })
     .catch((err) => console.log(err));
   };
