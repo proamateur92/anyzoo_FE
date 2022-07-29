@@ -80,13 +80,6 @@ const RecruitDetail = () => {
     });
   }, []);
 
-  const clickHeart = () => {
-    instance.post("/api/heart/" + params.id).then((res) => {
-      console.log(res);
-      setLike(!like);
-    });
-  };
-
   useEffect(() => {
     instance.get("/api/heart/" + params.id).then((res) => {
       // console.log(res)
@@ -173,12 +166,8 @@ const RecruitDetail = () => {
                 <p>{data?.nickname}</p>
               </InfoUser>
               <Location>
-                <Gu>
-                  <span>#{data?.cityName}</span>
-                </Gu>
-                <Gu>
-                  <span>#{data?.provinceName}</span>
-                </Gu>
+                <Gu>#{data?.cityName}</Gu>
+                <Gu>#{data?.provinceName}</Gu>
               </Location>
             </Info>
           </InfoAll>
@@ -190,38 +179,36 @@ const RecruitDetail = () => {
               <FiChevronDown />
             </span>
           </ChatB>
-          <JengBoUser>
-            <div>
-              <JengBoUserImg src={data?.userProfileImg} alt="" />
-              <p>{data?.nickname}</p>
-            </div>
-          </JengBoUser>
-          <JengBoLocation>
-            <Dong>
-              <span>#{data?.cityName}</span>
-            </Dong>
-            <Gu>
-              <span>#{data?.provinceName}</span>
-            </Gu>
-          </JengBoLocation>
-          <Chatting>
-            {lastDay === "00:00:00" ? (
-              <FinishBtn disabled="disabled">Comming soon</FinishBtn>
-            ) : (
-              <ChattingBtn disabled="disabled">Comming soon</ChattingBtn>
-            )}
-          </Chatting>
-          <Recruitment>
-            <div>
-              <p>모집 마감 {lastDay}</p>
-            </div>
-            <div>
-              <img src={require("../assets/images/캡처.PNG")} />{" "}
-              <p>
-                {data?.peopleCnt}/{data?.limitPeople}
-              </p>
-            </div>
-          </Recruitment>
+          <AllJengBo>
+            <JengBoUser>
+              <div>
+                <JengBoUserImg src={data?.userProfileImg} alt="" />
+              </div>
+              <span>{data?.nickname}</span>
+            </JengBoUser>
+            <JengBoLocation>
+              <Gu>#{data?.cityName}</Gu>
+              <Gu>#{data?.provinceName}</Gu>
+            </JengBoLocation>
+            <Chatting>
+              {lastDay === "00:00:00" ? (
+                <FinishBtn disabled="disabled">Comming soon</FinishBtn>
+              ) : (
+                <ChattingBtn disabled="disabled">Comming soon</ChattingBtn>
+              )}
+            </Chatting>
+            <Recruitment>
+              <div>
+                <p>모집 마감 {lastDay}</p>
+              </div>
+              <div>
+                <img src={require("../assets/images/캡처.PNG")} />{" "}
+                <p>
+                  {data?.peopleCnt}/{data?.limitPeople}
+                </p>
+              </div>
+            </Recruitment>
+          </AllJengBo>
         </JengBo>
       )}
     </Wrap>
@@ -292,7 +279,7 @@ const UserImg = styled.img`
 `;
 
 const UserName = styled.span`
-  font-size: clamp(8px, 3.67vw, 16px);
+  font-size: 1.2rem;
   width: 70%;
   margin: 4%;
 `;
@@ -334,11 +321,12 @@ const ChatBox = styled.div`
   position: fixed;
   width: 100%;
   max-width: 600px;
-  height: 11vh;
-  bottom: 90px;
+  height: 14%;
+  bottom: 5.625rem;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 100;
+  /* background-color: white; */
 `;
 
 const BtnBox = styled.div`
@@ -363,7 +351,7 @@ const InfoAll = styled.div`
   box-shadow: 0 -5px 10px -4px gray;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
-  height: 40px;
+  height: 100%;
   width: 100%;
   padding: 0 10% 0 10%;
   display: block;
@@ -379,67 +367,66 @@ const Info = styled.div`
 `;
 
 const InfoUserImg = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 1.875rem;
+  height: 1.875rem;
   border-radius: 100px;
 `;
 
 const InfoUser = styled.div`
-  width: 60%;
+  width: 50%;
   display: flex;
+  margin: auto;
 
   p {
-    font-size: clamp(8px, 3.67vw, 16px);
+    font-size: 1.2rem;
     width: 70%;
-    margin: 3.2% 0 0 5%;
+    margin: 2% 0 0 5%;
   }
 `;
 
 const Location = styled.div`
-  width: 40%;
+  width: 50%;
+  height: 100%;
   display: flex;
+  margin: auto;
 `;
 
 const Gu = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 45%;
-  height: 35px;
+  height: 100%;
   border: 1px solid gray;
-  margin: 0 2% 0 2%;
+  margin: auto;
   text-align: center;
-  line-height: 33px;
+
   border-radius: 30px;
 
   span {
     opacity: 0.7;
-    font-size: 0.8125rem;
-  }
-`;
-const Dong = styled.div`
-  width: 45%;
-  height: 35px;
-  border: 1px solid gray;
-  margin: 0 2% 0 2%;
-  text-align: center;
-  line-height: 33px;
-  border-radius: 30px;
-
-  span {
-    opacity: 0.7;
-    font-size: 13px;
+    font-size: 1rem;
+    height: 90%;
   }
 `;
 
 const JengBo = styled.div`
+  background-color: transparent;
   position: fixed;
   width: 100%;
   max-width: 600px;
-  height: 28vh;
-  bottom: 90px;
+  height: 30%;
+  bottom: 5.625rem;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 100;
+  z-index: 1000;
   border-radius: 30px;
   box-shadow: 0 -5px 10px -4px gray;
+`;
+
+const AllJengBo = styled.div`
+  height: 80%;
+  margin-top: 8%;
 `;
 
 const ChatB = styled.button`
@@ -459,44 +446,46 @@ const ChatB = styled.button`
 `;
 
 const JengBoUser = styled.div`
-  width: 100%;
-  height: 50px;
+  width: 40%;
+  height: 25%;
   display: flex;
-
-  margin: 35px 0 0 0;
-
+  margin: 2.1875rem 30% 0 30%;
+  justify-content: center;
   div {
-    margin: auto;
-
+    border-radius: 100%;
     width: 42%;
+    height: 100%;
     display: flex;
   }
 
-  p {
-    font-size: clamp(8px, 4.67vw, 16px);
+  span {
+    font-size: 1.4rem;
     width: 50%;
     margin: auto;
-    margin-left: 1%;
+    margin-top: 10%;
+    margin-left: 8%;
   }
 `;
 
 const JengBoUserImg = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 2.7rem;
+  height: 2.7rem;
   border-radius: 100px;
   margin: auto;
+  margin-left: 40%;
 `;
 
 const JengBoLocation = styled.div`
   width: 40%;
+  height: 18%;
   display: flex;
-  margin: auto;
+  margin: 0 30% 0 30%;
 `;
 
 const Chatting = styled.div`
   width: 50%;
-  height: 21%;
-  margin: 10px 25% 0 25%;
+  height: 25%;
+  margin: 0.425rem 25% 0 25%;
 `;
 
 const FinishBtn = styled.button`
@@ -523,6 +512,7 @@ const ChattingBtn = styled.button`
 const Recruitment = styled.div`
   display: flex;
   width: 50%;
+  height: 10%;
 
   justify-content: space-between;
   margin: auto;
@@ -533,19 +523,19 @@ const Recruitment = styled.div`
   }
 
   p {
-    font-size: 16px;
-    margin-top: 1px;
+    font-size: 1.2rem;
+    margin-top: 0.0625rem;
     opacity: 0.6;
   }
 
   img {
-    height: 18px;
-    margin-top: 1px;
+    height: 1.125rem;
+    margin-top: 0.0625rem;
   }
 
   span {
-    font-size: 16px;
-    margin-top: -2px;
+    font-size: 1rem;
+    margin-top: -0.125rem;
     opacity: 0.6;
   }
 `;
