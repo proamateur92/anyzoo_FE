@@ -88,12 +88,12 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   position: relative;
 
   #optionMenu {
     color: #919191;
-    font-size: 2.2rem;
+    font-size: 2.4rem;
     cursor: pointer;
   }
 `;
@@ -107,7 +107,7 @@ const UserInfo = styled.span`
 
   p {
     color: #333;
-    font-size: 1.6rem;
+    font-size: 1.8rem;
     display: flex;
     align-items: center;
   }
@@ -115,7 +115,7 @@ const UserInfo = styled.span`
   .grade {
     background: #6946b2;
     color: white;
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 100;
     padding: 0.29rem 0.8rem 0.41rem 0.9rem;
     border-radius: 3rem;
@@ -162,7 +162,7 @@ const TextPreview = styled.p`
   display: flex;
   align-items: center;
   overflow: hidden;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #666;
 
   span {
