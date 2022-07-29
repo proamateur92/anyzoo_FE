@@ -14,6 +14,8 @@ import ReactPlayer from "react-player/lazy";
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
 import { FiAlignJustify } from "react-icons/fi";
+
+//element
 import EditBubble from "../elements/EditBubble";
 
 // router
@@ -31,6 +33,13 @@ const Reels = (props) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [isDetail, setIsDetail] = React.useState(params.id);
 
+
+  // 스크롤 금지!
+  React.useEffect(() => {
+    document.body.style.overflow = "hidden";
+  }, []);
+
+  // 영상 불러오기
   const loadReels = () => {
     if (isDetail) {
       instance.get("/api/reels/" + params.id)
@@ -47,7 +56,7 @@ const Reels = (props) => {
     }
   }
 
-  // 영상 불러오기 & 재생 타이머 걸기
+  // 재생 타이머 걸기
   React.useEffect(() => {
     setIsPlaying(false);
     setShowCover(true);

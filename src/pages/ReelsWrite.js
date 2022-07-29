@@ -15,7 +15,6 @@ import ReactPlayer from "react-player/lazy";
 
 // icons
 import { FiPlay, FiPause, FiCheck, FiFolderPlus} from "react-icons/fi";
-// FiCamera, FiCrop 
 import { RiDropFill } from "react-icons/ri";
 
 const ReelsWrite = () => {
@@ -86,14 +85,6 @@ const ReelsWrite = () => {
     formData.append("thumbnailTime", timeFormater(currentTime, true));
     formData.append("startPoint", timeFormater(startPoint, true));
 
-    // for (let key of formData.keys()) {
-    //   console.log(key);
-    // }
-
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
-
     const videoData = await instance.post("/api/upload", formData);
 
     const reelsData = {
@@ -117,10 +108,17 @@ const ReelsWrite = () => {
 
   const editReels = () =>{
     const newData = {
-      content: textRef.current.value,
-      category: 'cute'
+      contents: textRef.current.value,
+      categoryName: 'cute'
     }
-    instance.patch('/api/reels/' + params.id, newData).then(res => console.log(res))
+    instance.patch('/api/reels/' + params.id, newData).then((res) => {
+      if (res.status === 200) {
+        window.alert('수정 성공!')
+        navigate('/reels/'+res.data.data.boardMainId)
+      } else {
+        window.alert('문제가 발생하였습니다')
+      }
+    }).catch((err) => console.log(err));
   }
 
   const getDuration = (e) => {
