@@ -14,7 +14,12 @@ import styled from "styled-components";
 import OneComment from "../elements/OneComment";
 import SendBtn from "../elements/SendBtn";
 
+// router
+import { useParams } from "react-router-dom";
+
+
 const Comment = (props) => {
+  const params = useParams();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.info);
   const postId = props.postId;
@@ -24,7 +29,17 @@ const Comment = (props) => {
   const isLast = useSelector((state) => state.comment.isLast);
   const topRef = React.useRef();
   const bottomRef = React.useRef();
-  const [page, setPage] = React.useState(-1);
+  const [page, setPage] = React.useState(0);
+
+    // 코멘트 불러오기
+    React.useEffect(() => {
+      if (page >= 0) {
+        dispatch(loadCommentsDB({ postId: postId, pgNo: page }));
+      } 
+    }, [dispatch, postId, page, isLast]);
+  
+    const comments = useSelector((state) => state.comment.list);
+
 
   // 페이지인덱스넘버 바꾸기
   const loadinghandler = useCallback(
@@ -48,15 +63,8 @@ const Comment = (props) => {
   }, [loadinghandler]);
 
 
-  // 코멘트 불러오기
-  React.useEffect(() => {
-    if (page >= 0 && !isLast) {
-      dispatch(loadCommentsDB({ postId: postId, pgNo: page }));
-    } 
-  }, [dispatch, postId, page, isLast]);
 
-  const comments = useSelector((state) => state.comment.list);
-
+  // 버튼 모양 바꿔주기
   const inputChange = () => {
     if (commentRef.current.value === '') {
       setBtnChange(false)
@@ -64,8 +72,6 @@ const Comment = (props) => {
       setBtnChange(true)
     }
   }
-
-  
 
   // 코멘트 추가하기
   const addComment = async () => {

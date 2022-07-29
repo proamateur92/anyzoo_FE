@@ -10,7 +10,7 @@ import OneComment from "../elements/OneComment";
 import SendBtn from "../elements/SendBtn";
 
 const ReComment = (props) => {
-  const replyList = props.replyList.data;
+  const replyList = props.replyList?.data;
   const commentId = props.commentId;
   const commentRef = React.useRef();
   const [btnChange, setBtnChange] = React.useState(false);
