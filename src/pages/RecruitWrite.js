@@ -237,8 +237,8 @@ const RecruitWrite = () => {
           )}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content maxLength={255} ref={contentRef} />
+        <p>게시글 내용(1000자 이내)</p>
+        <Content maxLength={1000} ref={contentRef} />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={addPost}>작성하기</AddBtn>

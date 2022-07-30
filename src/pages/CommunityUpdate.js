@@ -67,8 +67,12 @@ const CommunityUpdate = () => {
           })}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content ref={contentRef} defaultValue={data?.contents} />
+        <p>게시글 내용(1000자 이내)</p>
+        <Content
+          maxLength={1000}
+          ref={contentRef}
+          defaultValue={data?.contents}
+        />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/community")}>취소</CancelBtn>
           <AddBtn onClick={updateCommunity}>수정하기</AddBtn>

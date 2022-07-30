@@ -17,7 +17,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 // icon
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
+import { FiChevronLeft } from "react-icons/fi";
 
 // axios
 import instance from "../shared/axios";
@@ -69,11 +69,15 @@ const PostDetail = () => {
     <Wrap>
       <Header>
         <HeadBtn>
-          <Back
+          <FiChevronLeft
+            style={{
+              fontSize: "4.5rem",
+              marginTop: "-1.20rem",
+              marginLeft: "1.3rem",
+            }}
             onClick={() => {
               navigate(-1);
             }}
-            src={require("../assets/images/back.png.png")}
           />
           <HeadTitle>
             <p>자랑하개</p>
@@ -123,6 +127,7 @@ const Header = styled.div`
   width: 83%;
   height: 70px;
   margin: 7% 5% 0 5%;
+  color: #666;
 `;
 
 const HeadBtn = styled.div`
@@ -146,7 +151,7 @@ const HeadTitle = styled.div`
   /* margin-top: -50px; */
 
   p {
-    margin: 1.5%;
+    margin: 0.5%;
     font-size: 1.65rem;
     font-weight: bold;
     color: #666;
@@ -169,6 +174,7 @@ const UserInfo = styled.div`
   display: flex;
   width: 100%;
   height: 30px;
+  margin-bottom: 5%;
 `;
 
 const User = styled.div`

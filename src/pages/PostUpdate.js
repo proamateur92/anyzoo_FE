@@ -124,9 +124,9 @@ const PostUpdate = () => {
           })}
         </Preview>
 
-        <p>게시글 내용</p>
+        <p>게시글 내용(1000자 이내)</p>
         <Content
-          maxLength={255}
+          maxLength={1000}
           ref={contentRef}
           defaultValue={data?.contents}
         />
