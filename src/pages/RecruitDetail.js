@@ -415,7 +415,7 @@ const JengBo = styled.div`
   bottom: 5.45rem;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 1000;
+  z-index: 99;
   border-top-right-radius: 30px;
   border-top-left-radius: 30px;
   box-shadow: 0 -5px 10px -4px gray;
