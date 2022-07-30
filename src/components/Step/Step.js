@@ -655,6 +655,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
             당신의 <span className="strong">별명</span>은?
           </p>
         </span>
+        {userInfo[curData].trim().length === 0 && <Validation>*별명을 입력해주세요</Validation>}
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
           <Validation>*영문자, 한글, 숫자, 3~10글자</Validation>
         )}
@@ -676,6 +677,7 @@ const Step = ({ step, onCountChange, onSignup }) => {
           </p>
           <p>입력해주세요.</p>
         </span>
+        {userInfo[curData].trim().length === 0 && <Validation>*이메일을 입력해주세요</Validation>}
         {userInfo[curData].trim().length !== 0 && !validation[curData] && (
           <Validation>*이메일 형식이 유효하지 않아요.</Validation>
         )}
