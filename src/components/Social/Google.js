@@ -1,6 +1,6 @@
 // style
-import styled from 'styled-components';
-import logo from '../../assets/images/google.png';
+import styled from "styled-components";
+import logo from "../../assets/images/google.png";
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const REDIRECT_URI = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
@@ -10,7 +10,7 @@ const Google = () => {
   return (
     <Link href={GOOGLE_AUTH_URL}>
       <div>
-        <img src={logo} alt='logo' />
+        <img src={logo} alt="logo" />
         <span>구글 로그인</span>
       </div>
     </Link>
@@ -21,7 +21,7 @@ const Link = styled.a`
   position: relative;
   span {
     margin-left: 12%;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #000000;
   }

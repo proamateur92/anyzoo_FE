@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie, setCookie } from "./cookie";
 
 const instance = axios.create({
-  baseURL: "http://43.200.52.184:8080",
+  baseURL: process.env.REACT_APP_BASE_URL,
 });
 
 export const setAccessToken = () => {

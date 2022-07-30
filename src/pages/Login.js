@@ -1,65 +1,59 @@
 // react
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 // element
-import Wrap from '../elements/Wrap';
+import Wrap from "../elements/Wrap";
 
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // sweetalert
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 // router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // axios
-import instance, { setAccessToken } from '../shared/axios';
+import instance, { setAccessToken } from "../shared/axios";
 
 // cookie
-import { getCookie, setCookie } from '../shared/cookie';
+import { setCookie } from "../shared/cookie";
 
 // userSlice
-import { setUserDB } from '../redux/modules/userSlice';
+import { setUserDB } from "../redux/modules/userSlice";
 
 // redux
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 // google
-import Google from '../components/Social/Google';
-import Kakao from '../components/Social/Kakao';
+import Google from "../components/Social/Google";
+import Kakao from "../components/Social/Kakao";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [validation, setValidation] = useState({ onEmail: false, onPassword: false, msg: '' });
+  const [validation, setValidation] = useState({ onEmail: false, onPassword: false, msg: "" });
 
-  const isLogin = getCookie('accessToken') ? true : false;
-
-  useEffect(() => {
-    if (isLogin) navigate('/');
-  });
-
-  const eamilValue = useRef('');
-  const pwdValue = useRef('');
+  const eamilValue = useRef("");
+  const pwdValue = useRef("");
 
   const login = async (userInfo) => {
     try {
-      const response = await instance.post('/user/login', userInfo);
-      setCookie('accessToken', response.data.data.token.accessToken);
-      setCookie('refreshToken', response.data.data.token.refreshToken);
+      const response = await instance.post("/user/login", userInfo);
+      setCookie("accessToken", response.data.data.token.accessToken);
+      setCookie("refreshToken", response.data.data.token.refreshToken);
       setAccessToken();
-      navigate('/');
+      navigate("/");
       dispatch(setUserDB());
     } catch (error) {
       Swal.fire({
         title: `${error.response.data.errorMessage}`,
-        icon: 'warning',
-        confirmButtonText: '확인',
-        confirmButtonColor: '#44DCD3',
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
       });
-      navigate('/login');
+      navigate("/login");
     }
   };
 
@@ -93,8 +87,8 @@ const Login = () => {
     const userInfo = { username: email.value, password: password.value };
     login(userInfo);
 
-    email.value = '';
-    password.value = '';
+    email.value = "";
+    password.value = "";
   };
 
   return (
@@ -102,25 +96,25 @@ const Login = () => {
       <Container>
         <Logo>ANYZOO</Logo>
         <LoginForm onSubmit={handleSubmit} validation={validation.onEmail}>
-          <input ref={eamilValue} className='username' type='text' placeholder='이메일' />
-          {validation.onEmail && <span className='validation'>이메일을 입력해주세요.</span>}
-          <input ref={pwdValue} className='password' type='password' placeholder='비밀번호' />
-          {validation.onPassword && <span className='validation'>비밀번호를 입력해주세요.</span>}
+          <input ref={eamilValue} className="username" type="text" placeholder="이메일" />
+          {validation.onEmail && <span className="validation">이메일을 입력해주세요.</span>}
+          <input ref={pwdValue} className="password" type="password" placeholder="비밀번호" />
+          {validation.onPassword && <span className="validation">비밀번호를 입력해주세요.</span>}
           <Buttons>
             <button onClick={() => handleSubmit}>로그인</button>
-            <button onClick={() => navigate('/signup')}>회원가입</button>
+            <button onClick={() => navigate("/signup")}>회원가입</button>
           </Buttons>
           <FindInfo>
-            <div className='findInfo' onClick={() => navigate('/user/findId')}>
+            <div className="findInfo" onClick={() => navigate("/user/findId")}>
               <span>이메일 찾기</span>
             </div>
-            <div className='findInfo'>|</div>
-            <div className='findInfo' onClick={() => navigate('/user/findPassword')}>
+            <div className="findInfo">|</div>
+            <div className="findInfo" onClick={() => navigate("/user/findPassword")}>
               <span>비밀번호 찾기</span>
             </div>
           </FindInfo>
           <SimpleLogin>
-            <span className='simple'>간편 로그인</span>
+            <span className="simple">간편 로그인</span>
             <SocialButtons>
               <Google />
               <Kakao />
@@ -139,7 +133,7 @@ const Container = styled.div`
 
 const Logo = styled.span`
   display: inline-block;
-  font-size: 30px;
+  font-size: 3rem;
   font-weight: 800;
   padding-bottom: 8%;
   color: ${(props) => props.theme.color.main};
@@ -152,7 +146,7 @@ const LoginForm = styled.form`
   input {
     box-sizing: border-box;
     width: 100%;
-    font-size: 16px;
+    font-size: 1.6rem;
     border-radius: 10px;
     padding: 7%;
     outline: none;
@@ -161,7 +155,7 @@ const LoginForm = styled.form`
     background-color: ${(props) => props.theme.color.grey};
   }
   input:first-of-type {
-    margin-bottom: ${(props) => (props.validation ? '0' : '3%')};
+    margin-bottom: ${(props) => (props.validation ? "0" : "3%")};
   }
   input::placeholder {
     color: rgba(0, 0, 0, 0.3);
@@ -169,7 +163,7 @@ const LoginForm = styled.form`
   }
   button {
     padding: 7%;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 800;
     border-radius: 12px;
     border: none;
@@ -180,7 +174,7 @@ const LoginForm = styled.form`
     display: inline-block;
     margin: 3% 0;
     text-align: left;
-    font-size: 14px;
+    font-size: 1.4rem;
     color: red;
   }
   .validation:first-of-type {
@@ -191,15 +185,15 @@ const LoginForm = styled.form`
 const FindInfo = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10%;
   margin: 5% 0;
-  font-size: 16px;
+  font-size: 1.6rem;
   font-weight: 800;
   color: rgba(0, 0, 0, 0.3);
   .findInfo:nth-of-type(2) {
-    font-size: 14px;
+    font-size: 1.4rem;
   }
   .findInfo:not(:nth-of-type(2)):hover {
     color: ${(props) => props.theme.color.main};
@@ -231,7 +225,7 @@ const SimpleLogin = styled.div`
   padding: 5% 0 3% 0;
   width: 100%;
   .simple {
-    font-size: 14px;
+    font-size: 1.4rem;
     font-weight: 800;
     margin: 2% 0;
     color: rgba(0, 0, 0, 0.4);

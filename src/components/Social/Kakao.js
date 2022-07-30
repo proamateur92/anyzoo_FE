@@ -1,6 +1,6 @@
 // style
-import styled from 'styled-components';
-import logo from '../../assets/images/kakao.png';
+import styled from "styled-components";
+import logo from "../../assets/images/kakao.png";
 
 const REST_API_KEY = process.env.REACT_APP_KAKAO_API;
 const REDIRECT_URI = process.env.REACT_APP_KAKAO_REDIRECT_URI;
@@ -11,7 +11,7 @@ const Kakao = () => {
     <>
       <Link href={KAKAO_AUTH_URL}>
         <div>
-          <img src={logo} alt='logo' />
+          <img src={logo} alt="logo" />
           <span>카카오 로그인</span>
         </div>
       </Link>
@@ -23,7 +23,7 @@ const Link = styled.a`
   position: relative;
   span {
     margin-left: 18%;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #000000;
   }
