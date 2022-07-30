@@ -187,7 +187,7 @@ const RecruitWrite = () => {
             );
           })}
         </Location>
-        <p>게시물 제목</p>
+        <p>게시물 제목(10자 이내)</p>
         <input maxLength={10} ref={titleRef} type="text" />
         <p>인원 설정</p>
         <People onClick={numbers} onChange={count} defaultValue="none">

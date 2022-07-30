@@ -124,7 +124,7 @@ const RecruitUpdate = () => {
           <input type="text" value={data?.provinceName} />
         </Location>
 
-        <p>게시물 제목</p>
+        <p>게시물 제목(10자 이내)</p>
         <input
           maxLength={10}
           ref={titleRef}
