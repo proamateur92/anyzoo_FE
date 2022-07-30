@@ -100,7 +100,6 @@ const CommunityWrite = () => {
         {/* <p>게시글 제목</p>
         <input type="text" ref={titleRef} /> */}
         <p>사진 첨부 (최대 5장, 선택사항)</p>
-
         <Preview>
           {showImages &&
             showImages.map((image, id) => {
