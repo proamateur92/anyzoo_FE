@@ -110,19 +110,6 @@ const PostDetail = () => {
           <PhotoSlide photos={data?.img} />
         </ImgBox>
         <Content>{data?.contents}</Content>
-        {/* <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-          <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
-          </span>
-        </Reactions> */}
       </All>
       <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
 
@@ -162,11 +149,13 @@ const HeadTitle = styled.div`
     margin: 1.5%;
     font-size: 1.65rem;
     font-weight: bold;
+    color: #666;
   }
 
   span {
     font-size: 1.2rem;
     opacity: 0.6;
+    color: #666;
   }
 `;
 
@@ -197,6 +186,7 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
@@ -224,11 +214,14 @@ const ImgBox = styled.div`
 
 const Content = styled.p`
   width: 90%;
+  height: 29%;
   margin-left: 4%;
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 export default PostDetail;

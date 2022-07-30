@@ -103,7 +103,6 @@ const RecruitDetail = () => {
           />
           <HeadTitle>
             <p>{data?.title}</p>
-            <span>{data?.postCategory}</span>
           </HeadTitle>
           <JumMom>
             <IoMdMore
@@ -133,18 +132,8 @@ const RecruitDetail = () => {
             <PhotoSlide photos={data?.img} />
           </ImgBox>
         )}
-        <Content>{data?.contents}</Content>
-        {/* <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-        </Reactions> */}
       </All>
+      <Content>{data?.contents}</Content>
       <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
       {box === true ? (
         <ChatBox>
@@ -233,27 +222,30 @@ const Back = styled.img`
 
 const HeadTitle = styled.div`
   text-align: center;
-  width: 40%;
-  margin-left: 29%;
+  width: 90%;
+  margin-left: 25%;
   margin-top: 1%;
 
   /* margin-top: -50px; */
 
   p {
+    color: #666;
     margin: 1.5%;
-    font-size: 1.65rem;
+    font-size: 1.75rem;
     font-weight: bold;
   }
 
   span {
+    color: #666;
     font-size: 1.2rem;
     opacity: 0.6;
   }
 `;
 
 const All = styled.div`
+  color: #666;
   margin: 0 10% 0 10%;
-  height: 40vh;
+
   width: 80%;
 `;
 
@@ -278,6 +270,7 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
@@ -305,12 +298,15 @@ const ImgBox = styled.div`
 `;
 
 const Content = styled.p`
-  width: 90%;
-  margin-left: 4%;
+  width: 80%;
+
+  margin-left: 10%;
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: clamp(8px, 3.6vw, 20px);
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 const ChatBox = styled.div`
@@ -344,6 +340,7 @@ const ChatBtn = styled.button`
 `;
 
 const InfoAll = styled.div`
+  color: #666;
   box-shadow: 0 -5px 10px -4px gray;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
@@ -407,6 +404,7 @@ const Gu = styled.div`
 `;
 
 const JengBo = styled.div`
+  color: #666;
   background-color: transparent;
   position: fixed;
   width: 100%;

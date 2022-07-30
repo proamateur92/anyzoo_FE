@@ -26,9 +26,9 @@ const Oauth = () => {
   const code = serachParams.get("code");
   const scope = serachParams.get("scope");
 
-  console.log(searchPrams);
+  // console.log(searchPrams);
   console.log("인가코드: ", code);
-  
+
   const sendAuthCode = useCallback(
     async (url) => {
       try {

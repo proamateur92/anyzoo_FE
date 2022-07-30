@@ -125,7 +125,12 @@ const RecruitUpdate = () => {
         </Location>
 
         <p>게시물 제목</p>
-        <input ref={titleRef} type="text" defaultValue={data?.title} />
+        <input
+          maxLength={10}
+          ref={titleRef}
+          type="text"
+          defaultValue={data?.title}
+        />
         <p>인원 설정</p>
         <People
           onClick={numbers}
@@ -160,7 +165,7 @@ const RecruitUpdate = () => {
           ref={dateRef}
           defaultValue={data?.dday}
         ></DatePut>
-        <p>첨부한 사진 보기</p>
+        <p>첨부 사진 보기(수정X)</p>
         <Preview>
           {data?.img.map((v, id) => {
             return (
@@ -170,8 +175,12 @@ const RecruitUpdate = () => {
             );
           })}
         </Preview>
-        <p>게시글 내용</p>
-        <Content ref={contentRef} defaultValue={data?.contents} />
+        <p>게시글 내용(1000자이내)</p>
+        <Content
+          maxLength={1000}
+          ref={contentRef}
+          defaultValue={data?.contents}
+        />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={updateRecruit}>수정하기</AddBtn>
@@ -258,8 +267,10 @@ const Preview = styled.div`
   justify-content: center;
   display: flex;
   width: 100%;
-  height: 80px;
-
+  height: 15%;
+  div {
+    margin: 1%;
+  }
   overflow: auto;
 `;
 
@@ -272,6 +283,8 @@ const PreviewImg = styled.img`
 
 const Content = styled.textarea`
   border: none;
+  outline: none;
+  padding: 5%;
   width: 100%;
   height: 40%;
   margin: 0.3125rem 0 0;

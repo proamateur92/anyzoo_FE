@@ -97,13 +97,9 @@ const CommunityDetail = () => {
             <PhotoSlide photos={data?.img} />
           </ImgBox>
         )}
-
-        <Content>{data?.contents}</Content>
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <Content>{data?.contents}</Content>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
 
       <Comment postId={params.id} />
     </Wrap>
@@ -137,12 +133,14 @@ const HeadTitle = styled.div`
   /* margin-top: -50px; */
 
   p {
+    color: #666;
     margin: 1.5%;
     font-size: 1.45rem;
     font-weight: bold;
   }
 
   span {
+    color: #666;
     font-size: 1.2rem;
     opacity: 0.6;
   }
@@ -150,7 +148,7 @@ const HeadTitle = styled.div`
 
 const All = styled.div`
   margin: 0 10% 0 10%;
-  height: 40vh;
+
   width: 80%;
 `;
 
@@ -175,6 +173,7 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
@@ -191,7 +190,7 @@ const ImgBox = styled.div`
   /* overflow-x: hidden; */
   scroll-snap-type: x mandatory;
   width: 100%;
-  height: 55%;
+  height: 20vh;
   margin-left: -1%;
   margin-top: 3%;
   border-radius: 20px;
@@ -202,12 +201,15 @@ const ImgBox = styled.div`
 `;
 
 const Content = styled.p`
-  width: 90%;
-  margin-left: 4%;
-  margin-top: 2%;
-  margin-bottom: 2%;
+  width: 80%;
+  height: 30%;
+  margin-left: 10%;
+  margin-top: 1%;
+  margin-bottom: 3%;
   line-height: 1.8;
-  font-size: clamp(8px, 3.6vw, 20px);
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 export default CommunityDetail;
