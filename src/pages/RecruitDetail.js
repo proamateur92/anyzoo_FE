@@ -223,7 +223,7 @@ const Back = styled.img`
 const HeadTitle = styled.div`
   text-align: center;
   width: 90%;
-  margin-left: 25%;
+  margin-left: 28%;
   margin-top: 1%;
 
   /* margin-top: -50px; */
@@ -275,10 +275,10 @@ const UserName = styled.span`
 
 const JumMom = styled.div`
   position: relative;
-  font-size: 25px;
+  font-size: 1.5625rem;
   opacity: 0.6;
   z-index: 10;
-  width: 50%;
+  width: 90%;
 `;
 
 const ImgBox = styled.div`
@@ -317,12 +317,13 @@ const ChatBox = styled.div`
   bottom: 5.625rem;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 100;
+  z-index: 99;
   /* background-color: white; */
 `;
 
 const BtnBox = styled.div`
   height: 4rem;
+  background-color: transparent;
 `;
 
 const ChatBtn = styled.button`
@@ -348,6 +349,7 @@ const InfoAll = styled.div`
   width: 100%;
   padding: 0 10% 0 10%;
   display: block;
+  background-color: white;
 `;
 
 const Info = styled.div`
@@ -405,16 +407,17 @@ const Gu = styled.div`
 
 const JengBo = styled.div`
   color: #666;
-  background-color: transparent;
+  background-color: white;
   position: fixed;
   width: 100%;
   max-width: 600px;
-  height: 30%;
-  bottom: 5.625rem;
+  height: 32%;
+  bottom: 5.45rem;
   left: 50%;
   transform: translate(-50%, 0);
   z-index: 1000;
-  border-radius: 30px;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
   box-shadow: 0 -5px 10px -4px gray;
 `;
 
