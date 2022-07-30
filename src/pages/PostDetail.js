@@ -123,11 +123,8 @@ const PostDetail = () => {
             <IoChatbubbleOutline /> {data?.viewCnt}{" "}
           </span>
         </Reactions> */}
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
 
       <Comment postId={params.id} />
     </Wrap>

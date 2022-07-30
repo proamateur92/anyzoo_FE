@@ -144,11 +144,8 @@ const RecruitDetail = () => {
             <span>{data?.likeCnt}</span>{" "}
           </span>
         </Reactions> */}
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
       {box === true ? (
         <ChatBox>
           <BtnBox>
