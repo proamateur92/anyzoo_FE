@@ -68,41 +68,34 @@ const PostDetail = () => {
   return (
     <Wrap>
       <Header>
-        <HeadBtn>
+        <Icon>
           <FiChevronLeft
-            style={{
-              fontSize: "4.5rem",
-              marginTop: "-1.20rem",
-              marginLeft: "1.3rem",
-            }}
             onClick={() => {
               navigate(-1);
             }}
           />
-          <HeadTitle>
-            <p>자랑하개</p>
-            <span>{data?.postCategory}</span>
-          </HeadTitle>
-          <JumMom>
-            <IoMdMore
-              id="optionMenu"
-              onClick={menuOpen}
-              style={{ marginLeft: "80%" }}
-            />
-            {bubbleOn ? (
-              <div>
-                <EditBubble
-                  data={data}
-                  contentsId={data?.boardMainId}
-                  setBubbleOn={setBubbleOn}
-                  page={"post"}
-                />
-              </div>
-            ) : null}
-          </JumMom>
-        </HeadBtn>
+        </Icon>
+        <Title>
+          <p className="subtitle">자랑하개</p>
+          <span>{data?.postCategory}</span>
+        </Title>
+        <BobbleBox>
+          <Icon>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+          </Icon>
+          {bubbleOn ? (
+            <Bubble>
+              <EditBubble
+                data={data}
+                contentsId={data?.boardMainId}
+                page={"post"}
+                setBubbleOn={setBubbleOn}
+                targetNickname={data?.nickname}
+              />
+            </Bubble>
+          ) : null}
+        </BobbleBox>
       </Header>
-
       <All>
         <UserInfo>
           <User>
@@ -122,45 +115,41 @@ const PostDetail = () => {
   );
 };
 
-const Header = styled.div`
+const Title = styled.div`
   display: flex;
-  width: 83%;
-  height: 70px;
-  margin: 7% 5% 0 5%;
-  color: #666;
+  flex-direction: column;
+  align-items: center;
 `;
-
-const HeadBtn = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Back = styled.img`
-  height: 30%;
-  margin-left: 6%;
-  margin-top: 1%;
-`;
-
-const HeadTitle = styled.div`
-  text-align: center;
+const BobbleBox = styled.div``;
+const Bubble = styled.div`
+  position: absolute;
   width: 40%;
-  margin-left: 29%;
-  margin-top: 1%;
+  right: 5%;
+`;
 
-  /* margin-top: -50px; */
+const Icon = styled.div`
+  font-size: 3rem;
+  color: #666;
+  cursor: pointer;
+`;
 
-  p {
-    margin: 0.5%;
-    font-size: 1.65rem;
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6.5% 2%;
+  .subtitle {
+    color: #666;
+    font-size: 2rem;
     font-weight: bold;
-    color: #666;
   }
-
   span {
-    font-size: 1.2rem;
-    opacity: 0.6;
-    color: #666;
+    display: block;
+    margin-top: 4%;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 1.3rem;
+    font-weight: bold;
   }
 `;
 

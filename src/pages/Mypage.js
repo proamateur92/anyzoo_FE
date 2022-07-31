@@ -16,6 +16,7 @@ import styled from "styled-components";
 // icon
 import { AiOutlineRight } from "react-icons/ai";
 import { AiFillPlusCircle } from "react-icons/ai";
+import { MdCancel } from "react-icons/md";
 
 // redux
 import { useSelector } from "react-redux";
@@ -30,7 +31,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import instance from "../shared/axios";
 
 // userSlice
-import { updateUserImageDB } from "../redux/modules/userSlice";
+import { updateUserImageDB, updateUserNicknameDB } from "../redux/modules/userSlice";
 
 // redux
 import { useDispatch } from "react-redux";
@@ -40,7 +41,10 @@ const Mypage = () => {
   const { nickname } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
+
+  // 나의 정보
   const myInfo = useSelector((state) => state.user.info);
+  // 특정 마이페이지의 회원 정보
   const [userInfo, setUserInfo] = useState({});
   const navigate = useNavigate();
   const [contents, setContents] = useState({ post: [], community: [], together: [], reels: [] });
@@ -109,11 +113,13 @@ const Mypage = () => {
     setCheckPasswordValue("");
     setUserAuthNumber("");
 
-    setValidation({
-      nickname: true,
-      password: true,
-      phoneNumber: true,
-    });
+    if (stepNum !== 2) {
+      setValidation({
+        nickname: true,
+        password: true,
+        phoneNumber: true,
+      });
+    }
 
     setAllValidation(true);
     setIsActiveBtn(false);
@@ -262,32 +268,30 @@ const Mypage = () => {
   }, [isSubmit]);
 
   const onUpdate = async () => {
-    const nickname = changeInfoType.nickname ? newUserInfo.nickname : "";
-    const password = changeInfoType.password ? newUserInfo.password : "";
+    const nickname = changeInfoType.nickname ? newUserInfo.nickname : null;
+    const password = changeInfoType.password ? newUserInfo.password : null;
 
     console.log(`nickname: ${nickname}`);
     console.log(`password: ${password}`);
 
     try {
-      const response = await instance.patch("/user/edit", {
+      await instance.patch("/api/user/edit/userInfo", {
         nickname,
         password,
-        phoneNumber: "",
       });
-      console.log("업데이트 결과");
-      console.log(response.data);
       setIsSubmit(false);
-      // 변경한 회원 정보
-      // dispatch
+      Swal.fire({
+        title: "회원정보를 수정했어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      });
+      nickname && dispatch(updateUserNicknameDB({ nickname }));
+      navigate(`/mypage/${nickname}`);
+      setNewUserInfo({ ...newUserInfo, nickname });
     } catch (error) {
       console.log(error);
     }
-
-    setNewUserInfo({
-      nickname: myInfo.nickname,
-      password: "",
-      phoneNumber: myInfo.phoneNumber,
-    });
 
     setCheckPasswordValue("");
   };
@@ -296,10 +300,7 @@ const Mypage = () => {
     console.log(typeof id);
     console.log(id);
     try {
-      const response = await instance.patch("/api/user/edit/userImage", { userImage: id });
-      // 업데이트 테스트 필요!!
-      console.log("이미지 업데이트 결과");
-      console.log(response);
+      await instance.patch("/api/user/edit/userImage", { userImage: id });
       dispatch(updateUserImageDB({ userImage: url }));
     } catch (error) {
       console.log(error);
@@ -326,8 +327,6 @@ const Mypage = () => {
         reverseButtons: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log("변경할 이미지 정보");
-          console.log(response.data);
           changeImage(response.data.url, response.data.id);
         } else {
           setImageData({ previewImage: "", imageFile: "" });
@@ -341,8 +340,13 @@ const Mypage = () => {
   const updateNewInfo = async (event) => {
     event.preventDefault();
     let check = false;
-    setIsClickUpdateBtn(true);
 
+    console.log("1단계");
+    if (newUserInfo.nickname.trim().length === 0) {
+      return;
+    }
+
+    setIsClickUpdateBtn(true);
     if (changeInfoType.nickname) {
       console.log("닉네임 검사");
       try {
@@ -480,13 +484,15 @@ const Mypage = () => {
     content = (
       <>
         <Profile>
-          <img src={userInfo.img} alt="프로필 이미지" />
-          {/* <div onClick={() => handleMoveStep(2)}>
+          <img src={myInfo.nickname !== userInfo.nickname ? userInfo.img : myInfo.img} alt="프로필 이미지" />
+          <Nickname onClick={() => handleMoveStep(2)}>
             <span>{nickname}</span>
-            <Icon>
-              <AiOutlineRight />
-            </Icon>
-          </div> */}
+            {myInfo.nickname === nickname && (
+              <Right>
+                <AiOutlineRight style={{ fontSize: "2rem", fontWeight: "800" }} />
+              </Right>
+            )}
+          </Nickname>
         </Profile>
         <Follow onClick={() => handleMoveStep(1)}>
           <div>
@@ -539,22 +545,37 @@ const Mypage = () => {
             style={{ display: "none" }}
           />
         </Profile>
-        <UpdateForm active={isActiveBtn} onSubmit={(event) => isActiveBtn && updateNewInfo(event)}>
+        <UpdateForm
+          active={newUserInfo.nickname.trim().length !== 0 && isActiveBtn}
+          onSubmit={(event) =>
+            // newUserInfo.password.trim().length !== 0 &&
+            isActiveBtn && updateNewInfo(event)
+          }
+        >
           <span>이메일</span>
-          <div>{myInfo.username}</div>
+          <div className="box">{myInfo.username}</div>
+          <span>휴대폰 번호</span>
+          <div className="box">{myInfo.phoneNumber}</div>
           <span>닉네임</span>
-          <input
-            className="input"
-            value={newUserInfo.nickname}
-            onChange={(event) => handleEnteredInfo(event, "nickname")}
-            type="text"
-            placeholder="닉네임을 입력해주세요."
-          />
+          <EditArea active={!isDuplicated.nickname && newUserInfo.nickname.trim().length !== 0 && isActiveBtn}>
+            <input
+              className="input"
+              value={newUserInfo.nickname}
+              onChange={(event) => handleEnteredInfo(event, "nickname")}
+              type="text"
+              placeholder="닉네임을 입력해주세요."
+            />
+            <Cancel onClick={() => setNewUserInfo({ ...newUserInfo, nickname: "" })}>
+              <MdCancel />
+            </Cancel>
+          </EditArea>
           {newUserInfo.nickname.length !== 0 && !validation.nickname && <p>*영문자, 한글, 숫자, 3~10글자</p>}
           {isActiveBtn && isClickUpdateBtn && changeInfoType.nickname && isDuplicated.nickname && (
             <p>*중복된 닉네임이에요.</p>
           )}
-          <span>비밀번호</span>
+          {newUserInfo.nickname.trim().length === 0 && <p>*닉네임을 입력해주세요.</p>}
+
+          {/* <span>비밀번호</span>
           <input
             type="password"
             onChange={(event) => handleEnteredInfo(event, "password")}
@@ -573,9 +594,8 @@ const Mypage = () => {
           {newUserInfo.password.trim().length !== 0 && checkPasswordValue.trim().length === 0 && (
             <p>*비밀번호를 다시 입력해주세요.</p>
           )}
-          {!isPasswordMatch && checkPasswordValue.trim().length !== 0 && <p>*비밀번호가 일치하지 않아요.</p>}
-          <span>휴대폰 번호</span>
-          <PhoneDiv active={validation.phoneNumber}>
+          {!isPasswordMatch && checkPasswordValue.trim().length !== 0 && <p>*비밀번호가 일치하지 않아요.</p>} */}
+          {/* <PhoneDiv active={validation.phoneNumber}>
             <input
               className="input"
               value={newUserInfo.phoneNumber}
@@ -606,8 +626,14 @@ const Mypage = () => {
               placeholder="인증번호를 입력해주세요."
             />
           )}
-          {isSendCode && <button>인증</button>}
-          <button className="submitNewInfo" onClick={(event) => isActiveBtn && updateNewInfo(event)}>
+          {isSendCode && <button>인증</button>} */}
+          <button
+            className="submitNewInfo"
+            onClick={(event) =>
+              // newUserInfo.password.trim().length !== 0 &&
+              newUserInfo.nickname.trim().length !== 0 && isActiveBtn && updateNewInfo(event)
+            }
+          >
             저장
           </button>
         </UpdateForm>
@@ -681,26 +707,32 @@ const UpdateForm = styled.div`
   display: flex;
   flex-direction: column;
   padding: 10% 5% 0 5%;
-  input {
-    background-color: ${(props) => props.theme.color.grey};
-  }
   button {
     background-color: ${(props) => props.theme.color.main};
   }
-  input,
+  .box,
   button {
-    font-size: 1.6rem;
+    width: 100%;
+    padding: 15px;
+    background-color: ${(props) => props.theme.color.grey};
     border-radius: 10px;
+    margin-bottom: 5vw;
+    font-size: 1.6rem;
+  }
+  span {
+    font-size: 1.2rem;
+    margin-bottom: 2%;
   }
   p {
     display: inline-block;
-    margin: 1% 0 3% 0;
+    margin: 1% 3% 5% 3%;
     color: red;
   }
-  .input {
-    margin: 1% 0;
+  .box {
+    color: #a3a3a3;
   }
   .submitNewInfo {
+    margin-top: 5%;
     background-color: ${(props) => (props.active ? props.theme.color.main : props.theme.color.grey)};
   }
 `;
@@ -733,7 +765,7 @@ const ContentContainer = styled.div`
   .no_other {
     display: block;
     font-size: 1.3em;
-    margin: 8.7% auto 0 auto;
+    margin: 8.8% auto 0 auto;
   }
 `;
 
@@ -750,10 +782,26 @@ const Content = styled.div`
   cursor: pointer;
 `;
 
+const Right = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 1%;
+`;
+
+const Nickname = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 800;
+  width: 100%;
+  margin: 12% 0;
+  cursor: pointer;
+`;
+
 const Profile = styled.div`
   display: flex;
   position: relative;
-  width: 20%;
+  width: 40%;
   margin: auto;
   flex-direction: column;
   justify-content: center;
@@ -766,21 +814,40 @@ const Profile = styled.div`
     height: 4.5em;
     border-radius: 50%;
   }
-  div {
-    margin: 12% 0;
-    cursor: pointer;
-  }
   span {
     display: block;
     font-size: 2rem;
-    margin: 0 7%;
   }
+`;
+
+const EditArea = styled.div`
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  background-color: ${(porps) => porps.theme.color.grey};
+  border-radius: 12px;
+  input {
+    font-size: 1.6rem;
+    background-color: ${(porps) => porps.theme.color.grey};
+  }
+  input::placeholder {
+    color: rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const Cancel = styled.div`
+  position: absolute;
+  font-size: 2.5rem;
+  right: 10px;
+  top: 55%;
+  transform: translateY(-50%);
+  cursor: pointer;
 `;
 
 const Icon = styled.div`
   position: absolute;
-  right: ${(props) => (props.type === "plus" ? "-7%" : "0%")};
-  bottom: ${(props) => (props.type === "plus" ? "-20%" : "-1%")};
+  right: ${(props) => (props.type === "plus" ? "22%" : "0%")};
+  bottom: ${(props) => (props.type === "plus" ? "-13%" : "-1%")};
   color: ${(props) => (props.type === "plus" ? props.theme.color.main : "rgba(0, 0, 0, 0.3)")};
   font-size: ${(props) => (props.type === "plus" ? "2.5rem" : "1.6rem")};
   font-weight: 800;

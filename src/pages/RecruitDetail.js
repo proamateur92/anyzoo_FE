@@ -94,35 +94,24 @@ const RecruitDetail = () => {
   return (
     <Wrap>
       <Header>
-        <HeadBtn>
+        <Icon>
           <FiChevronLeft
-            style={{
-              fontSize: "6.25rem",
-              marginTop: "-1.95rem",
-              marginLeft: "1.3rem",
-            }}
             onClick={() => {
               navigate(-1);
             }}
           />
-          <HeadTitle>
-            <p>{data?.title}</p>
-          </HeadTitle>
-          <JumMom>
-            <IoMdMore
-              id="optionMenu"
-              onClick={menuOpen}
-              style={{ marginLeft: "80%" }}
-            />
-            {bubbleOn ? (
-              <EditBubble
-                data={data}
-                page={"recruit"}
-                setBubbleOn={setBubbleOn}
-              />
-            ) : null}
-          </JumMom>
-        </HeadBtn>
+        </Icon>
+        <p className="subtitle">{data?.title}</p>
+        <BobbleBox>
+          <Icon>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+          </Icon>
+          {bubbleOn ? (
+            <Bubble>
+              <EditBubble data={data} page={"recruit"} setBubbleOn={setBubbleOn} targetNickname={data?.nickname} />
+            </Bubble>
+          ) : null}
+        </BobbleBox>
       </Header>
       <All>
         <UserInfo>
@@ -148,7 +137,6 @@ const RecruitDetail = () => {
               </span>
             </ChatBtn>
           </BtnBox>
-
           <InfoAll>
             <Info>
               <InfoUser>
@@ -205,45 +193,27 @@ const RecruitDetail = () => {
   );
 };
 
-const Header = styled.div`
-  display: flex;
-  width: 83%;
-  height: 70px;
-  margin: 7% 5% 0 5%;
+const BobbleBox = styled.div``;
+const Bubble = styled.div`
+  position: absolute;
+  width: 40%;
+  right: 5%;
+`;
+const Icon = styled.div`
+  font-size: 3rem;
   color: #666;
+  cursor: pointer;
 `;
-
-const HeadBtn = styled.div`
+const Header = styled.div`
+  position: relative;
   display: flex;
-  width: 100%;
   justify-content: space-between;
-`;
-
-const Back = styled.img`
-  height: 30%;
-  margin-left: 6%;
-  margin-top: 1%;
-`;
-
-const HeadTitle = styled.div`
-  text-align: center;
-  width: 90%;
-  margin-left: 28%;
-  margin-top: 1%;
-
-  /* margin-top: -50px; */
-
-  p {
+  align-items: center;
+  padding: 6.5% 2%;
+  .subtitle {
     color: #666;
-    margin: 1.5%;
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: bold;
-  }
-
-  span {
-    color: #666;
-    font-size: 1.2rem;
-    opacity: 0.6;
   }
 `;
 
