@@ -3,6 +3,7 @@ import React from "react";
 // style
 import styled from "styled-components";
 
+// axios
 import instance from "../shared/axios";
 
 //element
@@ -26,7 +27,6 @@ const ReComment = (props) => {
   const loadReplies = () => {
     instance.get("/api/reply/" + commentId).then((res) => {
       setReplyList(res.data);
-
         if (res.data.length < 100) {
           setReplyLength(res.data.length);
         } else {
@@ -47,7 +47,7 @@ const ReComment = (props) => {
   const addComment = async () => {
     if (commentRef.current.value) {
       instance.post("/api/reply/" + commentId, { reply: commentRef.current.value })
-      .then(loadReplies());
+      .then(() => loadReplies());
       commentRef.current.value = "";
       setBtnChange(false);
       setReplyLength((prev) => prev+1)
