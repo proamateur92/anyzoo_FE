@@ -9,6 +9,7 @@ import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiDribbble } from "rea
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
+import { history } from '../shared/history'
 
 // redux
 import { useSelector } from "react-redux";
@@ -21,6 +22,24 @@ const NavCircle = (props) => {
   const userInfo = useSelector((state) => state.user.info);
   const [plusOpen, setPlusOpen] = React.useState(false);
   const [writeOpt, setWriteOpt] = React.useState(null);
+
+    // 뒤로가기시 닫히도록 제어
+    React.useEffect(()=>{
+      const listenBackEvent = () => {
+        document.body.style.overflow = "unset";
+        setCircleOn(false);
+        navigate(1)
+      }
+  
+      const unlistenBackEvent = history.listen( ({ action }) => {
+        if (action === 'POP') {
+          listenBackEvent()
+        }
+      })
+
+      return unlistenBackEvent;
+    },[])
+  
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -87,7 +106,7 @@ const NavCircle = (props) => {
             <FiPlus />
           </Center>
 
-          <Menu order={0} onClick={() => moveTo("/")}>
+          <Menu order={0} onClick={() => window.alert("준비중인 메뉴입니다")}>
             <FiMessageSquare className={"icons"} />
             <h5> 채팅 </h5>
           </Menu>

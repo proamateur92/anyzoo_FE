@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 const PostResponses = (props) => {
   const navigate = useNavigate();
   const boardMainId = props.boardMainId
-  const likeCnt = props.likeCnt
+  const likeCnt = props.likeCnt ? props.likeCnt : 0
   const pagetitle = props.pagetitle
   const [commentCount, setCommentCount] = React.useState(null);
   const [isLiked, setIsLiked] = React.useState(false);

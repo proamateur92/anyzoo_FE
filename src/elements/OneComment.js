@@ -18,26 +18,23 @@ const OneComment = (props) => {
   const data = props.commentData;
   const commentRef = React.useRef(null);
   const [openReplies, setOpenReplies] = React.useState(null);
-  const [replyList, setReplyList] = React.useState(null);
   const [replyLength, setReplyLength] = React.useState(0);
   const isReply = props.isReply;
   const blockReply = props.blockReply
 
-  // 대댓글리스트
+  // 대댓글숫자 받아오기
   React.useEffect(() => {
     if (!isReply) {
       instance.get("/api/reply/" + data.id).then((res) => {
-        setReplyList(res);
-
         if (res.data.length < 100) {
           setReplyLength(res.data.length);
         } else {
           setReplyLength('99+');
         }
-        
       });
     }
   }, [isReply, data.id]);
+
 
   // 오늘 날짜 구해오기
   const today = new Date();
@@ -133,7 +130,7 @@ const OneComment = (props) => {
         </Content>
       )}
 
-      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies}/> : null}
+      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies} setReplyLength={setReplyLength}/> : null}
 
       {isEditOptOpen ? (
         <EditOption>
@@ -187,6 +184,7 @@ const TextBubble = styled.div`
   max-width: 61.9%;
   padding: 5.13%;
   border-radius: 0rem 2rem 2rem 2rem;
+  word-break: break-all;
   cursor: pointer;
 
   span {

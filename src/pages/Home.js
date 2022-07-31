@@ -6,7 +6,7 @@ import Wrap from '../elements/Wrap';
 
 // component
 import PostCard from '../components/PostCard';
-import NoticeSlide from '../components/NoticeSlide';
+// import NoticeSlide from '../components/NoticeSlide';
 import RealTimeRank from '../components/RealtimeRank';
 import WeeklyRank from '../components/WeeklyRank';
 import TogetherSlide from '../components/TogetherSlide';
@@ -67,7 +67,7 @@ const Home = () => {
     <Wrap>
       <Logo> ANYZOO </Logo>
 
-      <NoticeSlide />
+      {/* <NoticeSlide /> */}
 
       <SubTitle> <FiAward className="icon"/> <h3>오늘의 인기상</h3> </SubTitle>
       <RealTimeRank />
@@ -76,14 +76,14 @@ const Home = () => {
       <WeeklyRank />
 
       <SubTitle>
-        <h3> <FiFeather className="icon"/> 산책 메이트 모집 글</h3>
-        <FiChevronRight className="moveto"/>
+        <h3> <FiFeather className="icon"/> 함께하개</h3>
+        <FiChevronRight className="moveto" onClick={()=> navigate('/together')} />
       </SubTitle>
 
       <TogetherSlide />
 
       <SubTitle>
-        <h3> <FiFeather className="icon"/> 자랑하기</h3>
+        <h3> <FiFeather className="icon"/> 자랑하개</h3>
         <FiChevronRight className="moveto" onClick={()=> navigate('/post')}/>
       </SubTitle>
 

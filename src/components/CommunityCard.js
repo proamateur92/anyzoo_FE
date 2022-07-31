@@ -36,7 +36,7 @@ const CommunityCard = (props) => {
       </Header>
 
       <Content onClick={()=> navigate("/community/detail/"+data.boardMainId)}>
-        {data.contents}
+        <span>{data.contents}</span>
       </Content>
 
       <PostResponses 
@@ -59,7 +59,7 @@ const CardWrap = styled.div`
 
 const Header = styled.div`
 width: 80%;
-margin: 1.6rem auto 1.2rem auto;
+margin: 1.6rem auto 1rem auto;
 display: flex;
 justify-content: space-between;
 align-items: center;
@@ -94,16 +94,21 @@ const UserProfile = styled.span`
 const Content = styled.p`
   width: 80%;
   height: 40.6%;
-  margin: auto;
+  margin: 0.2rem auto 1rem;
   overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  line-height: 1.29;
   cursor:pointer;
 
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   color: #666;
+  
+  span {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-height: 1.29;
+  }
 `

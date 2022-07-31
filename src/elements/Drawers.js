@@ -13,6 +13,7 @@ const Drawers = (props) => {
   const backDropRef = React.useRef();
   const setDrawerOn = props.setDrawerOn;
 
+  // 뒤로가기시 닫히도록 제어
   React.useEffect(()=>{
     const listenBackEvent = () => {
       setDrawerOn(false)

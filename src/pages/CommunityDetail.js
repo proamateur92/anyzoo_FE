@@ -98,12 +98,12 @@ const CommunityDetail = () => {
           </ImgBox>
         )}
 
-        <Content>{data?.contents}</Content>
+
+      </All>        <Content>{data?.contents}</Content>
         <PostResponses
           boardMainId={data?.boardMainId}
           likeCnt={data?.likeCnt}
         />
-      </All>
 
       <Comment postId={params.id} />
     </Wrap>
