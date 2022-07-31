@@ -57,6 +57,7 @@ const StepPhone = ({
         onChange={setAuthNumber}
         type="text"
         placeholder="인증 코드를 입력해주세요."
+        maxLength={4}
       />
     </>
   );

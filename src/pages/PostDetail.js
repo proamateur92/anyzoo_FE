@@ -17,7 +17,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 // icon
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
+import { FiChevronLeft } from "react-icons/fi";
 
 // axios
 import instance from "../shared/axios";
@@ -69,11 +69,15 @@ const PostDetail = () => {
     <Wrap>
       <Header>
         <HeadBtn>
-          <Back
+          <FiChevronLeft
+            style={{
+              fontSize: "4.5rem",
+              marginTop: "-1.20rem",
+              marginLeft: "1.3rem",
+            }}
             onClick={() => {
               navigate(-1);
             }}
-            src={require("../assets/images/back.png.png")}
           />
           <HeadTitle>
             <p>자랑하개</p>
@@ -110,24 +114,8 @@ const PostDetail = () => {
           <PhotoSlide photos={data?.img} />
         </ImgBox>
         <Content>{data?.contents}</Content>
-        {/* <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-          <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
-          </span>
-        </Reactions> */}
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
 
       <Comment postId={params.id} />
     </Wrap>
@@ -139,6 +127,7 @@ const Header = styled.div`
   width: 83%;
   height: 70px;
   margin: 7% 5% 0 5%;
+  color: #666;
 `;
 
 const HeadBtn = styled.div`
@@ -162,14 +151,16 @@ const HeadTitle = styled.div`
   /* margin-top: -50px; */
 
   p {
-    margin: 1.5%;
+    margin: 0.5%;
     font-size: 1.65rem;
     font-weight: bold;
+    color: #666;
   }
 
   span {
     font-size: 1.2rem;
     opacity: 0.6;
+    color: #666;
   }
 `;
 
@@ -183,6 +174,7 @@ const UserInfo = styled.div`
   display: flex;
   width: 100%;
   height: 30px;
+  margin-bottom: 5%;
 `;
 
 const User = styled.div`
@@ -200,6 +192,7 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
@@ -227,11 +220,14 @@ const ImgBox = styled.div`
 
 const Content = styled.p`
   width: 90%;
+  height: 29%;
   margin-left: 4%;
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 export default PostDetail;

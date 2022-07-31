@@ -30,6 +30,7 @@ const StepPassword = ({
           <span className="strong">비밀번호</span>를 입력해주세요.
         </span>
       )}
+      {userPassword.trim().length === 0 && <Validation>*비밀번호를 입력해주세요.</Validation>}
       {userPassword.trim().length !== 0 && !validation && (
         <Validation>
           *대문자, 특수문자를 포함해주세요.

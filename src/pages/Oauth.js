@@ -14,7 +14,7 @@ import { setUserDB } from "../redux/modules/userSlice";
 import instance, { setAccessToken } from "../shared/axios";
 
 // cookie
-import { setCookie } from "../shared/cookie";
+import { getCookie, setCookie } from "../shared/cookie";
 
 // sweetalert
 import Swal from "sweetalert2";
@@ -26,11 +26,14 @@ const Oauth = () => {
   const code = serachParams.get("code");
   const scope = serachParams.get("scope");
 
-  console.log(searchPrams);
-  console.log("인가코드: ", code);
-  
+  const back = getCookie("accessToken") ? true : false;
+
   const sendAuthCode = useCallback(
     async (url) => {
+      if (back) {
+        return;
+      }
+
       try {
         const response = await instance.get(url, {
           headers: {
@@ -56,7 +59,7 @@ const Oauth = () => {
         });
       }
     },
-    [code]
+    [back, dispatch, navigate, code]
   );
 
   useEffect(() => {
@@ -71,11 +74,7 @@ const Oauth = () => {
     sendAuthCode(url);
   }, [scope, sendAuthCode]);
 
-  return (
-    <>
-      <span>소셜로그인 인증 페이지</span>
-    </>
-  );
+  return <></>;
 };
 
 export default Oauth;

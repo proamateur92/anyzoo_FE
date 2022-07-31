@@ -77,42 +77,52 @@ const RecruitWrite = () => {
     e.preventDefault();
     console.log(getImages);
     let img = getImages;
-    if (img.length > 0) {
-      const formData = new FormData();
-
-      for (let i = 0; i < img.length; i++) {
-        //  console.log(img[i])
-        formData.append("file", img[i]);
-        // files.push(img[i])
-      }
-      // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
-
-      const response = await instance.post("/api/together/image", formData);
-      console.log(response.data);
-
-      const data = {
-        title: titleRef.current.value,
-        content: contentRef.current.value,
-        limitPeople: select,
-        dday: date,
-        provinceId: province,
-        togetherImages: response.data,
-      };
-
-      console.log(data);
-      dispatch(addDataDB(data));
+    if (
+      !titleRef.current.value ||
+      !contentRef.current.value ||
+      !select ||
+      !date ||
+      !province
+    ) {
+      window.alert("빈칸을 채워주세요");
     } else {
-      const data = {
-        title: titleRef.current.value,
-        dday: date,
-        content: contentRef.current.value,
-        togetherImages: null,
-        limitPeople: select,
-        provinceId: province,
-      };
+      if (img.length > 0) {
+        const formData = new FormData();
 
-      console.log(data);
-      dispatch(addDataDB(data));
+        for (let i = 0; i < img.length; i++) {
+          //  console.log(img[i])
+          formData.append("file", img[i]);
+          // files.push(img[i])
+        }
+        // console.log(img[i], "뭐냐") console.log(files) formData.append("file", img)
+
+        const response = await instance.post("/api/together/image", formData);
+        console.log(response.data);
+
+        const data = {
+          title: titleRef.current.value,
+          content: contentRef.current.value,
+          limitPeople: select,
+          dday: date,
+          provinceId: province,
+          togetherImages: response.data,
+        };
+
+        console.log(data);
+        dispatch(addDataDB(data));
+      } else {
+        const data = {
+          title: titleRef.current.value,
+          dday: date,
+          content: contentRef.current.value,
+          togetherImages: null,
+          limitPeople: select,
+          provinceId: province,
+        };
+
+        console.log(data);
+        dispatch(addDataDB(data));
+      }
     }
   };
 
@@ -177,8 +187,8 @@ const RecruitWrite = () => {
             );
           })}
         </Location>
-        <p>게시물 제목</p>
-        <input ref={titleRef} type="text" />
+        <p>게시물 제목(10자 이내)</p>
+        <input maxLength={10} ref={titleRef} type="text" />
         <p>인원 설정</p>
         <People onClick={numbers} onChange={count} defaultValue="none">
           <option disabled value="none">
@@ -195,7 +205,7 @@ const RecruitWrite = () => {
         </People>
         <p>날짜 설정</p>
         <DatePut onChange={dates} type="datetime-local"></DatePut>
-        <p>사진 첨부 (최대 5장)</p>
+        <p>사진 첨부 (최대 5장, 선택사항)</p>
 
         <Preview>
           {showImages &&
@@ -227,8 +237,8 @@ const RecruitWrite = () => {
           )}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content ref={contentRef} />
+        <p>게시글 내용(1000자 이내)</p>
+        <Content maxLength={1000} ref={contentRef} />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={addPost}>작성하기</AddBtn>
@@ -352,6 +362,8 @@ const DeleteImg = styled.button`
 
 const Content = styled.textarea`
   border: none;
+  outline: none;
+  padding: 5%;
   width: 100%;
   height: 40%;
   margin: 0.3125rem 0 0;

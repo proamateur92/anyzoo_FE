@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 // icon
 import { IoIosArrowBack } from "react-icons/io";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 
 // sweetalert
 import Swal from "sweetalert2";
@@ -43,7 +43,7 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
   };
 
   if (type === "mypage" && showLogout && step === 0) {
-    icon = <FaSignOutAlt style={{ fontSize: "3rem", color: "red" }} onClick={() => logout()} />;
+    icon = <FiLogOut style={{ fontSize: "2.6rem", color: "red" }} onClick={() => logout()} />;
   } else if (type === "signup") {
     icon = (
       <CircularProgressbar
@@ -54,9 +54,30 @@ const UserTop = ({ title, type, step, moveStep, showLogout, percentage }) => {
       ></CircularProgressbar>
     );
   }
+
+  const confirmStep = () => {
+    Swal.fire({
+      title: "로그인 화면으로 이동할까요?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "이동",
+      cancelButtonText: "머무르기",
+      confirmButtonColor: "#44DCD3",
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate("/login");
+      }
+    });
+  };
   return (
     <Top type={type}>
-      {(type === "signup" || type === "find") && (
+      {type === "signup" && (
+        <Icon onClick={confirmStep}>
+          <IoIosArrowBack />
+        </Icon>
+      )}
+      {type === "find" && (
         <Icon onClick={() => navigate("/login")}>
           <IoIosArrowBack />
         </Icon>
