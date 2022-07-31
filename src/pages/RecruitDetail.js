@@ -108,7 +108,7 @@ const RecruitDetail = () => {
           </Icon>
           {bubbleOn ? (
             <Bubble>
-              <EditBubble data={data} page={"recruit"} setBubbleOn={setBubbleOn} />
+              <EditBubble data={data} page={"recruit"} setBubbleOn={setBubbleOn} targetNickname={data?.nickname} />
             </Bubble>
           ) : null}
         </BobbleBox>
@@ -210,10 +210,6 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 6.5% 2%;
-  p {
-    color: #666;
-    font-weight: bold;
-  }
   .subtitle {
     color: #666;
     font-size: 2rem;

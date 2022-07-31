@@ -71,7 +71,7 @@ const CommunityDetail = () => {
           </Icon>
           {bubbleOn ? (
             <Bubble>
-              <EditBubble data={data} page={"community"} setBubbleOn={setBubbleOn} />
+              <EditBubble data={data} page={"community"} setBubbleOn={setBubbleOn} targetNickname={data?.nickname} />
             </Bubble>
           ) : null}
         </BobbleBox>
@@ -116,10 +116,6 @@ const Header = styled.div`
   .subtitle {
     color: #666;
     font-size: 2rem;
-    font-weight: bold;
-  }
-  p {
-    color: #666;
     font-weight: bold;
   }
 `;

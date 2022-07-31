@@ -85,7 +85,13 @@ const PostDetail = () => {
           </Icon>
           {bubbleOn ? (
             <Bubble>
-              <EditBubble data={data} contentsId={data?.boardMainId} page={"post"} setBubbleOn={setBubbleOn} />
+              <EditBubble
+                data={data}
+                contentsId={data?.boardMainId}
+                page={"post"}
+                setBubbleOn={setBubbleOn}
+                targetNickname={data?.nickname}
+              />
             </Bubble>
           ) : null}
         </BobbleBox>
@@ -136,10 +142,6 @@ const Header = styled.div`
   .subtitle {
     color: #666;
     font-size: 2rem;
-    font-weight: bold;
-  }
-  p {
-    color: #666;
     font-weight: bold;
   }
   span {
