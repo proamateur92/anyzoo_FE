@@ -57,37 +57,25 @@ const CommunityDetail = () => {
   return (
     <Wrap>
       <Header>
-        <HeadBtn>
+        <Icon>
           <FiChevronLeft
-            style={{
-              fontSize: "4.5rem",
-              marginTop: "-1.20rem",
-              marginLeft: "1.3rem",
-            }}
             onClick={() => {
               navigate(-1);
             }}
           />
-          <HeadTitle>
-            <p>커뮤니티</p>
-          </HeadTitle>
-          <JumMom>
-            <IoMdMore
-              id="optionMenu"
-              onClick={menuOpen}
-              style={{ marginLeft: "80%" }}
-            />
-            {bubbleOn ? (
-              <EditBubble
-                data={data}
-                page={"community"}
-                setBubbleOn={setBubbleOn}
-              />
-            ) : null}
-          </JumMom>
-        </HeadBtn>
+        </Icon>
+        <p className="subtitle">커뮤니티</p>
+        <BobbleBox>
+          <Icon>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+          </Icon>
+          {bubbleOn ? (
+            <Bubble>
+              <EditBubble data={data} page={"community"} setBubbleOn={setBubbleOn} />
+            </Bubble>
+          ) : null}
+        </BobbleBox>
       </Header>
-
       <All>
         <UserInfo>
           <User>
@@ -103,50 +91,36 @@ const CommunityDetail = () => {
       </All>
       <Content>{data?.contents}</Content>
       <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
-
       <Comment postId={params.id} />
     </Wrap>
   );
 };
 
-const Header = styled.div`
-  display: flex;
-  width: 83%;
-  height: 70px;
-  margin: 7% 5% 0 5%;
-  color: #666;
-`;
-
-const HeadBtn = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Back = styled.img`
-  height: 30%;
-  margin-left: 6%;
-  margin-top: 1%;
-`;
-
-const HeadTitle = styled.div`
-  text-align: center;
+const BobbleBox = styled.div``;
+const Bubble = styled.div`
+  position: absolute;
   width: 40%;
-  margin-left: 29%;
-  margin-top: 1%;
-  /* margin-top: -50px; */
-
-  p {
+  right: 5%;
+`;
+const Icon = styled.div`
+  font-size: 3rem;
+  color: #666;
+  cursor: pointer;
+`;
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6.5% 2%;
+  .subtitle {
     color: #666;
-    margin: 1.5%;
-    font-size: 1.45rem;
+    font-size: 2rem;
     font-weight: bold;
   }
-
-  span {
+  p {
     color: #666;
-    font-size: 1.2rem;
-    opacity: 0.6;
+    font-weight: bold;
   }
 `;
 
