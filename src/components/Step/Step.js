@@ -728,6 +728,10 @@ const Step = ({ step, onCountChange, onSignup }) => {
   const [authNumber, setAuthNumber] = useState("");
 
   const handleSetAuthNumber = (event) => {
+    if (isNaN(Number(event.target.value))) {
+      return;
+    }
+
     setAuthNumber(event.target.value);
   };
 
