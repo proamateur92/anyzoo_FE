@@ -164,11 +164,14 @@ const CommentInput = styled.div`
   height: 4rem;
   margin: 2.2rem 0rem;
   position: relative;
+  background-color: #ebebeb;
+  border-radius: 2rem;
 
   textarea {
-    width: 100%;
+    width: 85%;
     font-size: 1.4rem;
     padding: 1.1rem 1.5rem;
+    line-height: 1.8rem;
     border-radius: 2rem;
     border: none;
     outline: none;

@@ -17,7 +17,7 @@ import ReactPlayer from "react-player/lazy";
 import LoadingSpinner from "../elements/LoadingSpinner";
 
 // icons
-import { FiPlay, FiPause, FiCheck, FiFolderPlus} from "react-icons/fi";
+import { FiPlay, FiPause, FiFolderPlus} from "react-icons/fi";
 import { RiDropFill } from "react-icons/ri";
 
 const ReelsWrite = () => {
@@ -35,7 +35,7 @@ const ReelsWrite = () => {
   const [currentTime, setCurrentTime] = React.useState(0);
 
   const startPtRef = React.useRef();
-  // const endPtRef = React.useRef();
+  const endPtRef = React.useRef();
   const [startPoint, setStartPoint] = React.useState(0);
   const [endPoint, setEndPoint] = React.useState(15);
 
@@ -71,14 +71,15 @@ const ReelsWrite = () => {
 
   const addVideo = (e) => {
     const uploaded = e.target?.files[0];
-    const typeValidity = uploaded?.type?.split("/")[0] === "video";
+    const allowedfile = ['mp4', 'avi']
+    const typeValidity = allowedfile.includes(uploaded?.type?.split("/")[1]) ;
     const sizeValidity = uploaded?.size < (100*1024*1024);
 
     if (typeValidity && sizeValidity) {
       setVideo(uploaded);
       setVideoUrl(URL.createObjectURL(uploaded));
     } else if (!typeValidity) {
-      window.alert("영상 파일만 업로드 가능합니다");
+      window.alert(allowedfile.join(', ')+" 파일만 업로드 가능합니다");
     } else if (!sizeValidity) {
       window.alert("100MB 이하의 파일로 올려주세요");
     }
@@ -91,7 +92,13 @@ const ReelsWrite = () => {
     formData.append("thumbnailTime", timeFormater(currentTime, true));
     formData.append("startPoint", timeFormater(startPoint, true));
 
-    const videoData = await instance.post("/api/upload", formData);
+    const videoData = 
+      await instance.post("/api/upload", formData)
+      .catch((err)=> {
+        window.alert('문제가 발생하였습니다')
+        setSpinnerOn(()=>false)
+        console.log(err);        
+      });
 
     const reelsData = {
       content: textRef.current.value,
@@ -105,13 +112,12 @@ const ReelsWrite = () => {
         window.alert('업로드 성공!')
         setSpinnerOn(()=>false)
         navigate('/reels')
-      } else {
+      }})
+      .catch((err) => {
         window.alert('문제가 발생하였습니다')
         setSpinnerOn(()=>false)
-        console.log(res);
-      }
-    }).catch((err) => console.log(err));
-
+        console.log(err);
+      });
   };
 
   const editReels = () =>{
@@ -130,7 +136,7 @@ const ReelsWrite = () => {
   }
 
   const getDuration = (e) => {
-    setDuration(e);
+    setDuration(Math.floor(e));
     setStopper(e);
     if (e < 15) {
       setEndPoint(e);
@@ -138,7 +144,7 @@ const ReelsWrite = () => {
   };
 
   const getPlayedSeconds = (e) => {
-    const now = Math.round(e.playedSeconds);
+    const now = Math.floor(e.playedSeconds);
     trackRef.current.value = now;
     setCurrentTime(() => now);
 
@@ -150,27 +156,27 @@ const ReelsWrite = () => {
 
   const changeCurrentTime = (e) => {
     videoRef.current.seekTo(e.target.value);
-    setCurrentTime(e.target.value);
+    setCurrentTime(Math.floor(e.target.value));
   };
 
   const changeStartPt = (e) => {
-    setStartPoint(e.target.value);
-    if (duration > e.target.value + 15) {
-      setEndPoint(e.target.value + 15);
+    const pointer = parseInt(e.target.value)
+    setStartPoint(pointer);
+    if (duration > pointer + 15) {
+      endPtRef.current.value = pointer+15
+      setEndPoint(pointer+15);
     } else {
+      endPtRef.current.value = duration
       setEndPoint(duration);
     }
   };
-
-  // const changeEndPt = (e) => {
-  //   setEndPoint(e.target.value);
-  // };
 
   const testPlay = () => {
     trackRef.current.value = startPoint;
     videoRef.current.seekTo(startPoint);
     setStopper(endPoint);
     setIsPlaying(true);
+    console.log(endPoint)
   };
 
   return (
@@ -179,13 +185,12 @@ const ReelsWrite = () => {
       <Header> 릴스 </Header>
 
       <Contents>
-        
         {
         isNew ?
         <div>
           <p> 영상 올리기 </p>
           <LabelIcon htmlFor="videoinput"> <FiFolderPlus/> </LabelIcon>
-          <input id='videoinput' type="file" onChange={(e) => addVideo(e)} />
+          <input id='videoinput' type="file" capture="camera" accept="video/*" onChange={(e) => addVideo(e)} />
         </div>
         :null
         }
@@ -194,6 +199,7 @@ const ReelsWrite = () => {
         video ? (
           <div>
             <p> 영상 미리보기 </p>
+            <span id="uploadInfo"> (4초 이상, 용량 100Mb 이하 mp4 / avi 파일 )</span>
             <PlayerWrap>
               <ReactPlayer
                 ref={videoRef}
@@ -219,9 +225,9 @@ const ReelsWrite = () => {
                       step={1}
                       defaultValue={startPoint}
                       duration={duration}
-                      onChange={changeStartPt}
+                      onChange={(e) => changeStartPt(e)}
                     />
-                    {/* <EndPt
+                    <EndPt
                       ref={endPtRef}
                       type="range"
                       min="0"
@@ -229,14 +235,13 @@ const ReelsWrite = () => {
                       step={1}
                       defaultValue={endPoint}
                       duration={duration}
-                      onChange={changeEndPt}
-                    /> */}
+                    />
                   </CropBar>
                   <div className="guidetrack">
                     <ThumbIndicator position={currentTime} duration={duration}>
                       <div id="pointerwrap">
                         <RiDropFill id="pointer" />
-                        <span> 썸네일 </span>
+                        <span> Thumb </span>
                       </div>
                     </ThumbIndicator>
                   </div>
@@ -259,9 +264,9 @@ const ReelsWrite = () => {
                     ) : (
                       <FiPlay onClick={() => setIsPlaying(!isPlaying)} className="playbtn" />
                     )}
-                    <FiCheck className="playbtn" onClick={() => testPlay()} />
+                    <span onClick={() => testPlay(!isPlaying)} id='testplay'>미리보기</span>
                   </div>
-
+                  
                   <span>
                     {timeFormater(currentTime)} / {timeFormater(duration)}
                   </span>
@@ -316,6 +321,10 @@ const Contents = styled.div`
     margin: 0.5rem 0;
   }
 
+  #uploadInfo {
+    color: #b3b3b3;
+  }
+
   textarea {
     border: none;
     outline: none;
@@ -335,15 +344,15 @@ const Contents = styled.div`
 
 const LabelIcon = styled.label`
   background: #e4e4e4;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 10px;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 1rem;
   margin: 1rem 1rem 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
   color:#333;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   cursor: pointer;
 `
 
@@ -373,10 +382,11 @@ const Buttons = styled.div`
 `;
 
 const PlayerWrap = styled.div`
-  margin: auto;
+  margin: 1rem auto;
   width: 100%;
   height: 80vh;
   border: 1px solid #ddd;
+  border-radius: 1rem;
   background: #333;
   position: relative;
   display: flex;
@@ -431,15 +441,18 @@ const ProgressBar = styled.input`
 
 const CropBar = styled.div`
   width: 100%;
-  margin: auto;
+  margin: 0 auto 0.4rem;
   height: 1rem;
-  display: flex;
+  position: relative;
 `;
 const StartPt = styled.input`
   -webkit-appearance: none;
   background: transparent;
-  margin: 0px;
-  width: ${(props) => (props.duration - props.max / props.duration) * 100}%;
+  position:absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
   min-width: 0.8rem;
 
   ::-webkit-slider-thumb {
@@ -452,30 +465,40 @@ const StartPt = styled.input`
   }
 `;
 
-// const EndPt = styled.input`
-//   -webkit-appearance: none;
-//   background: blue;
-//   margin: 0px;
-//   width: 100%;
+const EndPt = styled.input`
+  -webkit-appearance: none;
+  background: transparent;
+  position:absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-width: 0.8rem;
 
-//   ::-webkit-slider-thumb {
-//     -webkit-appearance: none;
-//     height: 1.5rem;
-//     width: 0.8rem;
-//     border-radius: 0 0 1rem 0;
-//     background: #fff;
-//     cursor: pointer;
-//   }
-// `;
+  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 1.5rem;
+    width: 0.8rem;
+    border-radius: 0 0 1rem 0;
+    background: #fff;
+    cursor: pointer;
+  }
+`;
 
 const PlayStatus = styled.div`
   width: 88%;
   margin: 1.5rem auto 2rem auto;
   color: #fff;
+  font-size: 1.4rem;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 
   .playbtn {
     font-size: 2.4rem;
@@ -483,8 +506,8 @@ const PlayStatus = styled.div`
     cursor: pointer;
   }
 
-  span {
-    font-size: 1.4rem;
+  #testplay {
+    cursor:pointer;
   }
 `;
 
@@ -510,5 +533,6 @@ const ThumbIndicator = styled.div`
     top: 35%;
     text-align: center;
     width: 100%;
+    color: #fff;
   }
 `;

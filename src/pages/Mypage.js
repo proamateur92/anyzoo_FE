@@ -739,6 +739,7 @@ const ContentContainer = styled.div`
 
 const Content = styled.div`
   width: 25%;
+
   padding-top: 25%;
   box-sizing: border-box;
   border: solid 1px rgba(0, 0, 0, 0.1);

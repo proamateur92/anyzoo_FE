@@ -74,7 +74,7 @@ const Reels = (props) => {
     const coverControl = setTimeout(() => {
       setIsPlaying(true);
       setShowCover(false);
-    }, 1500);
+    }, 500);
 
     return () => clearTimeout(coverControl);
   }, [page, params.id]);
@@ -163,7 +163,9 @@ const Reels = (props) => {
 
               { drawerOn ?
                 <Drawers setDrawerOn={setDrawerOn}>
-                  <Comment postId={ reelsData?.boardMainId } blockReply={true} overflow={'overflowScroll'}/>
+                  <CommentWrap>
+                    <Comment postId={ reelsData?.boardMainId } blockReply={true} overflow={'overflowScroll'}/>
+                  </CommentWrap>
                 </Drawers>
               : null
               }
@@ -301,3 +303,8 @@ const Preview = styled.div`
   background-position: center;
   background-size: contain;
 `;
+
+const CommentWrap = styled.div`
+  margin-top: 2.5rem;
+
+`

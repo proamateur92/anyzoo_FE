@@ -100,10 +100,10 @@ const CommunityDetail = () => {
             <PhotoSlide photos={data?.img} />
           </ImgBox>
         )}
+
       </All>
       <Content>{data?.contents}</Content>
       <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
-
       <Comment postId={params.id} />
     </Wrap>
   );
