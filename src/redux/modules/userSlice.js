@@ -19,6 +19,11 @@ export const updateUserImageDB = createAsyncThunk("updateUserImage", async (user
   return { userImage };
 });
 
+export const updateUserNicknameDB = createAsyncThunk("updateUserNickname", async (userInfo) => {
+  const userNickname = userInfo.nickname;
+  return { userNickname };
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -30,7 +35,10 @@ const userSlice = createSlice({
       state.info = payload.userInfo;
     },
     [updateUserImageDB.fulfilled]: (state, { payload }) => {
-      state.info = { ...state.info, userImage: payload.userImage };
+      state.info = { ...state.info, img: payload.userImage };
+    },
+    [updateUserNicknameDB.fulfilled]: (state, { payload }) => {
+      state.info = { ...state.info, nickname: payload.userNickname };
     },
   },
 });
