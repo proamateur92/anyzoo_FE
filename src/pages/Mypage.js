@@ -29,7 +29,14 @@ import { useNavigate, useParams } from "react-router-dom";
 // axios
 import instance from "../shared/axios";
 
+// userSlice
+import { updateUserImageDB } from "../redux/modules/userSlice";
+
+// redux
+import { useDispatch } from "react-redux";
+
 const Mypage = () => {
+  const dispatch = useDispatch();
   const { nickname } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(0);
@@ -95,14 +102,15 @@ const Mypage = () => {
 
     setNewUserInfo({
       nickname: myInfo.nickname,
-      username: myInfo.username,
+      password: "",
       phoneNumber: myInfo.phoneNumber,
-      userImage: "",
     });
+
+    setCheckPasswordValue("");
+    setUserAuthNumber("");
 
     setValidation({
       nickname: true,
-      username: true,
       password: true,
       phoneNumber: true,
     });
@@ -110,19 +118,20 @@ const Mypage = () => {
     setAllValidation(true);
     setIsActiveBtn(false);
     setImageData({ previewImage: "", imageFile: "" });
+    setIsSubmit(false);
   };
 
   const [newUserInfo, setNewUserInfo] = useState({
     nickname: myInfo.nickname,
-    username: myInfo.username,
+    password: "",
     phoneNumber: myInfo.phoneNumber,
-    userImage: "",
   });
+
+  const [checkPasswordValue, setCheckPasswordValue] = useState("");
 
   // 유효성 검사 체크
   const [validation, setValidation] = useState({
     nickname: true,
-    username: true,
     password: true,
     phoneNumber: true,
   });
@@ -132,6 +141,7 @@ const Mypage = () => {
   // 인증번호 받기
   // 인증번호 중복 여부
 
+  const [isPasswordMatch, setIsPasswordMatch] = useState(false);
   const [isActiveBtn, setIsActiveBtn] = useState(false);
   const [allValidation, setAllValidation] = useState(true);
 
@@ -144,7 +154,7 @@ const Mypage = () => {
     username: false,
     nickname: false,
     phoneNumber: false,
-    image: false,
+    userImage: false,
   });
 
   useEffect(() => {
@@ -153,19 +163,18 @@ const Mypage = () => {
       return;
     }
 
-    const image = !!imageData.imageFile;
-    const checkUsername = newUserInfo.username !== myInfo.username;
     const checkNickname = newUserInfo.nickname !== myInfo.nickname;
+    const checkPassword = !!newUserInfo.password;
     const checkPhoneNumber = newUserInfo.phoneNumber !== myInfo.phoneNumber;
 
-    setChangeInfoType({ username: checkUsername, nickname: checkNickname, phoneNumber: checkPhoneNumber, image });
+    setChangeInfoType({ nickname: checkNickname, password: checkPassword, phoneNumber: checkPhoneNumber });
 
-    if (image || checkUsername || checkNickname || checkPhoneNumber) {
+    if (checkNickname || (checkPassword && isPasswordMatch && validation.password)) {
       setIsActiveBtn(true);
     } else {
       setIsActiveBtn(false);
     }
-  }, [imageData.imageFile, newUserInfo, allValidation]);
+  }, [newUserInfo, isPasswordMatch, allValidation]);
 
   // 유효성 검사 함수
   const checkValidation = (type, value) => {
@@ -176,8 +185,8 @@ const Mypage = () => {
         regExp = /^[a-zA-Z가-힣0-9]{3,9}$/;
         break;
       }
-      case "username": {
-        regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      case "password": {
+        regExp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/;
         break;
       }
       case "phoneNumber": {
@@ -193,12 +202,22 @@ const Mypage = () => {
     setValidation({ ...validation, [type]: result });
   };
 
+  const handleEnteredCheckPassword = (event) => {
+    setCheckPasswordValue(event.target.value);
+    setIsPasswordMatch(newUserInfo.password === event.target.value);
+  };
+
   const handleSelectImg = () => {
     const img = document.querySelector(".selectImg");
     img.addEventListener("click", img.click());
   };
 
+  useEffect(() => {
+    imageData.imageFile && uploadImage();
+  }, [imageData]);
+
   const handleEnteredInfo = async (event, type) => {
+    setIsClickUpdateBtn(false);
     if (type === "image") {
       const uploadFile = event.target.files[0];
       if (uploadFile) {
@@ -206,47 +225,252 @@ const Mypage = () => {
         setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
       } else {
         setImageData({ previewImage: "", imageFile: "" });
-        setNewUserInfo({ ...newUserInfo, userImage: "" });
         return;
       }
       return;
+    }
+
+    if (type === "authNumber") {
+      if (isNaN(Number(event.target.value))) {
+        return;
+      }
+      setUserAuthNumber(event.target.value);
     }
 
     if (type === "phoneNumber") {
       if (isNaN(Number(event.target.value))) {
         return;
       }
+      setIsShowAvailableTime(false);
+      setIsClickAuthBtn(false);
     }
 
     checkValidation(type, event.target.value);
     setNewUserInfo({ ...newUserInfo, [type]: event.target.value });
   };
 
-  const [isDuplicated, setIsDuplicated] = useState({ nickname: true, username: true, phoneNumber: true });
+  const [isDuplicated, setIsDuplicated] = useState({ nickname: true, phoneNumber: true });
+  const [isClickUpdateBtn, setIsClickUpdateBtn] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+
+  useEffect(() => {
+    if (isSubmit) {
+      console.log("수정요청 보내기 2 -> 3단계");
+      console.log(`isSubmit: ${isSubmit}`);
+      onUpdate();
+    }
+  }, [isSubmit]);
+
+  const onUpdate = async () => {
+    const nickname = changeInfoType.nickname ? newUserInfo.nickname : "";
+    const password = changeInfoType.password ? newUserInfo.password : "";
+
+    console.log(`nickname: ${nickname}`);
+    console.log(`password: ${password}`);
+
+    try {
+      const response = await instance.patch("/user/edit", {
+        nickname,
+        password,
+        phoneNumber: "",
+      });
+      console.log("업데이트 결과");
+      console.log(response.data);
+      setIsSubmit(false);
+      // 변경한 회원 정보
+      // dispatch
+    } catch (error) {
+      console.log(error);
+    }
+
+    setNewUserInfo({
+      nickname: myInfo.nickname,
+      password: "",
+      phoneNumber: myInfo.phoneNumber,
+    });
+
+    setCheckPasswordValue("");
+  };
+
+  const changeImage = async (url, id) => {
+    console.log(typeof id);
+    console.log(id);
+    try {
+      const response = await instance.patch("/api/user/edit/userImage", { userImage: id });
+      // 업데이트 테스트 필요!!
+      console.log("이미지 업데이트 결과");
+      console.log(response);
+      dispatch(updateUserImageDB({ userImage: url }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // 업로드 이미지 -> 서버 통신
+  const uploadImage = async () => {
+    const formData = new FormData();
+    formData.append("file", imageData.imageFile);
+    try {
+      // 서버 이미지 업로드 api 필요
+      const response = await instance.post("/user/image", formData);
+      // 유저 정보에 서버 이미지 url 저장
+      console.log("이미지 서버 등록");
+      console.log(response.data);
+      // 바로 이미지 변경하겠냐는 팝업 띄우기
+      Swal.fire({
+        title: "이미지를 변경할까요?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "네 변경할게요.",
+        cancelButtonText: "아니요 변경안해요",
+        confirmButtonColor: "#44DCD3",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("변경할 이미지 정보");
+          console.log(response.data);
+          changeImage(response.data.url, response.data.id);
+        } else {
+          setImageData({ previewImage: "", imageFile: "" });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const updateNewInfo = async (event) => {
     event.preventDefault();
+    let check = false;
+    setIsClickUpdateBtn(true);
 
-    console.log(changeInfoType);
+    if (changeInfoType.nickname) {
+      console.log("닉네임 검사");
+      try {
+        const response = await instance.get(`/user/checkNickname/${newUserInfo.nickname}`);
+        check = response.data;
+        setIsDuplicated({ ...isDuplicated, nickname: response.data });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (!check) {
+      setIsSubmit(true);
+    }
+  };
+
+  // 인증 코드 대기
+  const [waitSendCodeTime, setWaitSendCodeTime] = useState(false);
+
+  // 인증 코드 재요청까지 남은 시간
+  const [leftTime, setLeftTime] = useState(5);
+
+  // 인증번호 클릭 여부
+  const [isClickAuthBtn, setIsClickAuthBtn] = useState(false);
+
+  // 인증번호 남은 시간 문구 발생 여부
+  const [isShowAvailableTime, setIsShowAvailableTime] = useState(false);
+
+  // 인증 문구 발생 여부
+  const [authMessage, setAuthMessage] = useState(false);
+
+  // 인증 코드 발생 여부
+  const [isSendCode, setIsSendCode] = useState(false);
+
+  // 남은 시간 체크
+  const [availableTime, setAvailableTime] = useState(180);
+
+  // 인증번호 통과 여부
+  const [passedAuth, setPassedAuth] = useState(false);
+
+  // 유저가 입력한 인증 번호
+  const [userAuthNumber, setUserAuthNumber] = useState("");
+
+  // 인증 번호 요청
+  const callSendCodeHandler = async () => {
+    console.log("인증번호 발송");
+
     try {
-      const response = await instance.get(`/user/checkUsername/${newUserInfo.username}`);
-      setIsDuplicated({ ...isDuplicated, username: response.data });
+      await instance.get(`/user/send/phoneVerification/${newUserInfo.phoneNumber}`);
+      Swal.fire({
+        title: "인증번호를 발송했어요!",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      });
+
+      setAvailableTime(180);
+      setIsSendCode(true);
+      setAuthMessage(false);
+      setWaitSendCodeTime(true);
+      setIsShowAvailableTime(true);
+
+      setTimeout(() => {
+        setWaitSendCodeTime(false);
+      }, 5000);
+
+      const stopLeftTime = setInterval(() => {
+        setLeftTime((prev) => prev - 1);
+      }, 1000);
+
+      setTimeout(() => {
+        clearInterval(stopLeftTime);
+        setLeftTime(5);
+      }, 5000);
+
+      const decreaseAvailableTime = setInterval(() => {
+        setAvailableTime((prev) => prev - 1);
+      }, 1000);
+
+      // 3분 동안만 인증 가능
+      setTimeout(() => {
+        clearInterval(decreaseAvailableTime);
+        setPassedAuth(false);
+        alert("인증시간을 초과했습니다.");
+      }, 180001);
+
+      isSendCode && clearInterval(decreaseAvailableTime);
+
+      setIsSendCode(true);
     } catch (error) {
       console.log(error);
     }
+  };
 
-    try {
-      const response = await instance.get(`/user/checkNickname/${newUserInfo.nickname}`);
-      setIsDuplicated({ ...isDuplicated, nickname: response.data });
-    } catch (error) {
-      console.log(error);
+  // 인증 번호 요청 전 중복 확인
+  const sendAuthNumber = async () => {
+    setIsClickAuthBtn(true);
+
+    if (waitSendCodeTime) {
+      Swal.fire({
+        title: `${leftTime}초 후에 요청이 가능해요.`,
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      });
+      return;
     }
 
-    try {
-      const response = await instance.get(`/user/checkPhoneNumber/${newUserInfo.phoneNumber}`);
-      setIsDuplicated({ ...isDuplicated, phoneNumber: response.data });
-    } catch (error) {
-      console.log(error);
+    if (myInfo.phoneNumber === newUserInfo.phoneNumber) {
+      alert("이전과 동일한 번호에요.");
+      return;
+    }
+
+    let check = false;
+
+    if (changeInfoType.phoneNumber) {
+      console.log("핸드폰 검사");
+      try {
+        const response = await instance.get(`/user/checkPhoneNumber/${newUserInfo.phoneNumber}`);
+        check = response.data;
+        setIsDuplicated({ ...isDuplicated, phoneNumber: response.data });
+
+        if (!check) {
+          callSendCodeHandler();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -257,12 +481,12 @@ const Mypage = () => {
       <>
         <Profile>
           <img src={userInfo.img} alt="프로필 이미지" />
-          <div onClick={() => handleMoveStep(2)}>
+          {/* <div onClick={() => handleMoveStep(2)}>
             <span>{nickname}</span>
             <Icon>
               <AiOutlineRight />
             </Icon>
-          </div>
+          </div> */}
         </Profile>
         <Follow onClick={() => handleMoveStep(1)}>
           <div>
@@ -317,14 +541,7 @@ const Mypage = () => {
         </Profile>
         <UpdateForm active={isActiveBtn} onSubmit={(event) => isActiveBtn && updateNewInfo(event)}>
           <span>이메일</span>
-          <input
-            className="input"
-            value={newUserInfo.username}
-            onChange={(event) => handleEnteredInfo(event, "username")}
-            type="text"
-            placeholder="이메일을 입력해주세요."
-          />
-          {!validation.username && <p>*이메일 형식이 유효하지 않아요.</p>}
+          <div>{myInfo.username}</div>
           <span>닉네임</span>
           <input
             className="input"
@@ -334,26 +551,62 @@ const Mypage = () => {
             placeholder="닉네임을 입력해주세요."
           />
           {newUserInfo.nickname.length !== 0 && !validation.nickname && <p>*영문자, 한글, 숫자, 3~10글자</p>}
-          <span>휴대폰 번호</span>
+          {isActiveBtn && isClickUpdateBtn && changeInfoType.nickname && isDuplicated.nickname && (
+            <p>*중복된 닉네임이에요.</p>
+          )}
+          <span>비밀번호</span>
           <input
-            className="input"
-            value={newUserInfo.phoneNumber}
-            onChange={(event) => handleEnteredInfo(event, "phoneNumber")}
-            type="text"
-            placeholder="휴대폰 번호를 입력해주세요."
-            maxLength={11}
+            type="password"
+            onChange={(event) => handleEnteredInfo(event, "password")}
+            placeholder="비밀번호를 입력해주세요."
           />
+          {newUserInfo.password.trim().length !== 0 && !validation.password && (
+            <p>*대문자, 특수문자를 포함해주세요. (8~16자 이하).</p>
+          )}
+          <span>비밀번호 확인</span>
+          <input
+            value={checkPasswordValue}
+            onChange={handleEnteredCheckPassword}
+            type="password"
+            placeholder="비밀번호를 다시 입력해주세요."
+          />
+          {newUserInfo.password.trim().length !== 0 && checkPasswordValue.trim().length === 0 && (
+            <p>*비밀번호를 다시 입력해주세요.</p>
+          )}
+          {!isPasswordMatch && checkPasswordValue.trim().length !== 0 && <p>*비밀번호가 일치하지 않아요.</p>}
+          <span>휴대폰 번호</span>
+          <PhoneDiv active={validation.phoneNumber}>
+            <input
+              className="input"
+              value={newUserInfo.phoneNumber}
+              onChange={(event) => handleEnteredInfo(event, "phoneNumber")}
+              type="text"
+              placeholder="휴대폰 번호를 입력해주세요."
+              maxLength={11}
+            />
+            {isShowAvailableTime && (
+              <span>
+                남은시간 0{Math.floor(availableTime / 60)}:{availableTime % 60 < 10 && 0}
+                {availableTime % 60}
+              </span>
+            )}
+            <button onClick={() => validation.phoneNumber && sendAuthNumber()}>인증번호 받기</button>
+          </PhoneDiv>
           {newUserInfo.phoneNumber.length !== 0 && !validation.phoneNumber && (
             <p>*휴대폰 번호 형식이 유효하지 않아요.</p>
           )}
           <span>인증번호</span>
-          <input
-            className="input"
-            // value={newUserInfo.phoneNumber}
-            // onChange={(event) => handleEnteredInfo(event, "phoneNumber")}
-            type="text"
-            placeholder="인증번호를 입력해주세요."
-          />
+          {isSendCode && (
+            <input
+              className="input"
+              value={userAuthNumber}
+              onChange={(event) => handleEnteredInfo(event, "authNumber")}
+              type="text"
+              maxLength={4}
+              placeholder="인증번호를 입력해주세요."
+            />
+          )}
+          {isSendCode && <button>인증</button>}
           <button className="submitNewInfo" onClick={(event) => isActiveBtn && updateNewInfo(event)}>
             저장
           </button>
@@ -378,16 +631,14 @@ const Mypage = () => {
             tap === "post" &&
             (contents.post?.length ? (
               contents.post.map((p) => (
-                <Content key={p.boardMainId}>
-                  <img
-                    src={p.img[0].url}
-                    alt="자랑하기 글 이미지"
-                    onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
-                  />
-                </Content>
+                <Content
+                  key={p.boardMainId}
+                  img={p.img[0].url}
+                  onClick={() => navigate(`/post/detail/${p.boardMainId}`)}
+                ></Content>
               ))
             ) : (
-              <span>작성한 글이 없어요.</span>
+              <span className="no">작성한 글이 없어요.</span>
             ))}
           <InnerWrap mode="community" active={tap}>
             {step === 0 &&
@@ -395,7 +646,7 @@ const Mypage = () => {
               (contents.community?.length ? (
                 contents.community.map((item) => <CommunityCard key={item.boardMainId} data={item} />)
               ) : (
-                <span>작성한 커뮤니티 글이 없어요.</span>
+                <span className="no_other">작성한 커뮤니티 글이 없어요.</span>
               ))}
           </InnerWrap>
           <InnerWrap mode="together" active={tap}>
@@ -404,21 +655,21 @@ const Mypage = () => {
               (contents.together?.length ? (
                 contents.together.map((item) => <TogetherCard key={item.boardMainId} data={item} />)
               ) : (
-                <span>작성한 함께하기 글이 없어요.</span>
+                <span className="no_other">작성한 함께하기 글이 없어요.</span>
               ))}
           </InnerWrap>
           {step === 0 &&
             tap === "reels" &&
             (contents.reels?.length ? (
               contents.reels.map((p) => (
-                <Content key={p.boardMainId}>
-                  {/* <img src={p.titleImg} alt='릴스 이미지' onClick={() => navigate(`/reels/detail/${p.boardMainId}`)} /> */}
-                  {/* 일단 링크 대기중 */}
-                  <img src={p.titleImg} alt="릴스 이미지" />
-                </Content>
+                <Content
+                  key={p.boardMainId}
+                  img={p.titleImg}
+                  onClick={() => navigate(`/reels/${p.boardMainId}`)}
+                ></Content>
               ))
             ) : (
-              <span>작성한 릴스가 없어요.</span>
+              <span className="no">작성한 릴스가 없어요.</span>
             ))}
         </ContentContainer>
       </Wrap>
@@ -454,6 +705,12 @@ const UpdateForm = styled.div`
   }
 `;
 
+const PhoneDiv = styled.div`
+  button {
+    background-color: ${(props) => (props.active ? props.theme.color.main : props.theme.color.grey)};
+  }
+`;
+
 const InnerWrap = styled.div`
   width: 90%;
   margin: ${(props) => props.mode === "community" && "6.8% auto 0 auto"};
@@ -468,17 +725,28 @@ const ContentContainer = styled.div`
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
+  .no {
+    display: block;
+    font-size: 1.4em;
+    margin: 15% auto 0 auto;
+  }
+  .no_other {
+    display: block;
+    font-size: 1.3em;
+    margin: 8.7% auto 0 auto;
+  }
 `;
 
 const Content = styled.div`
   width: 25%;
-  height: 24.88vw;
-  img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-  }
+  padding-top: 25%;
+  box-sizing: border-box;
+  border: solid 1px rgba(0, 0, 0, 0.1);
+  background-color: red;
+  background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")};
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
 `;
 
 const Profile = styled.div`
