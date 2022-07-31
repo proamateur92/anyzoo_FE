@@ -105,9 +105,10 @@ const Top = styled.div`
   position: relative;
   font-size: 2rem;
   text-align: center;
-  padding: 6.5% 0;
+  padding: 8% 0 5% 0;
   span {
     font-weight: 800;
+    color: #666;
   }
 `;
 
@@ -115,10 +116,11 @@ const Icon = styled.div`
   position: absolute;
   width: ${(props) => props.type === "signup" && "11%"};
   font-weight: ${(props) => props.type === "signup" && "800"};
+  color: #666;
   cursor: pointer;
   font-size: 3rem;
   &:first-of-type {
-    left: 0;
+    left: 2.5%;
   }
   &:nth-of-type(2) {
     right: 2%;
