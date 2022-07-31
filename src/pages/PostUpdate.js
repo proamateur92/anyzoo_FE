@@ -113,7 +113,7 @@ const PostUpdate = () => {
           <option value="CUTE">귀여움</option>
           <option value="COMIC">웃김</option>
         </select>
-        <p>첨부 사진 보기</p>
+        <p>첨부 사진 보기(수정X)</p>
         <Preview>
           {data?.img.map((v) => {
             return (
@@ -124,8 +124,12 @@ const PostUpdate = () => {
           })}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content ref={contentRef} defaultValue={data?.contents} />
+        <p>게시글 내용(1000자 이내)</p>
+        <Content
+          maxLength={1000}
+          ref={contentRef}
+          defaultValue={data?.contents}
+        />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={updatePost}>수정하기</AddBtn>
@@ -185,20 +189,24 @@ const Preview = styled.div`
   justify-content: center;
   display: flex;
   width: 100%;
-  height: 80px;
-
+  height: 15%;
+  div {
+    margin: 1%;
+  }
   overflow: auto;
 `;
 
 const PreviewImg = styled.img`
-  width: 68px;
-  height: 68%;
+  width: 6.8rem;
+  height: 6.8rem;
   border-radius: 5px;
   margin-top: 5px;
 `;
 
 const Content = styled.textarea`
   border: none;
+  outline: none;
+  padding: 5%;
   width: 100%;
   height: 40%;
   margin: 0.3125rem 0 0;

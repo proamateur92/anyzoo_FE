@@ -8,17 +8,17 @@ import instance from "../../shared/axios";
 export const loadPostsDB = createAsyncThunk(
   "recruit/loadPost",
   async (pageInfo) => {
-    const url = 
-      pageInfo.provinceId === 'all' || pageInfo.cityId === 'all' ?
-        '/api/together' : '/api/together/category/'+ pageInfo.provinceId
-      
+    const url =
+      pageInfo.provinceId === "all" || pageInfo.cityId === "all"
+        ? "/api/together"
+        : "/api/together/category/" + pageInfo.provinceId;
+
     const response = await instance
       .get(`${url}?page=${pageInfo.page}`)
       .catch((err) => console.log(err));
-     return response.data;
+    return response.data;
   }
 );
-
 
 // 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
