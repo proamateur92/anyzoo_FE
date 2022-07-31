@@ -40,10 +40,10 @@ import { setAccessToken } from "./shared/axios";
 import { getCookie } from "./shared/cookie";
 
 // redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // userSlice
-import { setUserDB } from "./redux/modules/userSlice";
+import { setUserDB, setFollowingListDB } from "./redux/modules/userSlice";
 
 //component
 import NavMenu from "./components/NavMenu";
@@ -53,6 +53,8 @@ import RouteTracker from "./components/RouteTracker.js";
 function App() {
   const navigate = useNavigate();
   const theme = defaultTheme;
+  const myInfo = useSelector((state) => state.user?.info);
+
   setAccessToken();
   RouteTracker();
 
@@ -64,6 +66,12 @@ function App() {
       dispatch(setUserDB());
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (myInfo.nickname) {
+      dispatch(setFollowingListDB(myInfo.nickname));
+    }
+  }, [myInfo]);
 
   useEffect(() => {
     if (!getCookie("accessToken")) {
