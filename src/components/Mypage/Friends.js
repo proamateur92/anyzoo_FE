@@ -1,26 +1,26 @@
 // react
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 // style
-import styled from 'styled-components';
+import styled from "styled-components";
 
 // axios
-import instance from '../../shared/axios';
+import instance from "../../shared/axios";
 
 // redux
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 // router
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 // sweetalert
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Friends = ({ nickname, handleMoveStep }) => {
   const userInfo = useSelector((state) => state.user.info);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [chooseTap, setChooseTap] = useState('following');
+  const [chooseTap, setChooseTap] = useState("following");
   const [friendList, setFriendList] = useState({ following: [], follower: [], isShow: false });
 
   // tap 전환 여부
@@ -32,7 +32,7 @@ const Friends = ({ nickname, handleMoveStep }) => {
     try {
       const response = await instance.post(`/api/follow/${nickname}`);
       console.log(response.data);
-      const newFriendList = friendList.following.filter((friend) => friend.nickname != nickname);
+      const newFriendList = friendList.following.filter((friend) => friend.nickname !== nickname);
       setFriendList({ ...friendList, following: newFriendList });
     } catch (error) {
       console.log(error);
@@ -42,14 +42,14 @@ const Friends = ({ nickname, handleMoveStep }) => {
   // 팔로잉 해제
   const handleFriend = (event, nickname) => {
     event.stopPropagation();
-    console.log('팔로잉 취소');
+    console.log("팔로잉 취소");
     Swal.fire({
       title: `${nickname}님의 팔로잉을 해제합니다.`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: '팔로잉 해제',
-      cancelButtonText: '취소',
-      confirmButtonColor: 'red',
+      confirmButtonText: "팔로잉 해제",
+      cancelButtonText: "취소",
+      confirmButtonColor: "red",
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -58,24 +58,24 @@ const Friends = ({ nickname, handleMoveStep }) => {
     });
   };
 
-  let content = '';
+  let content = "";
 
-  if (chooseTap === 'following') {
+  if (chooseTap === "following") {
     // 팔로잉일때
     content = (
       <FriendList>
         {!!friendList.following.length &&
           friendList.following.map((friend) => (
             <div
-              className='friend_row'
+              className="friend_row"
               key={friend.nickname}
               onClick={() => {
                 handleMoveStep(0);
                 navigate(`/mypage/${friend.nickname}`);
               }}
             >
-              <div className='friend_profile'>
-                <img src={friend.userProfileImg} alt='유저 이미지' />
+              <div className="friend_profile">
+                <img src={friend.userProfileImg} alt="유저 이미지" />
                 <span>{friend.nickname}</span>
               </div>
               {userInfo.nickname === nickname && (
@@ -83,29 +83,30 @@ const Friends = ({ nickname, handleMoveStep }) => {
               )}
             </div>
           ))}
-        {!friendList.following.length && <div className='friend_no'>팔로잉한 친구가 없어요.</div>}
+        {!friendList.following.length && <div className="friend_no">팔로잉한 친구가 없어요.</div>}
       </FriendList>
     );
-  } else if (chooseTap === 'follower') {
+  } else if (chooseTap === "follower") {
     // 팔로워일때
     content = (
       <FriendList>
         {!!friendList.follower.length &&
           friendList.follower.map((friend) => (
             <div
-              className='friend_row'
+              key={friend.nickname}
+              className="friend_row"
               onClick={() => {
                 handleMoveStep(0);
                 navigate(`/mypage/${friend.nickname}`);
               }}
             >
-              <div className='friend_profile'>
-                <img src={friend.userProfileImg} alt='유저 이미지' />
+              <div className="friend_profile">
+                <img src={friend.userProfileImg} alt="유저 이미지" />
                 <span>{friend.nickname}</span>
               </div>
             </div>
           ))}
-        {!friendList.follower.length && <div className='friend_no'>팔로워한 친구가 없어요.</div>}
+        {!friendList.follower.length && <div className="friend_no">팔로워한 친구가 없어요.</div>}
       </FriendList>
     );
   }
@@ -147,8 +148,8 @@ const Friends = ({ nickname, handleMoveStep }) => {
     isLoading && (
       <div>
         <Tap mode={chooseTap}>
-          <div onClick={() => handleChangeTap('following')}>팔로잉</div>
-          <div onClick={() => handleChangeTap('follower')}>팔로워</div>
+          <div onClick={() => handleChangeTap("following")}>팔로잉</div>
+          <div onClick={() => handleChangeTap("follower")}>팔로워</div>
         </Tap>
         {content}
       </div>
@@ -169,10 +170,10 @@ const Tap = styled.div`
     border-radius: 10px 10px 0 0;
   }
   div:first-of-type {
-    border-bottom: 0.2rem solid ${(props) => (props.mode === 'following' ? props.theme.color.main : '#d9d9d9')};
+    border-bottom: 0.2rem solid ${(props) => (props.mode === "following" ? props.theme.color.main : "#d9d9d9")};
   }
   div:nth-of-type(2) {
-    border-bottom: 0.2rem solid ${(props) => (props.mode === 'follower' ? props.theme.color.main : '#d9d9d9')};
+    border-bottom: 0.2rem solid ${(props) => (props.mode === "follower" ? props.theme.color.main : "#d9d9d9")};
   }
 `;
 

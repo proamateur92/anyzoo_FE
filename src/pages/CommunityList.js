@@ -141,6 +141,8 @@ const ListOption = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0 2rem;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
 `;
 
 const InnerWrap = styled.div`

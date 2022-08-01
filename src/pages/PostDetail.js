@@ -17,7 +17,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 // icon
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
+import { FiChevronLeft } from "react-icons/fi";
 
 // axios
 import instance from "../shared/axios";
@@ -68,37 +68,34 @@ const PostDetail = () => {
   return (
     <Wrap>
       <Header>
-        <HeadBtn>
-          <Back
+        <Icon>
+          <FiChevronLeft
             onClick={() => {
               navigate(-1);
             }}
-            src={require("../assets/images/back.png.png")}
           />
-          <HeadTitle>
-            <p>자랑하개</p>
-            <span>{data?.postCategory}</span>
-          </HeadTitle>
-          <JumMom>
-            <IoMdMore
-              id="optionMenu"
-              onClick={menuOpen}
-              style={{ marginLeft: "80%" }}
-            />
-            {bubbleOn ? (
-              <div>
-                <EditBubble
-                  data={data}
-                  contentsId={data?.boardMainId}
-                  setBubbleOn={setBubbleOn}
-                  page={"post"}
-                />
-              </div>
-            ) : null}
-          </JumMom>
-        </HeadBtn>
+        </Icon>
+        <Title>
+          <p className="subtitle">자랑하개</p>
+          <span>{data?.postCategory}</span>
+        </Title>
+        <BobbleBox>
+          <Icon>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+          </Icon>
+          {bubbleOn ? (
+            <Bubble>
+              <EditBubble
+                data={data}
+                contentsId={data?.boardMainId}
+                page={"post"}
+                setBubbleOn={setBubbleOn}
+                targetNickname={data?.nickname}
+              />
+            </Bubble>
+          ) : null}
+        </BobbleBox>
       </Header>
-
       <All>
         <UserInfo>
           <User>
@@ -110,66 +107,49 @@ const PostDetail = () => {
           <PhotoSlide photos={data?.img} />
         </ImgBox>
         <Content>{data?.contents}</Content>
-        {/* <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-          <span>
-            <IoChatbubbleOutline /> {data?.viewCnt}{" "}
-          </span>
-        </Reactions> */}
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
 
       <Comment postId={params.id} />
     </Wrap>
   );
 };
 
-const Header = styled.div`
+const Title = styled.div`
   display: flex;
-  width: 83%;
-  height: 70px;
-  margin: 7% 5% 0 5%;
+  flex-direction: column;
+  align-items: center;
 `;
-
-const HeadBtn = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Back = styled.img`
-  height: 30%;
-  margin-left: 6%;
-  margin-top: 1%;
-`;
-
-const HeadTitle = styled.div`
-  text-align: center;
+const BobbleBox = styled.div``;
+const Bubble = styled.div`
+  position: absolute;
   width: 40%;
-  margin-left: 29%;
-  margin-top: 1%;
+  right: 5%;
+`;
 
-  /* margin-top: -50px; */
+const Icon = styled.div`
+  font-size: 3rem;
+  color: #666;
+  cursor: pointer;
+`;
 
-  p {
-    margin: 1.5%;
-    font-size: 1.65rem;
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6.5% 2%;
+  .subtitle {
+    color: #666;
+    font-size: 2rem;
     font-weight: bold;
   }
-
   span {
-    font-size: 1.2rem;
-    opacity: 0.6;
+    display: block;
+    margin-top: 4%;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 1.3rem;
+    font-weight: bold;
   }
 `;
 
@@ -183,6 +163,7 @@ const UserInfo = styled.div`
   display: flex;
   width: 100%;
   height: 30px;
+  margin-bottom: 5%;
 `;
 
 const User = styled.div`
@@ -200,6 +181,7 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
@@ -227,11 +209,14 @@ const ImgBox = styled.div`
 
 const Content = styled.p`
   width: 90%;
+  height: 29%;
   margin-left: 4%;
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: 1.25rem;
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 export default PostDetail;

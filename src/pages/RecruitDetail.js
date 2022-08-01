@@ -16,7 +16,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 // icon
 import { IoMdMore } from "react-icons/io";
-import { IoHeartOutline, IoChatbubbleOutline, IoHeart } from "react-icons/io5";
+import { FiChevronLeft } from "react-icons/fi";
 
 // axios
 import instance from "../shared/axios";
@@ -94,32 +94,24 @@ const RecruitDetail = () => {
   return (
     <Wrap>
       <Header>
-        <HeadBtn>
-          <Back
+        <Icon>
+          <FiChevronLeft
             onClick={() => {
               navigate(-1);
             }}
-            src={require("../assets/images/back.png.png")}
           />
-          <HeadTitle>
-            <p>{data?.title}</p>
-            <span>{data?.postCategory}</span>
-          </HeadTitle>
-          <JumMom>
-            <IoMdMore
-              id="optionMenu"
-              onClick={menuOpen}
-              style={{ marginLeft: "80%" }}
-            />
-            {bubbleOn ? (
-              <EditBubble
-                data={data}
-                page={"recruit"}
-                setBubbleOn={setBubbleOn}
-              />
-            ) : null}
-          </JumMom>
-        </HeadBtn>
+        </Icon>
+        <p className="subtitle">{data?.title}</p>
+        <BobbleBox>
+          <Icon>
+            <IoMdMore id="optionMenu" onClick={menuOpen} />
+          </Icon>
+          {bubbleOn ? (
+            <Bubble>
+              <EditBubble data={data} page={"recruit"} setBubbleOn={setBubbleOn} targetNickname={data?.nickname} />
+            </Bubble>
+          ) : null}
+        </BobbleBox>
       </Header>
       <All>
         <UserInfo>
@@ -133,22 +125,9 @@ const RecruitDetail = () => {
             <PhotoSlide photos={data?.img} />
           </ImgBox>
         )}
-        <Content>{data?.contents}</Content>
-        {/* <Reactions>
-          <span>
-            {like === true ? (
-              <IoHeartOutline onClick={clickHeart} />
-            ) : (
-              <IoHeart style={{ color: "red" }} onClick={clickHeart} />
-            )}
-            <span>{data?.likeCnt}</span>{" "}
-          </span>
-        </Reactions> */}
-        <PostResponses
-          boardMainId={data?.boardMainId}
-          likeCnt={data?.likeCnt}
-        />
       </All>
+      <Content>{data?.contents}</Content>
+      <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
       {box === true ? (
         <ChatBox>
           <BtnBox>
@@ -158,7 +137,6 @@ const RecruitDetail = () => {
               </span>
             </ChatBtn>
           </BtnBox>
-
           <InfoAll>
             <Info>
               <InfoUser>
@@ -215,48 +193,34 @@ const RecruitDetail = () => {
   );
 };
 
-const Header = styled.div`
-  display: flex;
-  width: 83%;
-  height: 70px;
-  margin: 7% 5% 0 5%;
-`;
-
-const HeadBtn = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const Back = styled.img`
-  height: 30%;
-  margin-left: 6%;
-  margin-top: 1%;
-`;
-
-const HeadTitle = styled.div`
-  text-align: center;
+const BobbleBox = styled.div``;
+const Bubble = styled.div`
+  position: absolute;
   width: 40%;
-  margin-left: 29%;
-  margin-top: 1%;
-
-  /* margin-top: -50px; */
-
-  p {
-    margin: 1.5%;
-    font-size: 1.65rem;
+  right: 5%;
+`;
+const Icon = styled.div`
+  font-size: 3rem;
+  color: #666;
+  cursor: pointer;
+`;
+const Header = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6.5% 2%;
+  .subtitle {
+    color: #666;
+    font-size: 2rem;
     font-weight: bold;
-  }
-
-  span {
-    font-size: 1.2rem;
-    opacity: 0.6;
   }
 `;
 
 const All = styled.div`
+  color: #666;
   margin: 0 10% 0 10%;
-  height: 40vh;
+
   width: 80%;
 `;
 
@@ -264,6 +228,7 @@ const UserInfo = styled.div`
   display: flex;
   width: 100%;
   height: 30px;
+  margin-bottom: 5%;
 `;
 
 const User = styled.div`
@@ -281,14 +246,15 @@ const UserName = styled.span`
   font-size: 1.4rem;
   width: 70%;
   margin: 5%;
+  color: #666;
 `;
 
 const JumMom = styled.div`
   position: relative;
-  font-size: 25px;
+  font-size: 1.5625rem;
   opacity: 0.6;
   z-index: 10;
-  width: 50%;
+  width: 90%;
 `;
 
 const ImgBox = styled.div`
@@ -308,12 +274,15 @@ const ImgBox = styled.div`
 `;
 
 const Content = styled.p`
-  width: 90%;
-  margin-left: 4%;
+  width: 80%;
+
+  margin-left: 10%;
   margin-top: 2%;
   margin-bottom: 2%;
   line-height: 1.8;
-  font-size: clamp(8px, 3.6vw, 20px);
+  font-size: 1.45rem;
+  color: #666;
+  overflow: auto;
 `;
 
 const ChatBox = styled.div`
@@ -324,12 +293,13 @@ const ChatBox = styled.div`
   bottom: 5.625rem;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 100;
+  z-index: 99;
   /* background-color: white; */
 `;
 
 const BtnBox = styled.div`
   height: 4rem;
+  background-color: transparent;
 `;
 
 const ChatBtn = styled.button`
@@ -347,6 +317,7 @@ const ChatBtn = styled.button`
 `;
 
 const InfoAll = styled.div`
+  color: #666;
   box-shadow: 0 -5px 10px -4px gray;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
@@ -354,6 +325,7 @@ const InfoAll = styled.div`
   width: 100%;
   padding: 0 10% 0 10%;
   display: block;
+  background-color: white;
 `;
 
 const Info = styled.div`
@@ -410,16 +382,18 @@ const Gu = styled.div`
 `;
 
 const JengBo = styled.div`
-  background-color: transparent;
+  color: #666;
+  background-color: white;
   position: fixed;
   width: 100%;
   max-width: 600px;
-  height: 30%;
-  bottom: 5.625rem;
+  height: 32%;
+  bottom: 5.45rem;
   left: 50%;
   transform: translate(-50%, 0);
-  z-index: 1000;
-  border-radius: 30px;
+  z-index: 99;
+  border-top-right-radius: 30px;
+  border-top-left-radius: 30px;
   box-shadow: 0 -5px 10px -4px gray;
 `;
 

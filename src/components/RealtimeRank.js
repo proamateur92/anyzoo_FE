@@ -23,8 +23,7 @@ const RealTimeRank = () => {
   return (
     <RealTimeRanking>
       <RealTimeTopRanker>
-        <RankerPreview
-          img={rankers[0]?.img[0]?.url}
+        <RankerPreview img={rankers[0]?.img[0]?.url}
           onClick={() => navigate('/post/detail/' + rankers[0].boardMainId)}
         />
         <span>vs</span>

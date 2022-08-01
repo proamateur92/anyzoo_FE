@@ -49,7 +49,7 @@ const CommunityWrite = () => {
 
       console.log(data);
       dispatch(addDataDB(data));
-    } else {
+    } else if (img.length === 0 && !!contentRef.current.value) {
       const data = {
         // title: titleRef.current.value,
         content: contentRef.current.value,
@@ -99,8 +99,7 @@ const CommunityWrite = () => {
       <InputBox>
         {/* <p>게시글 제목</p>
         <input type="text" ref={titleRef} /> */}
-        <p>사진 첨부 (최대 5장)</p>
-
+        <p>사진 첨부 (최대 5장, 선택사항)</p>
         <Preview>
           {showImages &&
             showImages.map((image, id) => {
@@ -131,8 +130,8 @@ const CommunityWrite = () => {
           )}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content ref={contentRef} />
+        <p>게시글 내용(1000자 이내,선택사항)</p>
+        <Content maxLength={1000} ref={contentRef} />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={addPost}>작성하기</AddBtn>
@@ -229,6 +228,8 @@ const DeleteImg = styled.button`
 
 const Content = styled.textarea`
   border: none;
+  outline: none;
+  padding: 5%;
   width: 100%;
   height: 50%;
   margin: 0.3125rem 0 0;

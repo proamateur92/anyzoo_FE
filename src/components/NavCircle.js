@@ -4,11 +4,12 @@ import React, { useCallback } from "react";
 import Portal from "../elements/Portal";
 
 // style
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiDribbble } from "react-icons/fi";
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
+import { history } from '../shared/history'
 
 // redux
 import { useSelector } from "react-redux";
@@ -21,6 +22,24 @@ const NavCircle = (props) => {
   const userInfo = useSelector((state) => state.user.info);
   const [plusOpen, setPlusOpen] = React.useState(false);
   const [writeOpt, setWriteOpt] = React.useState(null);
+
+    // 뒤로가기시 닫히도록 제어
+    React.useEffect(()=>{
+      const listenBackEvent = () => {
+        document.body.style.overflow = "unset";
+        setCircleOn(false);
+        navigate(1)
+      }
+  
+      const unlistenBackEvent = history.listen( ({ action }) => {
+        if (action === 'POP') {
+          listenBackEvent()
+        }
+      })
+
+      return unlistenBackEvent;
+    },[])
+  
 
   React.useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -87,7 +106,7 @@ const NavCircle = (props) => {
             <FiPlus />
           </Center>
 
-          <Menu order={0} onClick={() => moveTo("/")}>
+          <Menu order={0} onClick={() => window.alert("준비중인 메뉴입니다")}>
             <FiMessageSquare className={"icons"} />
             <h5> 채팅 </h5>
           </Menu>
@@ -159,19 +178,30 @@ const WriteMenu = styled.div`
   }
 `;
 
+const OpenAnimation = keyframes`
+0% {
+  width: 8rem;
+  height: 8rem;
+  margin-bottom: -20%;
+}
+100% {
+  margin-bottom: -5%;
+}
+`
+
 const MenuCircle = styled.div`
-  width: 60%;
-  min-width: 180px;
-  height: 60vw;
-  min-height: 180px;
-  max-height: ${600 * 0.6}px;
-  border-radius: 600px;
+  width: 22.5rem;
+  height: 22.5rem;
+  border-radius: 60rem;
   background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: -5%;
   position: relative;
+
+  animation: ${OpenAnimation} 0.2s ease-in ;
+  animation-iteration-count: 1;
 `;
 
 const Center = styled.div`

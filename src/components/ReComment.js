@@ -3,6 +3,7 @@ import React from "react";
 // style
 import styled from "styled-components";
 
+// axios
 import instance from "../shared/axios";
 
 //element
@@ -15,6 +16,7 @@ const ReComment = (props) => {
   const originalData = props.originalData;
   const commentId = props.originalData.id;
   const setOpenReplies = props.setOpenReplies;
+  const setReplyLength = props.setReplyLength
   const commentRef = React.useRef();
   const [btnChange, setBtnChange] = React.useState(false);
 
@@ -25,6 +27,11 @@ const ReComment = (props) => {
   const loadReplies = () => {
     instance.get("/api/reply/" + commentId).then((res) => {
       setReplyList(res.data);
+        if (res.data.length < 100) {
+          setReplyLength(res.data.length);
+        } else {
+          setReplyLength('99+');
+        }
     });
   }
 
@@ -40,9 +47,10 @@ const ReComment = (props) => {
   const addComment = async () => {
     if (commentRef.current.value) {
       instance.post("/api/reply/" + commentId, { reply: commentRef.current.value })
-      .then(loadReplies());
+      .then(() => loadReplies());
       commentRef.current.value = "";
       setBtnChange(false);
+      setReplyLength((prev) => prev+1)
     } else {
       window.alert("댓글을 입력해주세요!");
     }

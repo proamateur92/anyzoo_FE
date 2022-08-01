@@ -37,29 +37,33 @@ const PostWrite = () => {
     window.URL.revokeObjectURL(showImages);
     e.preventDefault();
     console.log(getImages);
-    let img = getImages;
-    const formData = new FormData();
+    if (getImages <= 0 || !select || !contentRef.current.value) {
+      window.alert("이미지 및 빈칸을 모두 채워주세요");
+    } else {
+      let img = getImages;
+      const formData = new FormData();
 
-    for (let i = 0; i < img.length; i++) {
-      //  console.log(img[i])
-      formData.append("file", img[i]);
-      // files.push(img[i])
+      for (let i = 0; i < img.length; i++) {
+        //  console.log(img[i])
+        formData.append("file", img[i]);
+        // files.push(img[i])
+      }
+      // console.log(img[i], "뭐냐")
+      // console.log(files)
+
+      // formData.append("file", img)
+
+      const response = await instance.post("/api/post/image", formData);
+      console.log(response.data);
+
+      const data = {
+        categoryName: select,
+        content: contentRef.current.value,
+        postImages: response.data,
+      };
+      console.log(data);
+      dispatch(addDataDB(data));
     }
-    // console.log(img[i], "뭐냐")
-    // console.log(files)
-
-    // formData.append("file", img)
-
-    const response = await instance.post("/api/post/image", formData);
-    console.log(response.data);
-
-    const data = {
-      categoryName: select,
-      content: contentRef.current.value,
-      postImages: response.data,
-    };
-    console.log(data);
-    dispatch(addDataDB(data));
   };
 
   const handelAddImg = (e) => {
@@ -137,8 +141,8 @@ const PostWrite = () => {
           )}
         </Preview>
 
-        <p>게시글 내용</p>
-        <Content ref={contentRef} />
+        <p>게시글 내용(1000자이내)</p>
+        <Content maxLength={1000} ref={contentRef} />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={addPost}>작성하기</AddBtn>
@@ -244,6 +248,8 @@ const DeleteImg = styled.button`
 
 const Content = styled.textarea`
   border: none;
+  outline: none;
+  padding: 5%;
   width: 100%;
   height: 40%;
   margin: 0.3125rem 0 0;

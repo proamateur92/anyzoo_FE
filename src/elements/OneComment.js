@@ -18,26 +18,26 @@ const OneComment = (props) => {
   const data = props.commentData;
   const commentRef = React.useRef(null);
   const [openReplies, setOpenReplies] = React.useState(null);
-  const [replyList, setReplyList] = React.useState(null);
   const [replyLength, setReplyLength] = React.useState(0);
+  const [content, setContent] = React.useState(null);
+  const [available, setAvailable] = React.useState(true);
   const isReply = props.isReply;
   const blockReply = props.blockReply
 
-  // 대댓글리스트
+  // 대댓글숫자 받아오기
   React.useEffect(() => {
     if (!isReply) {
       instance.get("/api/reply/" + data.id).then((res) => {
-        setReplyList(res);
-
         if (res.data.length < 100) {
           setReplyLength(res.data.length);
         } else {
           setReplyLength('99+');
         }
-        
       });
     }
-  }, [isReply, data.id]);
+    setContent(isReply ? data.reply : data.comment)
+  }, [isReply, data.id, data.reply, data.comment]);
+
 
   // 오늘 날짜 구해오기
   const today = new Date();
@@ -63,9 +63,10 @@ const OneComment = (props) => {
   const deleteComment = async () => {
     if (!isReply && data.userNickname === user.nickname) {
       await dispatch(deleteCommentDB(data.id));
-      // dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
+      setAvailable(false)
     } else if (isReply && data.userNickname === user.nickname) {
       await instance.delete("/api/reply/edit/" + data.id);
+      setAvailable(false)
     } else {
       window.alert("작성자만 삭제할수 있어요");
     }
@@ -90,13 +91,14 @@ const OneComment = (props) => {
           comment: commentRef.current.value,
         })
       );
-      // dispatch(loadCommentsDB({ postId: postId, pgNo: 0 }));
     } else if (isReply && commentRef.current.value !== "") {
       await instance.patch("/api/reply/edit/" + data.id, { reply: commentRef.current.value });
+      
     } else {
       window.alert("내용을 입력해주세요");
     }
 
+    setContent(commentRef.current.value)
     commentRef.current.value = "";
     setIsEdit(false);
     setIsEditOptOpen(false);
@@ -107,9 +109,9 @@ const OneComment = (props) => {
       commentRef.current.value = isReply ? data.reply : data.comment;
       commentRef.current.focus();
     }
-  }, [isEdit, data.comment]);
+  }, [isEdit, isReply, data.comment, data.reply]);
 
-  return (
+  return available ?(
     <CommentWrap>
       <UserInfo>
         <ProfileImg img={data.userUserImage?.url} />
@@ -126,14 +128,14 @@ const OneComment = (props) => {
       ) : (
         <Content>
           <TextBubble onClick={() => openEditOpt()}>
-            <span> {isReply ? data.reply : data.comment} </span>
+            <span> {content} </span>
           </TextBubble>
           <Time> {createdAtDisplay} </Time>
           {isReply || blockReply ? null : <Replies onClick={() => setOpenReplies(!openReplies)}> 답글 {replyLength} </Replies>}
         </Content>
       )}
 
-      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies}/> : null}
+      {openReplies ? <ReComment originalData={data} setOpenReplies={setOpenReplies} setReplyLength={setReplyLength}/> : null}
 
       {isEditOptOpen ? (
         <EditOption>
@@ -143,7 +145,7 @@ const OneComment = (props) => {
         </EditOption>
       ) : null}
     </CommentWrap>
-  );
+  ) : null;
 };
 
 const CommentWrap = styled.div`
@@ -187,6 +189,7 @@ const TextBubble = styled.div`
   max-width: 61.9%;
   padding: 5.13%;
   border-radius: 0rem 2rem 2rem 2rem;
+  word-break: break-all;
   cursor: pointer;
 
   span {
