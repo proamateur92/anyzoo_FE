@@ -23,10 +23,11 @@ const TogetherCard = (props) => {
       ? createdAt?.split("T")[0].substr(5)
       : createdAt?.split("T")[1].substr(0, 5);
 
+      
   return (
     <CardOuter>
       <FindMate onClick={() => navigate("/recruit/detail/" + data.boardMainId)}>
-        <CardImg />
+        <CardImg img={data.img[0]?.url}/>
 
         <CardContent>
           <Title>
@@ -44,7 +45,6 @@ const TogetherCard = (props) => {
               <span className="address">#{data?.provinceName}</span>
             </div>
             <span>
-              {" "}
               <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}
             </span>
           </AdditionalInfo>
@@ -82,7 +82,7 @@ const CardImg = styled.div`
   width: 30%;
   min-width: 30%;
   padding-top: 30%;
-  background: url("https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png");
+  background: url(${(props) => props.img ? props.img : "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdCUQ7g%2FbtrHpn7Oxdq%2Fb5VN04Jr1ukG5rTvrWT8O0%2Fimg.png"});
   background-size: cover;
   background-position: center;
   border-radius: 2rem;
