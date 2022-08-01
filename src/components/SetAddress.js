@@ -48,7 +48,7 @@ const SetAddress = (props) => {
         </SelectArrow>
 
         <select onChange={(e)=>changeProv(e)}>
-          <option value="all">ㅇㅇ동</option>
+          <option value="all">읍/면/동</option>
           {provinceList?.map((prov) => (
             <option key={prov.provinceId} value={prov.provinceId}>
             {prov.provinceName}
