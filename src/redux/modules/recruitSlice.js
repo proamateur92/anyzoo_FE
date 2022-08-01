@@ -9,9 +9,9 @@ export const loadPostsDB = createAsyncThunk(
   "recruit/loadPost",
   async (pageInfo) => {
     const url =
-      pageInfo.provinceId === "all" || pageInfo.cityId === "all"
-        ? "/api/together"
-        : "/api/together/category/" + pageInfo.provinceId;
+      pageInfo.cityId === "all" ? "/api/together"
+        : pageInfo.provinceId === "all" ? "/api/together/category/city/" + pageInfo.cityId
+        : "/api/together/category/province/" + pageInfo.provinceId;
 
     const response = await instance
       .get(`${url}?page=${pageInfo.page}`)

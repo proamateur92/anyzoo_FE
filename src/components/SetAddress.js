@@ -22,14 +22,17 @@ const SetAddress = (props) => {
   }, []);
 
   const changeCity = (e) => {
-    setCity(e.target.value)
+    setCity(() => e.target.value)
+    setProvince(() => 'all')
     const cityId = e.target.value
-    instance.get('/api/together/province/'+cityId).then((res) => setProvinceList(res.data))
+    if (e.target.value !== 'all') {
+      instance.get('/api/together/province/'+cityId).then((res) => setProvinceList(res.data))
+    }
     setPage(()=>0)
   };
 
   const changeProv = (e) => {
-    setProvince(e.target.value)
+    setProvince(() => e.target.value)
   }
 
   return (

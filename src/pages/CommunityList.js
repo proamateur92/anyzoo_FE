@@ -64,16 +64,19 @@ const CommunityList = ( props ) => {
       }
     }, [page, dispatch, isLastPg, type, city, province]);
 
-
-
+    // 카테고리 이동
+    const changeCategory = (address) => {
+      window.scrollTo(0, 0);
+      navigate(address)
+    }
 
   return (
     <Wrap>
       <Header type={type}>
-        <div id="together" onClick={() => navigate("/together")}>
+        <div id="together" onClick={() => changeCategory("/together")}>
           함께하개
         </div>
-        <div id="community" onClick={() => navigate("/community")}>
+        <div id="community" onClick={() => changeCategory("/community")}>
           커뮤니티
         </div>
       </Header>
