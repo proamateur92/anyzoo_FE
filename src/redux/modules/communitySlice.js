@@ -4,25 +4,30 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 //axios
 import instance from "../../shared/axios";
 
+// sweetalert
+import Swal from "sweetalert2";
 
 // 리스트 불러오기
-export const loadPostsDB = createAsyncThunk(
-  "community/loadPost",
-  async (page) => {
-    const response = await instance
-      .get(`/api/community?page=${page}`)
-      .catch((err) => console.log(err));
-     return response.data;
-  }
-);
+export const loadPostsDB = createAsyncThunk("community/loadPost", async (page) => {
+  const response = await instance.get(`/api/community?page=${page}`).catch((err) => console.log(err));
+  return response.data;
+});
 
 // 자랑하기 글 작성
 export const addDataDB = createAsyncThunk("addData", async (data) => {
   const response = await instance
     .post("/api/community", data)
     .then((res) => {
-      window.alert("추가되었습니다");
-      window.location.replace("/community");
+      Swal.fire({
+        title: "추가되었습니다",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.replace("/community");
+        }
+      });
     })
     .catch((err) => console.log(err));
   const newCommunity = { ...data, boardmainId: response.data.boardMainId };
@@ -35,8 +40,16 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   await instance
     .patch("/api/community/" + newData.id, newData.data)
     .then((res) => {
-      window.alert("수정되었습니다");
-      window.location.replace("/community");
+      Swal.fire({
+        title: "수정되었습니다",
+        icon: "success",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.replace("/community");
+        }
+      });
     })
     .catch((err) => console.log(err));
   return newData;
@@ -45,8 +58,16 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
 // 글 삭제
 export const removeDataDB = createAsyncThunk("removeData", async (id) => {
   await instance.delete("/api/community/" + id);
-  window.alert("삭제되었습니다");
-  window.location.replace("/community");
+  Swal.fire({
+    title: "삭제되었습니다",
+    icon: "success",
+    confirmButtonText: "확인",
+    confirmButtonColor: "#44DCD3",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.replace("/community");
+    }
+  });
   return id;
 });
 
@@ -60,7 +81,6 @@ const postSlice = createSlice({
   },
 
   extraReducers: {
-    
     // 불러오기
     [loadPostsDB.fulfilled]: (state, { payload }) => {
       if (payload.pageable.pageNumber === 0) {
