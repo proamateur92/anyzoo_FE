@@ -1,42 +1,49 @@
+// sweetalert
+import Swal from "sweetalert2";
+
 // redux-toolkit
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import instance from '../../shared/axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import instance from "../../shared/axios";
 
+export const loadCommentsDB = createAsyncThunk("loadComment", async (data) => {
+  const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}`).catch((err) => console.log(err));
+  return { list: response.data, pgNo: data.pgNo };
+});
 
-export const loadCommentsDB = createAsyncThunk(
-  'loadComment', async ( data ) => {
-    const response = await instance.get(`/api/comment/${data.postId}?page=${data.pgNo}` ).catch((err) => console.log(err))
-    return {list: response.data, pgNo: data.pgNo}
-  }
-);
+export const addCommentDB = createAsyncThunk("addComment", async (commentData) => {
+  const response = await instance.post("/api/comment/" + commentData.postId, { comment: commentData.comment });
+  const newComment = { ...commentData, id: response.data.data, createdAt: "작성방금 전" };
+  return newComment;
+});
 
-export const addCommentDB = createAsyncThunk(
-  'addComment',
-  async (commentData) => {
-    const response = await instance.post('/api/comment/' + commentData.postId, {comment: commentData.comment})
-    const newComment = {...commentData, id:response.data.data, createdAt:'작성방금 전'}
-    return newComment;
-  }
-);
- 
-export const editCommentDB = createAsyncThunk('editComment', async (commentData) => {
+export const editCommentDB = createAsyncThunk("editComment", async (commentData) => {
   console.log(commentData);
-  await instance.patch('/api/comment/edit/' + commentData.commentId, { comment: commentData.comment });
-  window.alert('수정되었습니다');
+  await instance.patch("/api/comment/edit/" + commentData.commentId, { comment: commentData.comment });
+  Swal.fire({
+    title: "수정되었습니다",
+    icon: "success",
+    confirmButtonText: "확인",
+    confirmButtonColor: "#44DCD3",
+  });
   return commentData;
 });
 
-export const deleteCommentDB = createAsyncThunk('deleteComment', async (commentId) => {
+export const deleteCommentDB = createAsyncThunk("deleteComment", async (commentId) => {
   await instance.delete(`/api/comment/edit/${commentId}`);
-  window.alert('삭제되었습니다');
+  Swal.fire({
+    title: "삭제되었습니다",
+    icon: "success",
+    confirmButtonText: "확인",
+    confirmButtonColor: "#44DCD3",
+  });
   return commentId;
 });
 
 const commentSlice = createSlice({
-  name: 'comment',
+  name: "comment",
   initialState: {
     list: [],
-    isLast: false
+    isLast: false,
   },
   reducers: {},
   extraReducers: {
@@ -46,7 +53,7 @@ const commentSlice = createSlice({
       } else {
         state.list = [...state.list, ...payload.list.comments];
       }
-      state.isLast = payload.list.last
+      state.isLast = payload.list.last;
     },
     [addCommentDB.fulfilled]: (state, { payload }) => {
       state.list = [payload, ...state.list];

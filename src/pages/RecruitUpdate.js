@@ -125,19 +125,9 @@ const RecruitUpdate = () => {
         </Location>
 
         <p>게시물 제목(10자 이내)</p>
-        <input
-          maxLength={10}
-          ref={titleRef}
-          type="text"
-          defaultValue={data?.title}
-        />
+        <input maxLength={10} ref={titleRef} type="text" defaultValue={data?.title} />
         <p>인원 설정</p>
-        <People
-          onClick={numbers}
-          onChange={count}
-          defaultValue={data?.limitPeople}
-          ref={numberRef}
-        >
+        <People onClick={numbers} onChange={count} defaultValue={data?.limitPeople} ref={numberRef}>
           <option disabled value="none">
             인원수
           </option>
@@ -159,12 +149,7 @@ const RecruitUpdate = () => {
           })}
         </People>
         <p>날짜 설정</p>
-        <DatePut
-          onChange={dates}
-          type="datetime-local"
-          ref={dateRef}
-          defaultValue={data?.dday}
-        ></DatePut>
+        <DatePut onChange={dates} type="datetime-local" ref={dateRef} defaultValue={data?.dday}></DatePut>
         <p>첨부 사진 보기(수정X)</p>
         <Preview>
           {data?.img.map((v, id) => {
@@ -176,11 +161,7 @@ const RecruitUpdate = () => {
           })}
         </Preview>
         <p>게시글 내용(1000자이내)</p>
-        <Content
-          maxLength={1000}
-          ref={contentRef}
-          defaultValue={data?.contents}
-        />
+        <Content maxLength={1000} ref={contentRef} defaultValue={data?.contents} />
         <ButtonBox>
           <CancelBtn onClick={() => navigate("/post")}>취소</CancelBtn>
           <AddBtn onClick={updateRecruit}>수정하기</AddBtn>
@@ -218,7 +199,7 @@ const InputBox = styled.div`
   }
   input {
     font-size: clamp(8px, 3.67vw, 16px);
-    opacity: 30%;
+    opacity: 0.3;
     padding: 0.1875rem;
     width: 100%;
     height: 6%;

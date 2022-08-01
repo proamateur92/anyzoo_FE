@@ -286,9 +286,8 @@ const Mypage = () => {
         confirmButtonText: "확인",
         confirmButtonColor: "#44DCD3",
       });
-      nickname && dispatch(updateUserNicknameDB({ nickname }));
       navigate(`/mypage/${nickname}`);
-      setNewUserInfo({ ...newUserInfo, nickname });
+      nickname && dispatch(updateUserNicknameDB({ nickname }));
     } catch (error) {
       console.log(error);
     }
