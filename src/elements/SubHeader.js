@@ -20,7 +20,7 @@ export default SubHeader;
 const HeaderWrap = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 15vh;
+  height: 7.54vh;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   font-size: 1.8rem;
   white-space: nowrap;
