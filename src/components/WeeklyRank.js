@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 const WeeklyRank = () => {
   const navigate = useNavigate();
   const [category, setCategory] = React.useState("cute");
-  const [list, setList] = React.useState([null, null, null]);
+  const [list, setList] = React.useState([]);
   const [mostVotes, setMostVotes] = React.useState(0);
 
   React.useEffect(() => {

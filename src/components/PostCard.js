@@ -26,6 +26,12 @@ const PostCard = (props) => {
 
   const cardWrapRef = React.useRef();
 
+  const tagColor = 
+    postData.postCategory === 'CUTE' ? '#FC68A6'
+    : postData.postCategory === 'PRETTY' ? '#6946B2' 
+    : postData.postCategory === 'COOL' ? '#3EB4F6'
+    : postData.postCategory === 'COMIC' ? '#B7D114' : '#FFB076'
+
   const menuOpen = () => {
       setBubbleOn(!bubbleOn);
   };
@@ -37,7 +43,7 @@ const PostCard = (props) => {
           <UserInfo>
             <UserProfile img={postData.userProfileImg}/>
             <p>
-              <span className="grade"> Purple </span>
+              <Grade className="grade" tagColor={tagColor}> {postData.postCategory} </Grade>
               {postData.nickname}
             </p>
           </UserInfo>
@@ -115,17 +121,17 @@ const UserInfo = styled.span`
     display: flex;
     align-items: center;
   }
+`;
 
-  .grade {
-    background: #6946b2;
+const Grade = styled.span`
+    background-color: ${(props) => props.tagColor ?  props.tagColor : '#6946B2' };
     color: white;
     font-size: 1rem;
     font-weight: 100;
-    padding: 0.29rem 0.8rem 0.41rem 0.9rem;
+    padding: 0.42rem 0.8rem 0.41rem 0.9rem;
     border-radius: 3rem;
     margin-right: 0.6rem;
-  }
-`;
+`
 
 const UserProfile = styled.span`
   width: 10%;

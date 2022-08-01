@@ -2,7 +2,6 @@ import React from "react";
 
 // style
 import styled from "styled-components";
-
 import TogetherCard from '../components/TogetherCard';
 
 import { useSelector, useDispatch } from "react-redux";

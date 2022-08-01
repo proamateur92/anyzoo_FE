@@ -2,7 +2,7 @@
 import React from "react";
 
 // style
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 // route
 import { useNavigate } from "react-router-dom"
@@ -47,6 +47,15 @@ const Drawers = (props) => {
 
 export default Drawers 
 
+const OpenAnimation = keyframes`
+0% {
+  bottom: -80vh;
+}
+100% {
+  bottom: 0;
+}
+`
+
 const DrawerWrapper = styled.div`
   width: 100%;
   height: 88vh;
@@ -61,6 +70,9 @@ const DrawerWrapper = styled.div`
   margin: auto;
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 3rem 3rem 0 0 ;
+
+  animation: ${OpenAnimation} 0.4s ease-in ;
+  animation-iteration-count: 1;
 `
 
 const BackDrop = styled.div`
