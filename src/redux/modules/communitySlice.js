@@ -39,7 +39,7 @@ export const modifyDataDB = createAsyncThunk("modifyData", async (newData) => {
   console.log(newData.data, "data", newData.id, "id");
   await instance
     .patch("/api/community/" + newData.id, newData.data)
-    .then((res) => {
+    .then(() => {
       Swal.fire({
         title: "수정되었습니다",
         icon: "success",

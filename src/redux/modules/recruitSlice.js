@@ -8,11 +8,13 @@ import instance from "../../shared/axios";
 import Swal from "sweetalert2";
 
 // 리스트 불러오기
-export const loadPostsDB = createAsyncThunk("recruit/loadPost", async (pageInfo) => {
-  const url =
-    pageInfo.provinceId === "all" || pageInfo.cityId === "all"
-      ? "/api/together"
-      : "/api/together/category/" + pageInfo.provinceId;
+export const loadPostsDB = createAsyncThunk(
+  "recruit/loadPost",
+  async (pageInfo) => {
+    const url =
+      pageInfo.cityId === "all" ? "/api/together"
+        : pageInfo.provinceId === "all" ? "/api/together/category/city/" + pageInfo.cityId
+        : "/api/together/category/province/" + pageInfo.provinceId;
 
   const response = await instance.get(`${url}?page=${pageInfo.page}`).catch((err) => console.log(err));
   return response.data;

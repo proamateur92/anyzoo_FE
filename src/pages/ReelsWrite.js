@@ -73,7 +73,6 @@ const ReelsWrite = () => {
     const allowedfile = ['mp4', 'avi', '.mov']
     const typeValidity = allowedfile.includes(uploaded?.type?.split("/")[1]) ;
     const sizeValidity = uploaded?.size < (100*1024*1024);
-    const textValidity = textRef.current.value !== ''
 
     if (typeValidity && sizeValidity) {
       setVideo(uploaded);
@@ -126,13 +125,12 @@ const ReelsWrite = () => {
       categoryName: 'cute'
     }
     instance.patch('/api/reels/' + params.id, newData).then((res) => {
-      if (res.status === 200) {
         window.alert('수정 성공!')
         navigate('/reels/'+res.data.data.boardMainId)
-      } else {
-        window.alert('문제가 발생하였습니다')
-      }
-    }).catch((err) => console.log(err));
+    }).catch((err) => {
+      window.alert('문제가 발생하였습니다')
+      console.log(err);
+    });
   }
 
   const getDuration = (e) => {

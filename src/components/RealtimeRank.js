@@ -66,7 +66,7 @@ const RankerPreview = styled.div`
   width: 43.33%;
   padding-top: 43.33%;
   border-radius: 200px;
-  background: ${(props) => props.img ? `url(${props.img})` : '#ddd'};
+  background: url(${(props) => props.img ? props.img : 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F247za%2FbtrIyZr7Y3Q%2FaD8KI3MbFUTW3gl0SHe7hk%2Fimg.png'});
   background-size: cover;
   background-position: center;
   cursor: pointer;
