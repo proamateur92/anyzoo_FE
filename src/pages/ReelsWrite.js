@@ -38,7 +38,6 @@ const ReelsWrite = () => {
   const endPtRef = React.useRef();
   const [startPoint, setStartPoint] = React.useState(0);
   const [endPoint, setEndPoint] = React.useState(15);
-
   const [spinnerOn, setSpinnerOn] = React.useState(null);
 
   // 새로 작성인지, 수정인지 판별
@@ -71,17 +70,20 @@ const ReelsWrite = () => {
 
   const addVideo = (e) => {
     const uploaded = e.target?.files[0];
-    const allowedfile = ['mp4', 'avi']
+    const allowedfile = ['mp4', 'avi', '.mov']
     const typeValidity = allowedfile.includes(uploaded?.type?.split("/")[1]) ;
     const sizeValidity = uploaded?.size < (100*1024*1024);
+    const textValidity = textRef.current.value !== ''
 
-    if (typeValidity && sizeValidity) {
+    if (typeValidity && sizeValidity && textValidity) {
       setVideo(uploaded);
       setVideoUrl(URL.createObjectURL(uploaded));
     } else if (!typeValidity) {
       window.alert(allowedfile.join(', ')+" 파일만 업로드 가능합니다");
     } else if (!sizeValidity) {
       window.alert("100MB 이하의 파일로 올려주세요");
+    } else if (!textValidity) {
+      window.alert("내용을 입력해주세요!")
     }
   };
 
@@ -95,7 +97,8 @@ const ReelsWrite = () => {
     const videoData = 
       await instance.post("/api/upload", formData)
       .catch((err)=> {
-        window.alert('문제가 발생하였습니다')
+        // window.alert('문제가 발생하였습니다')
+        window.alert(err)
         setSpinnerOn(()=>false)
         console.log(err);        
       });
@@ -114,7 +117,8 @@ const ReelsWrite = () => {
         navigate('/reels')
       }})
       .catch((err) => {
-        window.alert('문제가 발생하였습니다')
+        window.alert(err)
+        // window.alert('문제가 발생하였습니다')
         setSpinnerOn(()=>false)
         console.log(err);
       });

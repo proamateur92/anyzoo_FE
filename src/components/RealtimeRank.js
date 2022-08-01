@@ -14,6 +14,8 @@ import styled from "styled-components";
 const RealTimeRank = () => {
   const navigate = useNavigate();
   const [rankers, setRankers] = React.useState([null, null]);
+  const firstCount = rankers[0]?.likeCnt ? rankers[0]?.likeCnt : 0
+  const secondCount = rankers[1]?.likeCnt ? rankers[1]?.likeCnt : 0
 
   React.useState(async () => {
     const list = await instance.get('/api/rank/day').catch((err) => console.log(err));
@@ -33,7 +35,7 @@ const RealTimeRank = () => {
         />
       </RealTimeTopRanker>
 
-      <VoteBar data={rankers} total={rankers[0]?.likeCnt + rankers[1]?.likeCnt}>
+      <VoteBar data={rankers} total={firstCount + secondCount}>
         <div> {rankers[0]?.likeCnt ? rankers[0]?.likeCnt.toLocaleString() : '-'}표 </div>
         <div> {rankers[1]?.likeCnt ? rankers[1]?.likeCnt.toLocaleString() : '-'}표 </div>
       </VoteBar>
