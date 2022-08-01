@@ -8,9 +8,15 @@
   "icons": [
     {
       "src": "/icons/maskable_icon_516x516.png",
-      "sizes": "196x196", 
+      "sizes": "516x516", 
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable_icon_516x516.png",
+      "sizes": "516x516", 
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/icons/apple-touch-icon-57x57.png",
