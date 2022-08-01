@@ -23,7 +23,7 @@ import Comment from "../components/Comment";
 // router
 import { useParams } from "react-router-dom";
 
-const Reels = (props) => {
+const Reels = () => {
   const params = useParams();
   const [reelsData, setReelsData] = React.useState();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -58,7 +58,7 @@ const Reels = (props) => {
       });
     } else {
       instance.get("/api/reels/category/all?page=" + page).then((res) => {
-        setIsLast(() => res.last);
+        setIsLast(() => res.data.last);
         setReelsData(res.data.content[0]);
         window.history.pushState('', '', `/reels/${res.data.content[0].boardMainId}`)
       });
