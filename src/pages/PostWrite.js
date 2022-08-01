@@ -19,6 +19,9 @@ import { useNavigate } from "react-router-dom";
 // axios
 import instance from "../shared/axios";
 
+// sweetalert
+import Swal from "sweetalert2";
+
 const PostWrite = () => {
   const contentRef = useRef();
   const navigate = useNavigate();
@@ -38,7 +41,12 @@ const PostWrite = () => {
     e.preventDefault();
     console.log(getImages);
     if (getImages <= 0 || !select || !contentRef.current.value) {
-      window.alert("이미지 및 빈칸을 모두 채워주세요");
+      Swal.fire({
+        title: "이미지 및 빈칸을 모두 채워주세요",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      });
     } else {
       let img = getImages;
       const formData = new FormData();
@@ -125,12 +133,7 @@ const PostWrite = () => {
             })}
           {showImages.length === 5 ? null : (
             <label onChange={handelAddImg}>
-              <input
-                type="file"
-                id="input-file"
-                multiple
-                style={{ display: "none" }}
-              />
+              <input type="file" id="input-file" multiple style={{ display: "none" }} />
 
               <PlusImgBox>
                 <PlusImg>

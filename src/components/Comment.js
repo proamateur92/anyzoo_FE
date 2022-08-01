@@ -177,7 +177,7 @@ const CommentInput = styled.div`
     outline: none;
     resize: none;
     background-color: #ebebeb;
-    color: #b3b3b3;
+    color: #5e5e5e;
 
     &::placeholder {
       color: #b3b3b3;

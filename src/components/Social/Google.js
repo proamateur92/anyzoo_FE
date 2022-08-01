@@ -30,7 +30,7 @@ const Link = styled.a`
     left: 27%;
     bottom: 28%;
     width: 10%;
-    height: 40%;
+    height: 46%;
   }
 `;
 

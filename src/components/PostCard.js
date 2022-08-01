@@ -49,7 +49,7 @@ const PostCard = (props) => {
           </UserInfo>
 
           <IoMdMore id="optionMenu" onClick={menuOpen} />
-          {bubbleOn ? <EditBubble data={postData} setBubbleOn={setBubbleOn} /> : null}
+          {bubbleOn ? <EditBubble data={postData} setBubbleOn={setBubbleOn}  page={"post"} targetNickname={postData.nickname}/> : null}
         </CardHeader>
 
         <Contents>

@@ -11,6 +11,9 @@ import { addDataDB } from "../redux/modules/recruitSlice";
 import { useNavigate } from "react-router-dom";
 import instance from "../shared/axios";
 
+// sweetalert
+import Swal from "sweetalert2";
+
 const RecruitWrite = () => {
   const contentRef = useRef();
   const titleRef = useRef();
@@ -77,14 +80,13 @@ const RecruitWrite = () => {
     e.preventDefault();
     console.log(getImages);
     let img = getImages;
-    if (
-      !titleRef.current.value ||
-      !contentRef.current.value ||
-      !select ||
-      !date ||
-      !province
-    ) {
-      window.alert("빈칸을 채워주세요");
+    if (!titleRef.current.value || !contentRef.current.value || !select || !date || !province) {
+      Swal.fire({
+        title: "작성되지 않은 항목이 있어요",
+        icon: "warning",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#44DCD3",
+      });
     } else {
       if (img.length > 0) {
         const formData = new FormData();
@@ -273,7 +275,7 @@ const InputBox = styled.div`
   }
   input {
     font-size: 1.2rem;
-    opacity: 20%;
+    opacity: 0.3;
     padding: 0.1875rem;
     width: 100%;
     height: 6%;
@@ -283,7 +285,7 @@ const InputBox = styled.div`
 `;
 const People = styled.select`
   font-size: 1.2rem;
-  opacity: 20%;
+  opacity: 0.4;
   padding: 0.1875rem;
   width: 100%;
   height: 6%;
@@ -293,7 +295,7 @@ const People = styled.select`
 
 const Location = styled.select`
   font-size: 1.2rem;
-  opacity: 20%;
+  opacity: 0.4;
   padding: 0.1875rem;
   width: 47%;
   height: 6%;
@@ -303,7 +305,7 @@ const Location = styled.select`
 
 const DatePut = styled.input`
   font-size: clamp(8px, 3.67vw, 16px);
-  opacity: 20%;
+  opacity: 0.4;
   padding: 0.1875rem;
   width: 18.75rem;
   height: 6%;

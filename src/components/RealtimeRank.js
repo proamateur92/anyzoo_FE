@@ -14,6 +14,8 @@ import styled from "styled-components";
 const RealTimeRank = () => {
   const navigate = useNavigate();
   const [rankers, setRankers] = React.useState([null, null]);
+  const firstCount = rankers[0]?.likeCnt ? rankers[0]?.likeCnt : 0
+  const secondCount = rankers[1]?.likeCnt ? rankers[1]?.likeCnt : 0
 
   React.useState(async () => {
     const list = await instance.get('/api/rank/day').catch((err) => console.log(err));
@@ -33,7 +35,7 @@ const RealTimeRank = () => {
         />
       </RealTimeTopRanker>
 
-      <VoteBar data={rankers} total={rankers[0]?.likeCnt + rankers[1]?.likeCnt}>
+      <VoteBar data={rankers} total={firstCount + secondCount}>
         <div> {rankers[0]?.likeCnt ? rankers[0]?.likeCnt.toLocaleString() : '-'}표 </div>
         <div> {rankers[1]?.likeCnt ? rankers[1]?.likeCnt.toLocaleString() : '-'}표 </div>
       </VoteBar>
@@ -64,7 +66,7 @@ const RankerPreview = styled.div`
   width: 43.33%;
   padding-top: 43.33%;
   border-radius: 200px;
-  background: ${(props) => props.img ? `url(${props.img})` : '#ddd'};
+  background: url(${(props) => props.img ? props.img : 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F247za%2FbtrIyZr7Y3Q%2FaD8KI3MbFUTW3gl0SHe7hk%2Fimg.png'});
   background-size: cover;
   background-position: center;
   cursor: pointer;
