@@ -17,7 +17,7 @@ import ReactPlayer from "react-player/lazy";
 import LoadingSpinner from "../elements/LoadingSpinner";
 
 // icons
-import { FiPlay, FiPause, FiFolderPlus} from "react-icons/fi";
+import { FiPlay, FiPause, FiFolderPlus, FiCamera} from "react-icons/fi";
 import { RiDropFill } from "react-icons/ri";
 
 const ReelsWrite = () => {
@@ -75,15 +75,13 @@ const ReelsWrite = () => {
     const sizeValidity = uploaded?.size < (100*1024*1024);
     const textValidity = textRef.current.value !== ''
 
-    if (typeValidity && sizeValidity && textValidity) {
+    if (typeValidity && sizeValidity) {
       setVideo(uploaded);
       setVideoUrl(URL.createObjectURL(uploaded));
     } else if (!typeValidity) {
       window.alert(allowedfile.join(', ')+" 파일만 업로드 가능합니다");
     } else if (!sizeValidity) {
       window.alert("100MB 이하의 파일로 올려주세요");
-    } else if (!textValidity) {
-      window.alert("내용을 입력해주세요!")
     }
   };
 
@@ -97,8 +95,7 @@ const ReelsWrite = () => {
     const videoData = 
       await instance.post("/api/upload", formData)
       .catch((err)=> {
-        // window.alert('문제가 발생하였습니다')
-        window.alert(err)
+        window.alert('문제가 발생하였습니다')
         setSpinnerOn(()=>false)
         console.log(err);        
       });
@@ -117,8 +114,7 @@ const ReelsWrite = () => {
         navigate('/reels')
       }})
       .catch((err) => {
-        window.alert(err)
-        // window.alert('문제가 발생하였습니다')
+        window.alert('문제가 발생하였습니다')
         setSpinnerOn(()=>false)
         console.log(err);
       });
@@ -191,11 +187,15 @@ const ReelsWrite = () => {
       <Contents>
         {
         isNew ?
-        <div>
+        <UploadDiv>
           <p> 영상 올리기 </p>
-          <LabelIcon htmlFor="videoinput"> <FiFolderPlus/> </LabelIcon>
-          <input id='videoinput' type="file" capture="camera" accept="video/*" onChange={(e) => addVideo(e)} />
-        </div>
+          <div>
+            <LabelIcon htmlFor="fileinput"> <FiFolderPlus/> </LabelIcon>
+            <LabelIcon htmlFor="videoinput"> <FiCamera/> </LabelIcon>
+            <input id='fileinput' type="file" onChange={(e) => addVideo(e)} />
+            <input id='videoinput' type="file" capture="camera" accept="video/*" onChange={(e) => addVideo(e)} />
+          </div>
+        </UploadDiv>
         :null
         }
 
@@ -341,10 +341,20 @@ const Contents = styled.div`
     padding: 1rem;
   }
 
-  #videoinput{
+  .videoinput{
     display:none;
   }
 `;
+
+const UploadDiv = styled.div`
+  div {
+    display: flex;
+  }
+
+  input{
+    display:none;
+  }
+`
 
 const LabelIcon = styled.label`
   background: #e4e4e4;
