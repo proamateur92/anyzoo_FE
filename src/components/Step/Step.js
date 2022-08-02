@@ -994,10 +994,9 @@ const GuideList = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20px;
-    height: 20px;
+    width: 2.5rem;
+    height: 2.5rem;
     margin-right: 2%;
-    line-height: 20px;
     text-align: center;
     border-radius: 50%;
     border: 2px solid #ababab;
@@ -1006,10 +1005,11 @@ const GuideList = styled.div`
   .box.checked {
     &::after {
       content: "✔";
+      width: 100%;
+      height: 50%;
+      padding: 50% 0;
       background-color: ${(props) => props.theme.color.activeBtn};
       color: #ffffff;
-      width: 110%;
-      height: 110%;
       font-size: 1.8rem;
     }
   }
