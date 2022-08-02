@@ -303,6 +303,8 @@ const BtnBox = styled.div`
 `;
 
 const ChatBtn = styled.button`
+  display: flex;
+  justify-content: center;
   height: 100%;
   right: 12%;
   width: 4rem;
