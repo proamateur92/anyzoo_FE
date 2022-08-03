@@ -12,7 +12,14 @@ const GlobalStyles = createGlobalStyle`
     *{
         box-sizing:border-box;
     }
+    *::-webkit-scrollbar {
+        display: none;
+    }
     body{
+        font-family: 'Roboto', sans-serif;
+    }
+    textarea {
+        resize: none;
         font-family: 'Roboto', sans-serif;
     }
     input {
