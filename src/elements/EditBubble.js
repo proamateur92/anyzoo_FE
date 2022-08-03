@@ -131,22 +131,22 @@ const EditBubble = (props) => {
     let msg = "";
     if (type) {
       msg = `${props.targetNickname}님을 팔로잉합니다.`;
+      followAction(type, msg);
     } else {
       msg = `${props.targetNickname}님의 팔로잉을 해제했어요.`;
+      Swal.fire({
+        title: "팔로잉을 해제할까요?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "네",
+        cancelButtonText: "아니요",
+        confirmButtonColor: "#44DCD3",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          followAction(type, msg);
+        }
+      });
     }
-
-    Swal.fire({
-      title: `${type ? "팔로잉할까요?" : "팔로잉을 해제할까요?"}`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "네",
-      cancelButtonText: "아니요",
-      confirmButtonColor: "#44DCD3",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        followAction(type, msg);
-      }
-    });
   };
 
   return (
