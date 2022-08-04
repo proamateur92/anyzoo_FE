@@ -11,6 +11,9 @@ import { addDataDB, removeDataDB } from "../redux/modules/communitySlice";
 import { useNavigate } from "react-router-dom";
 import instance from "../shared/axios";
 
+// imageCompression
+import imageCompression from "browser-image-compression";
+
 const CommunityWrite = () => {
   //   const titleRef = useRef();
 
@@ -61,7 +64,20 @@ const CommunityWrite = () => {
     }
   };
 
-  const handelAddImg = (e) => {
+  // 이미지 리사이즈
+  const compressImage = async (image) => {
+    try {
+      const options = {
+        maxSizeMb: 1,
+        maxWidthOrHeight: 1000,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handelAddImg = async (e) => {
     // console.log(e.target.files, "img")
     const imageLists = e.target.files;
 
@@ -73,7 +89,11 @@ const CommunityWrite = () => {
       const currentImgUrl = URL.createObjectURL(imageLists[i]);
       // console.log(currentImgUrl, "url")
       imageUrlLists.push(currentImgUrl);
-      getImagesLists.push(imageLists[i]);
+
+      // 리사이즈
+      const resizeImageList = await compressImage(imageLists[i]);
+      const resizeImageFile = new File([resizeImageList], resizeImageList.name);
+      getImagesLists.push(resizeImageFile);
     }
 
     if (imageUrlLists.length > 5) {
