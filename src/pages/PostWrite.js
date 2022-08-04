@@ -83,7 +83,7 @@ const PostWrite = () => {
     try {
       const options = {
         maxSizeMb: 1,
-        maxWidthOrHeight: 100,
+        maxWidthOrHeight: 1000,
       };
       return await imageCompression(image, options);
     } catch (e) {
