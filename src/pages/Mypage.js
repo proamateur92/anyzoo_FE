@@ -36,6 +36,9 @@ import { updateUserImageDB, updateUserNicknameDB } from "../redux/modules/userSl
 // redux
 import { useDispatch } from "react-redux";
 
+// imageCompression
+import imageCompression from "browser-image-compression";
+
 const Mypage = () => {
   const dispatch = useDispatch();
   const { nickname } = useParams();
@@ -222,13 +225,31 @@ const Mypage = () => {
     imageData.imageFile && uploadImage();
   }, [imageData]);
 
+  // 이미지 리사이즈
+  const compressImage = async (image) => {
+    try {
+      const options = {
+        maxSizeMb: 1,
+        maxWidthOrHeight: 100,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleEnteredInfo = async (event, type) => {
     setIsClickUpdateBtn(false);
     if (type === "image") {
       const uploadFile = event.target.files[0];
       if (uploadFile) {
         const previewImagePath = URL.createObjectURL(uploadFile);
-        setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
+
+        // 리사이즈
+        const resizeImage = await compressImage(uploadFile);
+        const resizeImageFile = new File([resizeImage], resizeImage.name);
+
+        setImageData({ previewImage: previewImagePath, imageFile: resizeImageFile });
       } else {
         setImageData({ previewImage: "", imageFile: "" });
         return;
@@ -296,8 +317,6 @@ const Mypage = () => {
   };
 
   const changeImage = async (url, id) => {
-    console.log(typeof id);
-    console.log(id);
     try {
       await instance.patch("/api/user/edit/userImage", { userImage: id });
       dispatch(updateUserImageDB({ userImage: url }));

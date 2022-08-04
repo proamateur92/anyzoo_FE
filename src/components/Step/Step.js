@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import StepPassword from "./StepPassword";
 
 // style
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 // image
 import profile from "../../assets/images/noProfile.png";
@@ -18,6 +18,9 @@ import Swal from "sweetalert2";
 // axios
 import instance from "../../shared/axios";
 import StepPhone from "./StepPhone";
+
+// imageCompression
+import imageCompression from "browser-image-compression";
 
 const Step = ({ step, onCountChange, onSignup }) => {
   // 패스워드 일치 여부
@@ -108,6 +111,19 @@ const Step = ({ step, onCountChange, onSignup }) => {
     }
   };
 
+  // 이미지 리사이즈
+  const compressImage = async (image) => {
+    try {
+      const options = {
+        maxSizeMb: 1,
+        maxWidthOrHeight: 100,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // 입력 값 유저 정보 state에 넣기
   const handleEnteredInfo = async (event) => {
     // 이미지 업로드할 때
@@ -116,7 +132,11 @@ const Step = ({ step, onCountChange, onSignup }) => {
 
       if (uploadFile) {
         const previewImagePath = URL.createObjectURL(uploadFile);
-        setImageData({ previewImage: previewImagePath, imageFile: uploadFile });
+        // 리사이즈
+        const resizeImage = await compressImage(uploadFile);
+        const resizeImageFile = new File([resizeImage], resizeImage.name);
+
+        setImageData({ previewImage: previewImagePath, imageFile: resizeImageFile });
       } else {
         setImageData({ previewImage: "", imageFile: "" });
         setUserInfo({ ...userInfo, userImage: "" });
