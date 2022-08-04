@@ -13,7 +13,7 @@ import ReactPlayer from "react-player/lazy";
 
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiAlignJustify,FiVolume2, FiVolumeX } from "react-icons/fi";
 
 //element
 import EditBubble from "../elements/EditBubble";
@@ -35,6 +35,7 @@ const Reels = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [isDetail, setIsDetail] = React.useState(params.id);
   const [drawerOn, setDrawerOn] = React.useState(false);
+  const [soundOn, setSoundOn] = React.useState(true)
 
 
   // 스크롤 금지!
@@ -161,6 +162,12 @@ const Reels = () => {
                 <IoChatbubbleOutline /> {commentCount ? commentCount : 0}
               </span>
 
+             
+
+              <span className="icons" onClick={()=> setSoundOn(!soundOn)}>  
+                { soundOn ? <FiVolume2/> : <FiVolumeX/> }
+              </span>
+
               { drawerOn ?
                 <Drawers setDrawerOn={setDrawerOn}>
                   <CommentWrap>
@@ -190,7 +197,7 @@ const Reels = () => {
           height={"100%"}
           url={reelsData?.video}
           playing={isPlaying}
-          muted={false}
+          muted={!soundOn}
           id="player"
         />
       </VideoClip>
