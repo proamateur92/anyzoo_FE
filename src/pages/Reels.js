@@ -164,6 +164,12 @@ const Reels = () => {
               { drawerOn ?
                 <Drawers setDrawerOn={setDrawerOn}>
                   <CommentWrap>
+                    <OriginalContent>
+                      <UserProfile img={reelsData?.userProfileImg} />
+                      <span>{reelsData?.nickname}</span>
+                      <p>{reelsData?.contents}</p>
+
+                    </OriginalContent>
                     <Comment postId={ reelsData?.boardMainId } blockReply={true} overflow={'overflowScroll'}/>
                   </CommentWrap>
                 </Drawers>
@@ -171,7 +177,7 @@ const Reels = () => {
               }
             </Reactions>
 
-            {menuOpen ? <EditBubble data={reelsData} setBubbleOn={setMenuOpen} /> : null}
+            {menuOpen ? <EditBubble setBubbleOn={setMenuOpen} targetNickname={reelsData?.nickname} /> : null}
             <FiAlignJustify id="seeMore" onClick={() => setMenuOpen(!menuOpen)} />
           </More>
         </InfoBox>
@@ -231,6 +237,7 @@ const UserProfile = styled.span`
   width: 3rem;
   padding-top: 3rem;
   border-radius: 100px;
+  border: 1px solid #eee;
   margin-right: 1rem;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")};
   background-size: cover;
@@ -306,5 +313,17 @@ const Preview = styled.div`
 
 const CommentWrap = styled.div`
   margin-top: 2.5rem;
+`
+
+const OriginalContent =styled.div`
+  width: 85%;
+  margin: auto;
+  color: #333;
+  
+  span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
 
 `
