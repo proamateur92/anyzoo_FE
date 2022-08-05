@@ -7,6 +7,7 @@ import styled from 'styled-components';
 
 const Bubble = (props) => {
   const setBubbleOn = props.setBubbleOn;
+  const direction = props.direction;
 
   const backDropClose = () => {
     setBubbleOn(false);
@@ -14,7 +15,7 @@ const Bubble = (props) => {
 
   return (
     <>
-      <BubbleWrap>
+      <BubbleWrap direction={direction}>
         { props.children }
       </BubbleWrap>
       <BackDrop onClick={backDropClose} />
@@ -37,7 +38,7 @@ const BubbleWrap = styled.div`
   padding: 1.8rem;
   box-sizing: border-box;
   border: 1px solid #ddd;
-  border-radius: 30px 0px 30px 30px;
+  border-radius: ${(props) => props.direction === 'bottom' ? '30px 30px 0px 30px' : '30px 0px 30px 30px'};
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   font-size: 1.6rem;
   text-align: center;
@@ -45,8 +46,8 @@ const BubbleWrap = styled.div`
   background: #fff;
 
   position: absolute;
-  top: 55%;
-  right: 3%;
+  ${(props) => props.direction === 'bottom' ? 'bottom: 15%' : 'top: 55%'};
+  right: ${(props) => props.direction === 'bottom' ? '8%' : '3%'};;
   z-index: 10;
 
   display: flex;

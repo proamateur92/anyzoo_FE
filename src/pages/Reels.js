@@ -49,6 +49,7 @@ const Reels = () => {
     return clearScrollBlock()
   }, []);
 
+
   // 영상 불러오기
   const loadReels = () => {
     if (isDetail) {
@@ -80,11 +81,19 @@ const Reels = () => {
     return () => clearTimeout(coverControl);
   }, [page, params.id]);
 
+  // 재생 바 컨트롤
+  const [duration, setDuration] = React.useState(null);
+  const [currentTime, setCurrentTime] = React.useState(0);
+
+
+  // 영상 재생/멈추기 
   const playVideo = () => {
     setIsPlaying(!isPlaying);
     setShowCover(false);
   };
 
+
+  // 릴스 넘기기
   const moveSlide = (target, endX) => {
     const distance = Math.abs(startX - endX);
 
@@ -121,6 +130,7 @@ const Reels = () => {
       .catch((err) => console.log(err));
   };
 
+  // 릴스 반응 불러오기
   React.useEffect(() => {
     if (reelsData) {
       instance
@@ -144,6 +154,8 @@ const Reels = () => {
         onTouchStart={(e) => setStartX(e.touches[0].clientX)}
         onTouchEnd={(e) => moveSlide(e.target, e.changedTouches[0].clientX)}
       >
+        
+
         <InfoBox>
           <UserInfo>
             <UserProfile img={reelsData?.userProfileImg} />
@@ -162,8 +174,6 @@ const Reels = () => {
                 <IoChatbubbleOutline /> {commentCount ? commentCount : 0}
               </span>
 
-             
-
               <span className="icons" onClick={()=> setSoundOn(!soundOn)}>  
                 { soundOn ? <FiVolume2/> : <FiVolumeX/> }
               </span>
@@ -172,8 +182,10 @@ const Reels = () => {
                 <Drawers setDrawerOn={setDrawerOn}>
                   <CommentWrap>
                     <OriginalContent>
-                      <UserProfile img={reelsData?.userProfileImg} />
-                      <span>{reelsData?.nickname}</span>
+                      <div id="userinfo">
+                        <UserProfile img={reelsData?.userProfileImg} />
+                        <span>{reelsData?.nickname}</span>
+                      </div>
                       <p>{reelsData?.contents}</p>
 
                     </OriginalContent>
@@ -184,12 +196,15 @@ const Reels = () => {
               }
             </Reactions>
 
-            {menuOpen ? <EditBubble setBubbleOn={setMenuOpen} targetNickname={reelsData?.nickname} /> : null}
+            {menuOpen ? 
+              <EditBubble data={reelsData} setBubbleOn={setMenuOpen} targetNickname={reelsData?.nickname} direction={'bottom'}/> 
+            : null}
             <FiAlignJustify id="seeMore" onClick={() => setMenuOpen(!menuOpen)} />
           </More>
         </InfoBox>
       </Cover>
 
+      <PlayBar currentTime={currentTime} duration={duration}/>
       <VideoClip>
         {showCover ? <Preview img={reelsData?.thumbnail} /> : null}
         <ReactPlayer
@@ -198,6 +213,8 @@ const Reels = () => {
           url={reelsData?.video}
           playing={isPlaying}
           muted={!soundOn}
+          onDuration={(e) => setDuration(e)}
+          onProgress={(e) => setCurrentTime(e.playedSeconds)}
           id="player"
         />
       </VideoClip>
@@ -256,11 +273,11 @@ const Texts = styled.p`
   font-size: 1.2rem;
   color: #fff;
   margin-bottom: 1.8rem;
-
+  overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 `;
 
@@ -308,6 +325,15 @@ const VideoClip = styled.div`
   overflow: hidden;
 `;
 
+const PlayBar = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.4rem;
+  width: ${props => (props?.currentTime / props?.duration)*100}%;
+  background: #666;
+`
+
 const Preview = styled.div`
   width: 100%;
   min-width: 100%;
@@ -328,9 +354,21 @@ const OriginalContent =styled.div`
   color: #333;
   
   span {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: #333;
-}
+    display: flex;
+    align-items: center;
+  }
 
+  p{
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  #userinfo{
+    display: flex;
+    margin-bottom: 1rem;
+  }
 `
