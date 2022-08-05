@@ -17,7 +17,7 @@ const PhotoModal = (props) => {
   // 뒤로가기시 닫히도록 제어
   React.useEffect(()=>{
     const listenBackEvent = () => {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "unset";
       setModalOn(false)
       navigate(1)
     }
