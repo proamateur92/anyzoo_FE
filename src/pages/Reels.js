@@ -4,8 +4,8 @@ import Wrap from "../elements/Wrap";
 
 // style
 import styled from "styled-components";
-// import styled, { keyframes } from "styled-components";
 
+// axios
 import instance from "../shared/axios";
 
 // video player
@@ -13,12 +13,13 @@ import ReactPlayer from "react-player/lazy";
 
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
-import { FiAlignJustify,FiVolume2, FiVolumeX } from "react-icons/fi";
+import { FiAlignJustify,FiVolume2, FiVolumeX, FiPlay, FiPause } from "react-icons/fi";
 
-//element
+// element
 import EditBubble from "../elements/EditBubble";
 import Drawers from "../elements/Drawers";
 import Comment from "../components/Comment";
+import SwipeGuide from "../elements/SwipeGuide";
 
 // router
 import { useParams } from "react-router-dom";
@@ -35,7 +36,7 @@ const Reels = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [isDetail, setIsDetail] = React.useState(params.id);
   const [drawerOn, setDrawerOn] = React.useState(false);
-  const [soundOn, setSoundOn] = React.useState(true)
+  const [soundOn, setSoundOn] = React.useState(true);
 
 
   // 스크롤 금지!
@@ -147,6 +148,7 @@ const Reels = () => {
 
   return (
     <Wrap>
+      <SwipeGuide/>
       <Cover
         ref={coverRef}
         onMouseDown={(e) => setStartX(e.clientX)}

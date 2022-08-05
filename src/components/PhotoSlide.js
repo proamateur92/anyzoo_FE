@@ -6,6 +6,8 @@ import { FiMaximize } from 'react-icons/fi';
 
 import PhotoModal from "../elements/PhotoModal";
 
+import SwipeGuide from "../elements/SwipeGuide";
+
 const PhotoSlide = (props) => {
   const photos = props.photos;
   const clickAction = props.clickAction;
@@ -58,6 +60,7 @@ const PhotoSlide = (props) => {
         onTouchStart={(e) => setStartX(e.touches[0].clientX)}
         onTouchEnd={(e) => moveSlide(e, e.changedTouches[0].clientX)}
       >
+        {photos.length > 1 ? <SwipeGuide/> : null}
         {photos.map((v, i) => (
           <Photo key={v.id} img={v.url}>
             <span id="maximize" >

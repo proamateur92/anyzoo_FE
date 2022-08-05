@@ -159,8 +159,4 @@ const InnerWrap = styled.div`
 
 const ScrollDetect = styled.div`
   height: 10px;
-  width: 100%;
-  margin-top: -30vh;
-  padding-top: 30vh;
-  padding-bottom: 20vh;
 `
