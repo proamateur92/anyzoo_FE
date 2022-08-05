@@ -32,6 +32,7 @@ const CommunityList = ( props ) => {
   const listEndRef = React.useRef();
   const [page, setPage] = React.useState(-1);
 
+
     // 페이지인덱스넘버 바꾸기
     const loadinghandler = useCallback(
       (entries) => {
@@ -54,8 +55,9 @@ const CommunityList = ( props ) => {
     }, [loadinghandler]);
 
       // 포스트 로딩
+      
     React.useEffect(() => {
-      if ( page >= 0 && !isLastPg ) {
+      if ( page === 0 || (page > 0 && !isLastPg)) {
         if (type === 'together') {
           const pageInfo = { page: page, provinceId: province, cityId: city };
           dispatch(loadTogether(pageInfo));

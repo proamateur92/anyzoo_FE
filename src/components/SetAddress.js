@@ -33,6 +33,7 @@ const SetAddress = (props) => {
 
   const changeProv = (e) => {
     setProvince(() => e.target.value)
+    setPage(()=>0)
   }
 
   return (
