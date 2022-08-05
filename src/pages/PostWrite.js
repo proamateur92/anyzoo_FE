@@ -10,6 +10,9 @@ import styled from "styled-components";
 //redux
 import { useDispatch } from "react-redux";
 
+// imageCompression
+import imageCompression from "browser-image-compression";
+
 // postSlice
 import { addDataDB } from "../redux/modules/postSlice";
 
@@ -52,7 +55,8 @@ const PostWrite = () => {
       const formData = new FormData();
 
       for (let i = 0; i < img.length; i++) {
-        //  console.log(img[i])
+        console.log("이미지 타입");
+        console.log(img[i]);
         formData.append("file", img[i]);
         // files.push(img[i])
       }
@@ -74,7 +78,20 @@ const PostWrite = () => {
     }
   };
 
-  const handelAddImg = (e) => {
+  // 이미지 리사이즈
+  const compressImage = async (image) => {
+    try {
+      const options = {
+        maxSizeMb: 1,
+        maxWidthOrHeight: 1000,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handelAddImg = async (e) => {
     // console.log(e.target.files, "img")
     const imageLists = e.target.files;
 
@@ -86,7 +103,11 @@ const PostWrite = () => {
       const currentImgUrl = URL.createObjectURL(imageLists[i]);
       // console.log(currentImgUrl, "url")
       imageUrlLists.push(currentImgUrl);
-      getImagesLists.push(imageLists[i]);
+
+      // 리사이즈
+      const resizeImageList = await compressImage(imageLists[i]);
+      const resizeImageFile = new File([resizeImageList], resizeImageList.name);
+      getImagesLists.push(resizeImageFile);
     }
 
     if (imageUrlLists.length > 5) {

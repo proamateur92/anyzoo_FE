@@ -34,6 +34,7 @@ const EditBubble = (props) => {
   const contentsId = props.data?.boardMainId;
   const page = props.page;
   const setBubbleOn = props.setBubbleOn;
+  const direction = props.direction;
   const dispatch = useDispatch();
 
   React.useEffect(() => {
@@ -150,7 +151,7 @@ const EditBubble = (props) => {
   };
 
   return (
-    <Bubble setBubbleOn={setBubbleOn}>
+    <Bubble setBubbleOn={setBubbleOn} direction={direction}>
       {isWriter ? (
         <>
           <Option onClick={(e) => moveToEdit()}> 수정하기</Option>

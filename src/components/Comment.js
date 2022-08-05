@@ -149,7 +149,7 @@ const NoComments = styled.p`
 
 const InputWrapper = styled.div`
   width: 100%;
-  max-width: 599px;
+  max-width: 598px;
   height: 8rem;
   padding: 0 3rem;
   background: #ffffffb3;
@@ -157,6 +157,8 @@ const InputWrapper = styled.div`
   left: 50%;
   transform: translate(-50%, 0);
   bottom: 10vh;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
 `
 
 const CommentInput = styled.div`

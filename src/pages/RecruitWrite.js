@@ -5,6 +5,9 @@ import styled from "styled-components";
 //react
 import React, { useEffect, useRef, useState } from "react";
 
+// imageCompression
+import imageCompression from "browser-image-compression";
+
 //redux
 import { useDispatch } from "react-redux/es/exports";
 import { addDataDB } from "../redux/modules/recruitSlice";
@@ -47,7 +50,7 @@ const RecruitWrite = () => {
     // console.log(e.target.value)
     let num = [];
 
-    for (let i = 0; i <= 100; i++) {
+    for (let i = 2; i <= 20; i++) {
       num.push(i);
     }
 
@@ -128,7 +131,20 @@ const RecruitWrite = () => {
     }
   };
 
-  const handelAddImg = (e) => {
+  // 이미지 리사이즈
+  const compressImage = async (image) => {
+    try {
+      const options = {
+        maxSizeMb: 1,
+        maxWidthOrHeight: 1000,
+      };
+      return await imageCompression(image, options);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handelAddImg = async (e) => {
     // console.log(e.target.files, "img")
     const imageLists = e.target.files;
 
@@ -140,7 +156,11 @@ const RecruitWrite = () => {
       const currentImgUrl = URL.createObjectURL(imageLists[i]);
       // console.log(currentImgUrl, "url")
       imageUrlLists.push(currentImgUrl);
-      getImagesLists.push(imageLists[i]);
+
+      // 리사이즈
+      const resizeImageList = await compressImage(imageLists[i]);
+      const resizeImageFile = new File([resizeImageList], resizeImageList.name);
+      getImagesLists.push(resizeImageFile);
     }
 
     if (imageUrlLists.length > 5) {
@@ -206,7 +226,7 @@ const RecruitWrite = () => {
           })}
         </People>
         <p>날짜 설정</p>
-        <DatePut onChange={dates} type="datetime-local"></DatePut>
+        <DatePut min={new Date().toISOString().slice(0, -1)} onChange={dates} type="datetime-local"></DatePut>
         <p>사진 첨부 (최대 5장, 선택사항)</p>
 
         <Preview>

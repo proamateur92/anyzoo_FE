@@ -5,7 +5,7 @@ import Portal from "../elements/Portal";
 
 // style
 import styled, { keyframes } from "styled-components";
-import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiDribbble } from "react-icons/fi";
+import { FiPlus, FiMessageSquare, FiUser, FiHome, FiStar, FiDribbble, FiThumbsUp } from "react-icons/fi";
 
 // route
 import { useNavigate, useLocation } from "react-router-dom";
@@ -106,10 +106,17 @@ const NavCircle = (props) => {
             <FiPlus />
           </Center>
 
-          <Menu order={0} onClick={() => window.alert("준비중인 메뉴입니다")}>
+          {/* <Menu order={0} onClick={() => window.alert("준비중인 메뉴입니다")}>
             <FiMessageSquare className={"icons"} />
             <h5> 채팅 </h5>
+          </Menu> */}
+
+
+          <Menu order={0} onClick={() => moveTo("/post")}>
+            <FiThumbsUp className={"icons"} />
+            <h5> 자랑하개 </h5>
           </Menu>
+
 
           <Menu order={1} onClick={() => moveTo(`/mypage/${userInfo.nickname}`)}>
             <FiUser className={"icons"} />

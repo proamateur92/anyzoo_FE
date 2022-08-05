@@ -46,6 +46,7 @@ const NavWrap = styled.div`
   width: 100%;
   max-width: 600px;
   height: 10.25vh;
+  min-height: 7rem;
   bottom: 0px;
   left: 50%;
   transform: translate(-50%, 0);

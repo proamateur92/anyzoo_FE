@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 // components
 import PhotoSlide from "../components/PhotoSlide.js";
 import PostResponses from "../components/PostResponses.js";
+import Comment from "../components/Comment.js";
+
 // elements
 import Wrap from "../elements/Wrap";
 import EditBubble from "../elements/EditBubble";
@@ -128,7 +130,10 @@ const RecruitDetail = () => {
       </All>
       <Content>{data?.contents}</Content>
       <PostResponses boardMainId={data?.boardMainId} likeCnt={data?.likeCnt} />
-      {box === true ? (
+
+      <Comment postId={params.id} />
+
+      {/* {box === true ? (
         <ChatBox>
           <BtnBox>
             <ChatBtn onClick={changeBox}>
@@ -188,7 +193,7 @@ const RecruitDetail = () => {
             </Recruitment>
           </AllJengBo>
         </JengBo>
-      )}
+      )} */}
     </Wrap>
   );
 };

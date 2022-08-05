@@ -70,7 +70,7 @@ const ReelsWrite = () => {
 
   const addVideo = (e) => {
     const uploaded = e.target?.files[0];
-    const allowedfile = ['mp4', 'avi', '.mov']
+    const allowedfile = ['mp4', 'avi', '.mov', '.Mov']
     const typeValidity = allowedfile.includes(uploaded?.type?.split("/")[1]) ;
     const sizeValidity = uploaded?.size < (100*1024*1024);
 

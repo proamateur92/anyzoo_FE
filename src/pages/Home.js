@@ -53,6 +53,7 @@ const Home = () => {
     };
   }, [loadinghandler]);
 
+
   React.useEffect(() => {
     if (page >= 0 && !isLastPg) {
       const pageInfo = { page: page, sorting: 'all' };
@@ -142,7 +143,4 @@ h3 {
 
 const ScrollDetect = styled.div`
   height: 10px;
-  width: 100%;
-  margin-top: -30vh;
-  padding-top: 30vh;
 `
