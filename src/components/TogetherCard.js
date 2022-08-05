@@ -45,7 +45,7 @@ const TogetherCard = (props) => {
               <span className="address">#{data?.provinceName}</span>
             </div>
             <span>
-              <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople}
+              {/* <FiUser className="icon" /> {data?.peopleCnt}/{data?.limitPeople} */}
             </span>
           </AdditionalInfo>
         </CardContent>
