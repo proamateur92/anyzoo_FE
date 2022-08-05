@@ -3,7 +3,7 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { MdOutlineSwipe } from "react-icons/md";
 
-const SwipeGuide = (props) => {
+const SwipeGuide = () => {
   return (
     <Outer>
       <Circle>
@@ -59,7 +59,7 @@ const OpenAnimation = keyframes`
 `
 
 const Circle = styled.div`
-visibility: hidden;
+  visibility: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

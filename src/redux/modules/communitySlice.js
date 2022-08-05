@@ -89,7 +89,7 @@ const postSlice = createSlice({
         state.list = [...state.list, ...payload.content];
       }
       state.pageNumber = payload.pageable.pageNumber;
-      state.last = payload.isLast;
+      state.isLast = payload.last;
     },
 
     //추가하기

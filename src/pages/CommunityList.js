@@ -25,7 +25,10 @@ const CommunityList = ( props ) => {
  
   const communityList = useSelector((state) => state.community.list);
   const togetherList = useSelector((state) => state.recruit.list);
-  const isLastPg = useSelector((state) => state.post.isLast);
+  const isCommunityLastPg = useSelector((state) => state.community.isLast);
+  const isRecruitLastPg = useSelector((state) => state.recruit.isLast);
+  const isLastPg = type === 'community' ? isCommunityLastPg : isRecruitLastPg
+
   const listEndRef = React.useRef();
   const [page, setPage] = React.useState(-1);
 
@@ -67,6 +70,7 @@ const CommunityList = ( props ) => {
     // 카테고리 이동
     const changeCategory = (address) => {
       window.scrollTo(0, 0);
+      setPage(0)
       navigate(address)
     }
 

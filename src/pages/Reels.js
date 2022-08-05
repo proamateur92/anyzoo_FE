@@ -13,7 +13,7 @@ import ReactPlayer from "react-player/lazy";
 
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
-import { FiAlignJustify,FiVolume2, FiVolumeX, FiPlay, FiPause } from "react-icons/fi";
+import { FiAlignJustify,FiVolume2, FiVolumeX } from "react-icons/fi";
 
 // element
 import EditBubble from "../elements/EditBubble";
@@ -27,7 +27,7 @@ import { useParams } from "react-router-dom";
 const Reels = () => {
   const params = useParams();
   const [reelsData, setReelsData] = React.useState();
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isPlaying, setIsPlaying] = React.useState();
   const [startX, setStartX] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [isLast, setIsLast] = React.useState(false);
