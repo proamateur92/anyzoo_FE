@@ -159,10 +159,11 @@ const AdditionalInfo = styled.div`
 
   .address {
     border: 1px solid #d1d1d6;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.6rem;
     border-radius: 30rem;
     white-space: nowrap;
-    max-width: 50%;
+    max-width: 60%;
+    overflow: hidden;
   }
 
   .icon {

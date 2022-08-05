@@ -25,7 +25,7 @@ const Post = () => {
   const posts = useSelector((state) => state.post.list);
   const isLastPg = useSelector((state) => state.post.last);
   const postEndRef = React.useRef();
-  const [page, setPage] = React.useState(-1);
+  const [page, setPage] = React.useState(0);
   const [category, setCategory] = React.useState("all");
   const [sort, setSort] = React.useState("");
   const [bubbleOn, setBubbleOn] = React.useState(false);
@@ -52,6 +52,10 @@ const Post = () => {
   }, [loadinghandler]);
 
   // 포스트 로딩
+  React.useEffect(()=> {
+    dispatch(loadPostsDB({ page: 0, sorting: "all" }))
+  },[dispatch])
+
   React.useEffect(() => {
     if (page >= 0 && !isLastPg) {
       const pageInfo = { page: page, sorting: category + sort };
@@ -107,7 +111,7 @@ const Post = () => {
       {posts.map((post) => (
         <PostCard key={post.boardMainId} data={post} />
       ))}
-      <ScrollDetect ref={postEndRef} />
+      <ScrollDetect ref={postEndRef}/>
     </Wrap>
   );
 };
@@ -152,8 +156,4 @@ const SelectCategory = styled.div`
 
 const ScrollDetect = styled.div`
   height: 10px;
-  width: 100%;
-  margin-top: -30vh;
-  padding-top: 30vh;
-  padding-bottom: 20vh;
 `

@@ -4,8 +4,8 @@ import Wrap from "../elements/Wrap";
 
 // style
 import styled from "styled-components";
-// import styled, { keyframes } from "styled-components";
 
+// axios
 import instance from "../shared/axios";
 
 // video player
@@ -13,12 +13,13 @@ import ReactPlayer from "react-player/lazy";
 
 // icons
 import { IoHeartOutline, IoHeart, IoChatbubbleOutline } from "react-icons/io5";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiAlignJustify,FiVolume2, FiVolumeX } from "react-icons/fi";
 
-//element
+// element
 import EditBubble from "../elements/EditBubble";
 import Drawers from "../elements/Drawers";
 import Comment from "../components/Comment";
+import SwipeGuide from "../elements/SwipeGuide";
 
 // router
 import { useParams } from "react-router-dom";
@@ -26,7 +27,7 @@ import { useParams } from "react-router-dom";
 const Reels = () => {
   const params = useParams();
   const [reelsData, setReelsData] = React.useState();
-  const [isPlaying, setIsPlaying] = React.useState(false);
+  const [isPlaying, setIsPlaying] = React.useState();
   const [startX, setStartX] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [isLast, setIsLast] = React.useState(false);
@@ -35,6 +36,7 @@ const Reels = () => {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [isDetail, setIsDetail] = React.useState(params.id);
   const [drawerOn, setDrawerOn] = React.useState(false);
+  const [soundOn, setSoundOn] = React.useState(true);
 
 
   // 스크롤 금지!
@@ -47,6 +49,7 @@ const Reels = () => {
 
     return clearScrollBlock()
   }, []);
+
 
   // 영상 불러오기
   const loadReels = () => {
@@ -79,11 +82,19 @@ const Reels = () => {
     return () => clearTimeout(coverControl);
   }, [page, params.id]);
 
+  // 재생 바 컨트롤
+  const [duration, setDuration] = React.useState(null);
+  const [currentTime, setCurrentTime] = React.useState(0);
+
+
+  // 영상 재생/멈추기 
   const playVideo = () => {
     setIsPlaying(!isPlaying);
     setShowCover(false);
   };
 
+
+  // 릴스 넘기기
   const moveSlide = (target, endX) => {
     const distance = Math.abs(startX - endX);
 
@@ -120,6 +131,7 @@ const Reels = () => {
       .catch((err) => console.log(err));
   };
 
+  // 릴스 반응 불러오기
   React.useEffect(() => {
     if (reelsData) {
       instance
@@ -136,6 +148,7 @@ const Reels = () => {
 
   return (
     <Wrap>
+      <SwipeGuide/>
       <Cover
         ref={coverRef}
         onMouseDown={(e) => setStartX(e.clientX)}
@@ -143,6 +156,8 @@ const Reels = () => {
         onTouchStart={(e) => setStartX(e.touches[0].clientX)}
         onTouchEnd={(e) => moveSlide(e.target, e.changedTouches[0].clientX)}
       >
+        
+
         <InfoBox>
           <UserInfo>
             <UserProfile img={reelsData?.userProfileImg} />
@@ -161,9 +176,21 @@ const Reels = () => {
                 <IoChatbubbleOutline /> {commentCount ? commentCount : 0}
               </span>
 
+              <span className="icons" onClick={()=> setSoundOn(!soundOn)}>  
+                { soundOn ? <FiVolume2/> : <FiVolumeX/> }
+              </span>
+
               { drawerOn ?
                 <Drawers setDrawerOn={setDrawerOn}>
                   <CommentWrap>
+                    <OriginalContent>
+                      <div id="userinfo">
+                        <UserProfile img={reelsData?.userProfileImg} />
+                        <span>{reelsData?.nickname}</span>
+                      </div>
+                      <p>{reelsData?.contents}</p>
+
+                    </OriginalContent>
                     <Comment postId={ reelsData?.boardMainId } blockReply={true} overflow={'overflowScroll'}/>
                   </CommentWrap>
                 </Drawers>
@@ -171,12 +198,15 @@ const Reels = () => {
               }
             </Reactions>
 
-            {menuOpen ? <EditBubble data={reelsData} setBubbleOn={setMenuOpen} /> : null}
+            {menuOpen ? 
+              <EditBubble data={reelsData} setBubbleOn={setMenuOpen} targetNickname={reelsData?.nickname} direction={'bottom'}/> 
+            : null}
             <FiAlignJustify id="seeMore" onClick={() => setMenuOpen(!menuOpen)} />
           </More>
         </InfoBox>
       </Cover>
 
+      <PlayBar currentTime={currentTime} duration={duration}/>
       <VideoClip>
         {showCover ? <Preview img={reelsData?.thumbnail} /> : null}
         <ReactPlayer
@@ -184,7 +214,9 @@ const Reels = () => {
           height={"100%"}
           url={reelsData?.video}
           playing={isPlaying}
-          muted={false}
+          muted={!soundOn}
+          onDuration={(e) => setDuration(e)}
+          onProgress={(e) => setCurrentTime(e.playedSeconds)}
           id="player"
         />
       </VideoClip>
@@ -231,6 +263,7 @@ const UserProfile = styled.span`
   width: 3rem;
   padding-top: 3rem;
   border-radius: 100px;
+  border: 1px solid #eee;
   margin-right: 1rem;
   background: ${(props) => (props.img ? `url(${props.img})` : "#ddd")};
   background-size: cover;
@@ -242,11 +275,11 @@ const Texts = styled.p`
   font-size: 1.2rem;
   color: #fff;
   margin-bottom: 1.8rem;
-
+  overflow: hidden;
   text-overflow: ellipsis;
   word-break: break-all;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 `;
 
@@ -294,6 +327,15 @@ const VideoClip = styled.div`
   overflow: hidden;
 `;
 
+const PlayBar = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.4rem;
+  width: ${props => (props?.currentTime / props?.duration)*100}%;
+  background: #666;
+`
+
 const Preview = styled.div`
   width: 100%;
   min-width: 100%;
@@ -306,5 +348,29 @@ const Preview = styled.div`
 
 const CommentWrap = styled.div`
   margin-top: 2.5rem;
+`
 
+const OriginalContent =styled.div`
+  width: 85%;
+  margin: auto;
+  color: #333;
+  
+  span {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+  }
+
+  p{
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  #userinfo{
+    display: flex;
+    margin-bottom: 1rem;
+  }
 `
