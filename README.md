@@ -113,7 +113,7 @@ https://anyzoo.co.kr/
 </details>
 <br/>
 
-노희수 :
+노희수 https://github.com/heesujin:
 <details>
 <summary>담당 파트</summary>
 <div markdown="1">
